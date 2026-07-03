@@ -229,8 +229,8 @@ The first public release: the `.mtph` format + a Python reference implementation
   a diagram cookbook, and a self-audit checklist.
 
 ### Packaging
-- Single `pip install` (works from `git+https://…`, a clone, or — once published — PyPI), with
-  KaTeX + schema bundled so a fresh machine works offline with no extra steps.
+- Published to **PyPI**: `pip install mtph` (also installable from `git+https://…` or a clone),
+  with KaTeX + schema bundled so a fresh machine works offline with no extra steps.
 
 [Unreleased]: https://github.com/Saurav0989/mtph/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/Saurav0989/mtph/releases/tag/v0.1.0

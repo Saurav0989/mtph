@@ -1,5 +1,6 @@
 # mtph
 
+[![PyPI](https://img.shields.io/pypi/v/mtph.svg)](https://pypi.org/project/mtph/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![Status](https://img.shields.io/badge/status-alpha-orange)
@@ -45,14 +46,10 @@ A block of mass $m$ on an incline of angle $\theta$ …
 ## Install
 
 Everything (including the math fonts) is bundled — it works **offline, with zero setup**.
+Requires Python 3.9+.
 
 ```bash
-# straight from GitHub, no clone needed:
-pip install git+https://github.com/Saurav0989/mtph
-
-# …or clone and install:
-git clone https://github.com/Saurav0989/mtph && cd mtph
-pip install .
+pip install mtph
 ```
 
 Optional extras:
@@ -68,7 +65,8 @@ pip install "mtph[app]"      # native desktop reader window (pywebview)
 > 300 MB browser. A *full page* (math + prose laid out by KaTeX's HTML/CSS) can only be
 > rasterized faithfully by a browser engine, so `mtph render … -o page.png` still uses `[export]`.
 
-> Requires Python 3.9+. Once published to PyPI it'll be a plain `pip install mtph`.
+> **Bleeding edge:** to run ahead of the latest release, install from source —
+> `pip install git+https://github.com/Saurav0989/mtph` (or clone and `pip install .`).
 
 ---
 

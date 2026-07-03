@@ -52,5 +52,6 @@ pip install build
 python -m build            # writes dist/mtph-*.whl and dist/mtph-*.tar.gz
 ```
 
-CI runs the test suite on every push/PR. Pushing a tag like `v0.1.0` triggers the release
-workflow, which builds and publishes to PyPI (requires the `PYPI_API_TOKEN` repo secret).
+CI runs the test suite on every push/PR. To cut a release, bump `version` in `pyproject.toml`
+and push a matching tag (e.g. `v0.2.0`); the release workflow then builds and publishes to PyPI.
+(The `PYPI_API_TOKEN` repo secret is already configured — `v0.1.0` is [live on PyPI](https://pypi.org/project/mtph/).)
