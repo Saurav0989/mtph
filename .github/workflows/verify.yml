@@ -1,15 +1,17 @@
 name: verify-mtph
 
-# Run `mtph verify` on changed .mtph problem files: surface silent failures that `validate`
-# can't (doubled backslashes, dangling \ref, undefined figure anchors, plot domain gaps) and
-# block the merge on any error. Findings go to the run summary and a sticky PR comment.
+# Run `mtph verify` and block on any error, surfacing silent failures that `validate` can't
+# (doubled backslashes, dangling \ref, undefined figure anchors, plot domain gaps).
+#   - On a PR: verify the .mtph files the PR changed (findings go to a sticky comment).
+#   - On push to main: verify the curated `spec/examples/` set — the release surface that must
+#     always be clean. The raw `problems/` bank is gated per-file on PRs and curated for the
+#     eval (fable C1) separately, so a WIP problem there doesn't fail the main build.
 
 on:
   pull_request:
     paths: ["**.mtph"]
   push:
     branches: [main]
-    paths: ["**.mtph"]
 
 permissions:
   contents: read
@@ -31,16 +33,17 @@ jobs:
       - name: Install mtph
         run: pip install -e .
 
-      - name: Collect changed .mtph files
+      - name: Collect .mtph files to verify
         id: changed
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # the files this PR added/changed/renamed
             base='${{ github.event.pull_request.base.sha }}'
+            files=$(git diff --name-only --diff-filter=ACMR "$base" HEAD -- '*.mtph' 2>/dev/null || true)
           else
-            base='${{ github.event.before }}'
+            # push to main: the curated example set (the release surface)
+            files=$(git ls-files 'spec/examples/*.mtph')
           fi
-          files=$(git diff --name-only --diff-filter=ACMR "$base" HEAD -- '*.mtph' 2>/dev/null || true)
-          [ -z "$files" ] && files=$(git ls-files '*.mtph')
           {
             echo "files<<EOF"
             echo "$files"
