@@ -1,0 +1,21 @@
+---
+mtph: "0.2"
+id: anim-coverage
+title: Animation Coverage
+subject: physics
+topic: mechanics
+difficulty: 1
+tags: [animation, coverage]
+---
+
+A conformance fixture exercising every micro-animation verb, so the Python reference and the JS
+port are checked byte-for-byte on each.
+
+```figure
+circle at=(-3,0) r=0.8 anim=spin anim-period=2
+line from=(-3,0) to=(-3,0.8) anim=spin anim-about=(-3,0) anim-period=2
+circle at=(0,0) r=0.6 fill=black anim=oscillate anim-amp=0.8 anim-dir=90 anim-period=1.5
+circle at=(3,0) r=0.2 fill=black anim=along anim-path="(0,0);(1,1);(2,-1)" anim-period=3
+pendulum at=(6,1.5) length=1.5 angle=20 anim=spin anim-about=(6,1.5) anim-swing=40 anim-period=2
+mass m at=(-3,-3) size=0.5 anim=spin anim-cw=true anim-period=4
+```

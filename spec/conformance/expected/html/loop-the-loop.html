@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Spring, Friction Patch, and a Vertical Loop</title>
+<style>
+:root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f7f7f8;
+  --chip-bg:#eef0f3; --chip-ink:#445; --code-bg:#f0f0f2; --summary:#334; --ok:#2a7; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+    --chip-bg:#2a2c33; --chip-ink:#c3cbe0; --code-bg:#26282e; --summary:#c3cbe0; --ok:#4cd6a0; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,serif; }
+main { max-width:760px; margin:40px auto; background:var(--paper); padding:40px 48px;
+  border:1px solid var(--line); border-radius:10px; line-height:1.6; }
+h1 { font-size:1.6rem; margin:0 0 .4rem; }
+.meta { margin-bottom:1.6rem; }
+.chip { display:inline-block; font-size:.74rem; background:var(--chip-bg); color:var(--chip-ink);
+  padding:2px 9px; border-radius:20px; margin-right:6px; }
+.tag { font-size:.74rem; color:var(--muted); margin-right:6px; }
+.mtph-prose { margin:1rem 0; }
+.mtph-math { margin:1.3rem 0; text-align:center; overflow-x:auto; }
+.mtph-math.numbered { position:relative; padding-right:2.5rem; }
+.mtph-math.numbered .eqno { position:absolute; right:0; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-variant-numeric:tabular-nums; }
+.eqref { text-decoration:none; color:inherit; border-bottom:1px dotted var(--muted); }
+.mtph-figure { margin:1.6rem 0; text-align:center; }
+/* Diagrams/plots draw their default ink with currentColor, so they follow the page theme;
+   the white knock-out fills and label halos are re-themed to the paper colour here. */
+.mtph-figure svg { max-width:100%; height:auto; color:var(--ink); }
+.mtph-figure svg .mtph-pp { fill:var(--paper); }
+.mtph-figure svg .mtph-lbl { fill:var(--paper); stroke:var(--paper); }
+figcaption { font-size:.85rem; color:var(--muted); margin-top:.4rem; }
+.mtph-aside { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-aside summary { cursor:pointer; font-weight:600; color:var(--summary); }
+.answer, .solution { margin-top:1rem; }
+.answer h3, .solution h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.6rem 0 .3rem; }
+.choices li.correct { font-weight:700; }
+.choices li.correct::after { content:" ✓"; color:var(--ok); }
+.grading .rubric { list-style:none; padding-left:0; }
+.grading .rubric li { margin:.25rem 0; }
+.grading .pts { display:inline-block; min-width:3.6em; font-variant-numeric:tabular-nums;
+  font-weight:600; color:var(--muted); }
+.grading .total { font-weight:600; margin-top:.4rem; }
+code { background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.92em; }
+.mtph-quiz { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-quiz h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.4rem 0 .7rem; }
+.mtph-quiz .q { margin:.55rem 0; }
+.mtph-quiz .q-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mtph-quiz .q-in { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:6px;
+  background:var(--paper); color:var(--ink); width:8em; }
+.mtph-quiz .q-unit { color:var(--muted); }
+.mtph-quiz button { font:inherit; font-size:.85rem; padding:4px 12px; border:1px solid var(--line);
+  border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; }
+.mtph-quiz button:hover { border-color:var(--summary); }
+.mtph-quiz .q-choices { list-style:none; padding-left:0; display:flex; flex-direction:column;
+  gap:6px; margin:.3rem 0; }
+.mtph-quiz .q-opt { text-align:left; width:100%; }
+.mtph-quiz .q-opt.sel { border-color:var(--summary); font-weight:600; }
+.mtph-quiz .q-fb { font-weight:600; }
+.mtph-quiz .q-fb.ok { color:var(--ok); }
+.mtph-quiz .q-fb.no { color:#cc4b37; }
+.mtph-quiz .q-reveal { margin-top:1rem; border-top:1px solid var(--line); padding-top:.8rem; }
+.mtph-quiz .q-reveal summary { cursor:pointer; font-weight:600; color:var(--summary); }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false,errorColor:"#cc0000"});});</script>
+</head>
+<body>
+<main><h1>Spring, Friction Patch, and a Vertical Loop</h1>
+<div class="meta"><span class="chip">physics</span><span class="chip">mechanics/energy-circular-motion</span><span class="chip">difficulty 5/5</span><span class="tag">#energy</span><span class="tag">#friction</span><span class="tag">#circular-motion</span><span class="tag">#hooke</span><span class="tag">#jee-advanced</span></div>
+<div class="mtph-prose"><p>A small block of mass $m$ is pressed against a spring of force constant $k$, compressing it by<br>
+a distance $d$ on a <strong>smooth</strong> horizontal floor. When released, the block crosses a <strong>rough</strong><br>
+strip of length $L$ (kinetic friction coefficient $\mu$) and then enters a <strong>smooth</strong> vertical<br>
+circular loop of radius $R$ that is tangent to the floor.</p>
+<p>1. Find the minimum compression $d_{\min}$ for which the block <em>just</em> completes the loop.<br>
+2. For $d = d_{\min}$, find the normal reaction $N$ on the block at the lowest point of the loop.<br>
+3. If the block enters the loop too slowly to complete it, it leaves the track where $N = 0$.<br>
+   Find the angle $\theta$ (measured at the centre from the upward vertical) of that point in<br>
+   terms of the entry speed $v_{\text{bot}}$.</p></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 828.2 409.4" width="828" height="409" font-family="Georgia, 'Times New Roman', serif">
+<line x1="39.64" y1="307.96" x2="802.24" y2="307.96" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="39.64" y1="307.96" x2="26.00" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="59.48" y1="307.96" x2="45.84" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="79.32" y1="307.96" x2="65.68" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="99.16" y1="307.96" x2="85.52" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="119.00" y1="307.96" x2="105.36" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="138.84" y1="307.96" x2="125.20" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="158.68" y1="307.96" x2="145.04" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="178.52" y1="307.96" x2="164.88" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="198.36" y1="307.96" x2="184.72" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="218.20" y1="307.96" x2="204.56" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="238.04" y1="307.96" x2="224.40" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="257.88" y1="307.96" x2="244.24" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="277.72" y1="307.96" x2="264.08" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="297.56" y1="307.96" x2="283.92" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="317.40" y1="307.96" x2="303.76" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="337.24" y1="307.96" x2="323.60" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="357.08" y1="307.96" x2="343.44" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="376.92" y1="307.96" x2="363.28" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="396.76" y1="307.96" x2="383.12" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="416.60" y1="307.96" x2="402.96" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="436.44" y1="307.96" x2="422.80" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="456.28" y1="307.96" x2="442.64" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="476.12" y1="307.96" x2="462.48" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="495.96" y1="307.96" x2="482.32" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="515.80" y1="307.96" x2="502.16" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="535.64" y1="307.96" x2="522.00" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="555.48" y1="307.96" x2="541.84" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="575.32" y1="307.96" x2="561.68" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="595.16" y1="307.96" x2="581.52" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="615.00" y1="307.96" x2="601.36" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="634.84" y1="307.96" x2="621.20" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="654.68" y1="307.96" x2="641.04" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="674.52" y1="307.96" x2="660.88" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="694.36" y1="307.96" x2="680.72" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="714.20" y1="307.96" x2="700.56" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="734.04" y1="307.96" x2="720.40" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="753.88" y1="307.96" x2="740.24" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="773.72" y1="307.96" x2="760.08" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="793.56" y1="307.96" x2="779.92" y2="321.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="58.24" y1="307.96" x2="58.24" y2="214.96" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="58.24" y1="307.96" x2="44.60" y2="294.32" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="58.24" y1="288.12" x2="44.60" y2="274.48" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="58.24" y1="268.28" x2="44.60" y2="254.64" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="58.24" y1="248.44" x2="44.60" y2="234.80" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="58.24" y1="228.60" x2="44.60" y2="214.96" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<polyline points="58.24,273.86 73.62,273.86 78.28,265.80 82.95,281.92 87.62,265.80 92.29,281.92 96.95,265.80 101.62,281.92 106.29,265.80 110.96,281.92 115.63,265.80 120.29,281.92 124.96,265.80 129.63,281.92 134.30,265.80 138.96,273.86 154.34,273.86" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="106.29" y="259.86" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">k</tspan></text><text x="106.29" y="259.86" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">k</tspan></text>
+<polygon points="158.06,249.68 206.42,249.68 206.42,298.04 158.06,298.04" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<text class="mtph-lbl" x="196.24" y="273.86" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">m</tspan></text><text x="196.24" y="273.86" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">m</tspan></text>
+<polygon points="287.64,298.04 448.84,298.04 448.84,307.96 287.64,307.96" fill="#cccccc" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<text class="mtph-lbl" x="368.24" y="288.04" text-anchor="middle" dominant-baseline="auto" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">μ</tspan></text><text x="368.24" y="288.04" text-anchor="middle" dominant-baseline="auto" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">μ</tspan></text>
+<line x1="287.64" y1="307.96" x2="287.64" y2="351.36" stroke="#888888" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="448.84" y1="307.96" x2="448.84" y2="351.36" stroke="#888888" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="287.64" y1="351.36" x2="448.84" y2="351.36" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="448.84,351.36 438.84,355.56 438.84,347.16" fill="currentColor"/><polygon points="287.64,351.36 297.64,347.16 297.64,355.56" fill="currentColor"/>
+<text class="mtph-lbl" x="368.24" y="365.36" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">L</tspan></text><text x="368.24" y="365.36" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">L</tspan></text>
+<circle cx="616.24" cy="183.96" r="124.00" fill="none" stroke="currentColor" stroke-width="2"/>
+<circle cx="616.24" cy="183.96" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<line x1="616.24" y1="183.96" x2="740.24" y2="183.96" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<text class="mtph-lbl" x="678.24" y="173.96" text-anchor="middle" dominant-baseline="auto" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">R</tspan></text><text x="678.24" y="173.96" text-anchor="middle" dominant-baseline="auto" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">R</tspan></text>
+<line x1="616.24" y1="59.96" x2="616.24" y2="97.16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="616.24,97.16 612.04,87.16 620.44,87.16" fill="currentColor"/>
+<text class="mtph-lbl" x="624.24" y="84.76" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">mg</tspan></text><text x="624.24" y="84.76" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">mg</tspan></text>
+<line x1="616.24" y1="59.96" x2="560.44" y2="59.96" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="560.44,59.96 570.44,55.76 570.44,64.16" fill="currentColor"/>
+<text class="mtph-lbl" x="544.44" y="59.96" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">v</tspan><tspan dy="5.40" font-size="13.0">top</tspan></text><text x="544.44" y="59.96" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">v</tspan><tspan dy="5.40" font-size="13.0">top</tspan></text>
+<line x1="616.24" y1="303.62" x2="616.24" y2="242.86" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="616.24,242.86 620.44,252.86 612.04,252.86" fill="currentColor"/>
+<text class="mtph-lbl" x="616.24" y="226.86" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">N</tspan></text><text x="616.24" y="226.86" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">N</tspan></text>
+<line x1="548.04" y1="307.96" x2="603.84" y2="307.96" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="603.84,307.96 593.84,312.16 593.84,303.76" fill="currentColor"/>
+<text class="mtph-lbl" x="619.84" y="307.96" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">v</tspan><tspan dy="5.40" font-size="13.0">bot</tspan></text><text x="619.84" y="307.96" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">v</tspan><tspan dy="5.40" font-size="13.0">bot</tspan></text>
+<circle cx="692.56" cy="86.25" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<line x1="616.24" y1="183.96" x2="692.56" y2="86.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="7 5"/>
+<polyline points="646.78,144.87 643.44,142.48 639.91,140.37 636.22,138.56 632.39,137.06 628.45,135.88 624.43,135.04 620.35,134.53 616.24,134.36" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="638.04" y="120.65" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">θ</tspan></text><text x="638.04" y="120.65" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">θ</tspan></text>
+<line x1="692.56" y1="86.25" x2="650.34" y2="53.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="650.34,53.76 660.83,56.53 655.70,63.18" fill="currentColor"/>
+<text class="mtph-lbl" x="637.66" y="44.00" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">v</tspan></text><text x="637.66" y="44.00" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">v</tspan></text>
+</svg><figcaption>Spring launch across a rough strip $L$ into a smooth vertical loop of radius $R$.</figcaption></figure>
+<details class="mtph-aside"><summary>Answer &amp; solution</summary><div class="answer"><h3>Answer</h3><p>$ d_{\min} = \sqrt{\dfrac{mg}{k}\,(2\mu L + 5R)} $</p></div>
+<div class="solution"><h3>Solution</h3><p><strong>(a) Minimum compression.</strong> Let the loop (radius $R$) be smooth. To <em>just</em> complete the<br>
+loop, gravity alone supplies the centripetal force at the top:<br>
+$$mg = \frac{m v_{\text{top}}^2}{R} \;\Rightarrow\; v_{\text{top}}^2 = gR.$$<br>
+Energy from release to the top (height $2R$), losing $\mu m g L$ to friction on the rough<br>
+patch:<br>
+$$\tfrac{1}{2}k d_{\min}^2 = \mu m g L + \tfrac{1}{2}m v_{\text{top}}^2 + mg(2R)
+   = \mu m g L + \tfrac{5}{2}mgR.$$<br>
+$$\boxed{\,d_{\min} = \sqrt{\tfrac{mg}{k}\,(2\mu L + 5R)}\,}.$$</p>
+<p><strong>(b) Normal force at the lowest point.</strong> For $d = d_{\min}$, energy from release to the<br>
+bottom of the loop gives $\tfrac{1}{2}m v_{\text{bot}}^2 = \tfrac{1}{2}k d_{\min}^2 - \mu mgL
+= \tfrac{5}{2}mgR$, so $v_{\text{bot}}^2 = 5gR$. At the bottom,<br>
+$$N - mg = \frac{m v_{\text{bot}}^2}{R} = 5mg \;\Rightarrow\; \boxed{N = 6mg}.$$</p>
+<p><strong>(c) Leaving the track.</strong> If the block enters the loop with a smaller speed $v_{\text{bot}}$<br>
+(where $2gR \le v_{\text{bot}}^2 &lt; 5gR$) it leaves the track on the way up, where $N = 0$.<br>
+At an angle $\theta$ from the top, $mg\cos\theta = \dfrac{mv^2}{R}$ and energy conservation<br>
+on the smooth loop give<br>
+$$\boxed{\cos\theta = \frac{v_{\text{bot}}^2 - 2gR}{3gR}},\qquad
+  v_{\text{bot}}^2 = \frac{k d^2}{m} - 2\mu g L.$$</p></div></details></main>
+</body>
+</html>

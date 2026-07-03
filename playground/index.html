@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mtph playground</title>
+<meta name="description" content="Write a math/physics problem in .mtph and see it render live — figures, plots and LaTeX. No server; every share link contains its own source.">
+<style>
+  :root {
+    --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f4f5f7;
+    --accent:#3a6ea5; --err:#c0392b; --warn:#b8860b; --ok:#2a8; --mono:#f0f0f2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+      --accent:#79a9d6; --err:#e8776b; --warn:#e0b64c; --ok:#4cd6a0; --mono:#26282e;
+    }
+  }
+  * { box-sizing:border-box; }
+  html, body { height:100%; margin:0; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); display:flex; flex-direction:column;
+  }
+  header {
+    display:flex; align-items:center; gap:14px; padding:10px 16px;
+    border-bottom:1px solid var(--line); background:var(--paper); flex-wrap:wrap;
+  }
+  header h1 { font-size:1rem; margin:0; font-weight:700; letter-spacing:.01em; }
+  header h1 .dim { color:var(--muted); font-weight:400; }
+  header .spacer { flex:1; }
+  button, select {
+    font:inherit; font-size:.85rem; padding:5px 11px; border:1px solid var(--line);
+    background:var(--bg); color:var(--ink); border-radius:7px; cursor:pointer;
+  }
+  button:hover, select:hover { border-color:var(--accent); }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  button[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); }
+  a.gh { color:var(--muted); text-decoration:none; font-size:.85rem; }
+  a.gh:hover { color:var(--accent); }
+  main { flex:1; display:grid; grid-template-columns:1fr 1fr; min-height:0; }
+  @media (max-width:800px) { main { grid-template-columns:1fr; } }
+  .pane { display:flex; flex-direction:column; min-width:0; min-height:0; }
+  .pane + .pane { border-left:1px solid var(--line); }
+  @media (max-width:800px) { .pane + .pane { border-left:none; border-top:1px solid var(--line); } }
+  .pane .bar {
+    font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted);
+    padding:6px 14px; border-bottom:1px solid var(--line); background:var(--paper);
+    display:flex; align-items:center; gap:10px;
+  }
+  #editor {
+    flex:1; border:0; resize:none; padding:16px; font-size:13px; line-height:1.55;
+    font-family:'SF Mono',ui-monospace,Menlo,Consolas,monospace; background:var(--paper);
+    color:var(--ink); tab-size:2; outline:none; white-space:pre; overflow:auto;
+  }
+  #preview { flex:1; border:0; width:100%; background:#fff; }
+  #status { display:flex; gap:8px; align-items:center; margin-left:auto; }
+  .badge { font-size:.72rem; padding:1px 8px; border-radius:20px; font-weight:600; }
+  .badge.ok { color:var(--ok); }
+  .badge.err { color:var(--err); }
+  .badge.warn { color:var(--warn); }
+  #problems {
+    max-height:34vh; overflow:auto; border-top:1px solid var(--line); background:var(--paper);
+    font-size:.8rem; padding:6px 14px 10px; display:none;
+  }
+  #problems.show { display:block; }
+  #problems .row { padding:3px 0; color:var(--err); font-family:ui-monospace,monospace; }
+  #problems .row.warn { color:var(--warn); }
+  #problems h4 { margin:8px 0 2px; font-size:.72rem; text-transform:uppercase;
+    letter-spacing:.06em; color:var(--muted); }
+  #sliders { display:none; gap:14px 22px; flex-wrap:wrap; padding:10px 14px;
+    border-bottom:1px solid var(--line); background:var(--paper); }
+  #sliders.show { display:flex; }
+  #sliders label { display:flex; align-items:center; gap:8px; font-size:.8rem; color:var(--ink); }
+  #sliders .name { font-style:italic; min-width:1.4em; }
+  #sliders input[type=range] { accent-color:var(--accent); vertical-align:middle; }
+  #sliders .val { font-variant-numeric:tabular-nums; color:var(--muted); min-width:3.5em; }
+</style>
+</head>
+<body>
+<header>
+  <h1>mtph <span class="dim">playground</span></h1>
+  <select id="examples" title="Load an example">
+    <option value="">Load an example…</option>
+  </select>
+  <span class="spacer"></span>
+  <button id="quiz" aria-pressed="false" title="Turn the answer into a self-test">Quiz mode</button>
+  <button id="share" class="primary">Copy share link</button>
+  <button id="download">Download .html</button>
+  <a class="gh" href="https://github.com/Saurav0989/mtph" target="_blank" rel="noopener">GitHub ↗</a>
+</header>
+<main>
+  <div class="pane">
+    <div class="bar">
+      source
+      <span id="status">
+        <span id="badge" class="badge ok">ok</span>
+        <button id="toggle-problems" style="display:none; padding:1px 8px; font-size:.72rem;">details</button>
+      </span>
+    </div>
+    <textarea id="editor" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+    <div id="problems"></div>
+  </div>
+  <div class="pane">
+    <div class="bar">rendered</div>
+    <div id="sliders"></div>
+    <iframe id="preview" sandbox="allow-scripts" title="rendered problem"></iframe>
+  </div>
+</main>
+
+<!-- The default document — an *explorable*: drag the θ and v₀ sliders above the render. Kept as
+     inert text so its backslashes, {{params}} and ``` fences need no escaping. -->
+<script type="text/plain" id="seed">---
+mtph: "0.2"
+id: projectile-range
+title: Projectile Range on Level Ground
+subject: physics
+topic: mechanics/kinematics
+difficulty: 2
+tags: [projectile, kinematics, range, explorable]
+params:
+  theta: { min: 15, max: 75, default: 40, unit: "deg" }
+  v0: { min: 8, max: 25, default: 20, unit: "m/s" }
+symbols:
+  R: length
+  v_0: velocity
+  g: acceleration
+  theta: angle
+answer:
+  type: expression
+  value: 'R = \frac{v_0^2 \sin(2\theta)}{g}'
+solution: |
+  Time of flight $T = \tfrac{2 v_0 \sin\theta}{g}$; range
+  $$R = v_0\cos\theta \cdot T = \frac{v_0^2 \sin 2\theta}{g},$$ maximal at $\theta = 45^\circ$.
+---
+
+A projectile is launched from level ground at speed $v_0$ and angle $\theta$. Find its range $R$.
+
+**Drag the sliders** to see how the launch angle and speed reshape the launch vector and the
+trajectory — no static format can do this.
+
+```figure
+ground at=(-0.5,0) width=5
+force from=(0,0) dir={{theta}} mag=2.4 label="v_0"
+angle at=(0,0) from=0 to={{theta}} value="\theta"
+```
+
+```plot
+x: 0..70
+f(x) = x*tan({{theta}}*pi/180) - 9.8*x^2/(2*{{v0}}^2*cos({{theta}}*pi/180)^2)
+xlabel: "x (m)"
+ylabel: "y (m)"
+grid: true
+```
+</script>
+
+<script src="app.js"></script>
+</body>
+</html>

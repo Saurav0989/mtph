@@ -1,0 +1,46 @@
+{
+  "blocks": [
+    {
+      "text": "Synthetic coverage for the plot renderer.\n\n## Parametric (a Lissajous curve, equal-aspect trajectory)",
+      "type": "prose"
+    },
+    {
+      "source": "mode: parametric\nt: 0..2*pi\nx(t) = cos(t)\ny(t) = sin(2*t)\nmark: (1, 0) label=\"t=0\"\ngrid: true",
+      "type": "plot"
+    },
+    {
+      "text": "## Polar (a three-petal rose)",
+      "type": "prose"
+    },
+    {
+      "source": "mode: polar\ntheta: 0..2*pi\nr(theta) = 1 + 0.5*cos(3*theta)\ngrid: true",
+      "type": "plot"
+    },
+    {
+      "text": "## Function with reference lines and custom labels",
+      "type": "prose"
+    },
+    {
+      "source": "x: -3..3\nf(x) = tanh(x)\nvline: 0\nhline: 1\nhline: -1\nxlabel: \"u\"\nylabel: \"\\tanh u\"\nsamples: 120\ngrid: true\nmark: (1, 0.7616) label=\"P\" color=\"#c0392b\"",
+      "type": "plot"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "type": "expression",
+      "value": "n/a"
+    },
+    "difficulty": 1,
+    "id": "plot-mode-coverage",
+    "solution": "Not a real problem: this fixture exists so the conformance corpus exercises the parametric\nand polar plot modes (and the grid / reference-line / label directives) that the curated\nexamples do not otherwise reach, giving the JS plot renderer a full parity target.\n",
+    "subject": "math",
+    "tags": [
+      "conformance",
+      "plot",
+      "coverage"
+    ],
+    "title": "Plot mode coverage (conformance fixture)",
+    "topic": "meta/conformance"
+  },
+  "mtph": "0.2"
+}

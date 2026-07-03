@@ -1,0 +1,24 @@
+{
+  "blocks": [
+    {
+      "text": "State and prove the summation formula $\\sum_{i=1}^{n} i = \\tfrac{n(n+1)}{2}$. This fixture\nexercises the Markdown-rendered freeform answer path.",
+      "type": "prose"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "type": "freeform",
+      "value": "Prove by induction. **Base case:** $n=1$ gives $1 = 1$. **Step:** assume the identity\nholds for $n=k$; adding $k+1$ to both sides establishes it for $n=k+1$.\n"
+    },
+    "difficulty": 1,
+    "id": "html-freeform",
+    "subject": "math",
+    "tags": [
+      "conformance",
+      "html"
+    ],
+    "title": "HTML coverage — freeform answer",
+    "topic": "meta/conformance"
+  },
+  "mtph": "0.2"
+}

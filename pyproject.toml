@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mtph"
+version = "0.1.0"
+description = "An AI-native file format for math & physics problems: real symbolic notation + diagrams-as-code, rendered crisply."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Saurav" }]
+keywords = ["math", "physics", "latex", "diagram", "education", "file-format", "ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Text Processing :: Markup",
+]
+dependencies = [
+    "pyyaml>=6.0",
+    "jsonschema>=4.0",
+    "typer>=0.9",
+]
+
+[project.optional-dependencies]
+export = ["playwright>=1.40"]   # full-page PNG/SVG export (headless browser)
+raster = ["cairosvg>=2.5"]      # browserless figure/plot SVG→PNG
+app = ["pywebview>=4.0"]        # native desktop reader window
+dev = ["pytest>=7.0", "build>=1.0"]
+
+[project.urls]
+Homepage = "https://github.com/Saurav0989/mtph"
+Repository = "https://github.com/Saurav0989/mtph"
+Specification = "https://github.com/Saurav0989/mtph/blob/main/spec/SPEC.md"
+"Agent guide" = "https://github.com/Saurav0989/mtph/blob/main/AGENTS.md"
+
+[project.scripts]
+mtph = "mtph.cli:app"
+
+# The package lives at python/src/mtph; treat python/src as the source root so it installs as
+# the top-level `mtph` package. KaTeX is bundled (committed) for offline math rendering, and the
+# canonical schema is force-included from spec/schema.json.
+[tool.hatch.build]
+artifacts = ["python/src/mtph/vendor/katex/**/*"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["python/src/mtph"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"spec/schema.json" = "mtph/spec/schema.json"
+# Authoring docs bundled so `mtph prompt` works from an installed wheel (no repo checkout).
+"AGENTS.md" = "mtph/docs/AGENTS.md"
+"thesis/card.md" = "mtph/docs/card.md"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "python/src/mtph",
+    "python/tests",
+    "spec",
+    "AGENTS.md",
+    "thesis/card.md",   # force-included into the wheel (mtph/docs/card.md); must be in the sdist too
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "pyproject.toml",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["python/tests"]

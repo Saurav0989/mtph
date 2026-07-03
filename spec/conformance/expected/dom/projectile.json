@@ -1,0 +1,41 @@
+{
+  "blocks": [
+    {
+      "text": "A projectile is launched from the ground with speed $v_0 = 15\\ \\text{m/s}$ at an angle\n$\\theta = 30^\\circ$ above the horizontal. Taking $g = 9.8\\ \\text{m/s}^2$, its trajectory is",
+      "type": "prose"
+    },
+    {
+      "latex": "y(x) = x\\tan\\theta - \\frac{g\\,x^2}{2\\,v_0^2\\cos^2\\theta}.",
+      "type": "math"
+    },
+    {
+      "text": "Estimate the horizontal range $R$ — the value of $x$ at which the projectile returns to the\nground ($y = 0$).",
+      "type": "prose"
+    },
+    {
+      "caption": "Trajectory $y(x)$, in metres.",
+      "source": "x: 0..21\nf(x) = 0.5774*x - 0.02904*x^2\nhline: 0\ngrid: true\nxlabel: \"x (m)\"\nylabel: \"y (m)\"",
+      "type": "plot"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "tolerance": 0.3,
+      "type": "numeric",
+      "unit": "m",
+      "value": 19.9
+    },
+    "difficulty": 3,
+    "id": "projectile-range",
+    "solution": "The range of a projectile launched from the ground is\n$R = \\dfrac{v_0^2 \\sin 2\\theta}{g}$. With $v_0 = 15\\ \\text{m/s}$, $\\theta = 30^\\circ$ and\n$g = 9.8\\ \\text{m/s}^2$,\n$$R = \\frac{15^2 \\sin 60^\\circ}{9.8} \\approx 19.9\\ \\text{m}.$$\n",
+    "subject": "physics",
+    "tags": [
+      "projectile",
+      "kinematics",
+      "parabola"
+    ],
+    "title": "Projectile Range",
+    "topic": "mechanics/kinematics"
+  },
+  "mtph": "0.2"
+}

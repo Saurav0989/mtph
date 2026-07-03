@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Area of a Triangle (SAS)</title>
+<style>
+:root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f7f7f8;
+  --chip-bg:#eef0f3; --chip-ink:#445; --code-bg:#f0f0f2; --summary:#334; --ok:#2a7; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+    --chip-bg:#2a2c33; --chip-ink:#c3cbe0; --code-bg:#26282e; --summary:#c3cbe0; --ok:#4cd6a0; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,serif; }
+main { max-width:760px; margin:40px auto; background:var(--paper); padding:40px 48px;
+  border:1px solid var(--line); border-radius:10px; line-height:1.6; }
+h1 { font-size:1.6rem; margin:0 0 .4rem; }
+.meta { margin-bottom:1.6rem; }
+.chip { display:inline-block; font-size:.74rem; background:var(--chip-bg); color:var(--chip-ink);
+  padding:2px 9px; border-radius:20px; margin-right:6px; }
+.tag { font-size:.74rem; color:var(--muted); margin-right:6px; }
+.mtph-prose { margin:1rem 0; }
+.mtph-math { margin:1.3rem 0; text-align:center; overflow-x:auto; }
+.mtph-math.numbered { position:relative; padding-right:2.5rem; }
+.mtph-math.numbered .eqno { position:absolute; right:0; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-variant-numeric:tabular-nums; }
+.eqref { text-decoration:none; color:inherit; border-bottom:1px dotted var(--muted); }
+.mtph-figure { margin:1.6rem 0; text-align:center; }
+/* Diagrams/plots draw their default ink with currentColor, so they follow the page theme;
+   the white knock-out fills and label halos are re-themed to the paper colour here. */
+.mtph-figure svg { max-width:100%; height:auto; color:var(--ink); }
+.mtph-figure svg .mtph-pp { fill:var(--paper); }
+.mtph-figure svg .mtph-lbl { fill:var(--paper); stroke:var(--paper); }
+figcaption { font-size:.85rem; color:var(--muted); margin-top:.4rem; }
+.mtph-aside { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-aside summary { cursor:pointer; font-weight:600; color:var(--summary); }
+.answer, .solution { margin-top:1rem; }
+.answer h3, .solution h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.6rem 0 .3rem; }
+.choices li.correct { font-weight:700; }
+.choices li.correct::after { content:" ✓"; color:var(--ok); }
+.grading .rubric { list-style:none; padding-left:0; }
+.grading .rubric li { margin:.25rem 0; }
+.grading .pts { display:inline-block; min-width:3.6em; font-variant-numeric:tabular-nums;
+  font-weight:600; color:var(--muted); }
+.grading .total { font-weight:600; margin-top:.4rem; }
+code { background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.92em; }
+.mtph-quiz { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-quiz h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.4rem 0 .7rem; }
+.mtph-quiz .q { margin:.55rem 0; }
+.mtph-quiz .q-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mtph-quiz .q-in { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:6px;
+  background:var(--paper); color:var(--ink); width:8em; }
+.mtph-quiz .q-unit { color:var(--muted); }
+.mtph-quiz button { font:inherit; font-size:.85rem; padding:4px 12px; border:1px solid var(--line);
+  border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; }
+.mtph-quiz button:hover { border-color:var(--summary); }
+.mtph-quiz .q-choices { list-style:none; padding-left:0; display:flex; flex-direction:column;
+  gap:6px; margin:.3rem 0; }
+.mtph-quiz .q-opt { text-align:left; width:100%; }
+.mtph-quiz .q-opt.sel { border-color:var(--summary); font-weight:600; }
+.mtph-quiz .q-fb { font-weight:600; }
+.mtph-quiz .q-fb.ok { color:var(--ok); }
+.mtph-quiz .q-fb.no { color:#cc4b37; }
+.mtph-quiz .q-reveal { margin-top:1rem; border-top:1px solid var(--line); padding-top:.8rem; }
+.mtph-quiz .q-reveal summary { cursor:pointer; font-weight:600; color:var(--summary); }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false,errorColor:"#cc0000"});});</script>
+</head>
+<body>
+<main><h1>Area of a Triangle (SAS)</h1>
+<div class="meta"><span class="chip">math</span><span class="chip">geometry/trigonometry</span><span class="chip">difficulty 2/5</span><span class="tag">#triangle</span><span class="tag">#area</span><span class="tag">#trigonometry</span></div>
+<div class="mtph-prose"><p>In triangle $ABC$, side $a = BC$ and side $b = CA$ meet at vertex $C$, where the included<br>
+angle is $C$. Write the area of the triangle in terms of $a$, $b$ and $C$.</p></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 354.9 255.4" width="355" height="255" font-family="Georgia, 'Times New Roman', serif">
+<circle cx="29.41" cy="220.40" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<text class="mtph-lbl" x="38.41" y="211.40" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">A</tspan></text><text x="38.41" y="211.40" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">A</tspan></text>
+<circle cx="308.41" cy="220.40" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<text class="mtph-lbl" x="317.41" y="211.40" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">B</tspan></text><text x="317.41" y="211.40" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">B</tspan></text>
+<circle cx="110.01" cy="53.00" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<text class="mtph-lbl" x="119.01" y="44.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">C</tspan></text><text x="119.01" y="44.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">C</tspan></text>
+<polygon points="29.41,220.40 308.41,220.40 110.01,53.00" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<text class="mtph-lbl" x="217.21" y="136.70" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">a</tspan></text><text x="217.21" y="136.70" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">a</tspan></text>
+<text class="mtph-lbl" x="61.71" y="136.70" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">b</tspan></text><text x="61.71" y="136.70" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">b</tspan></text>
+<polyline points="89.84,94.90 94.55,96.86 99.46,98.29 104.49,99.17 109.58,99.50 114.69,99.26 119.73,98.47 124.66,97.13 129.41,95.26 133.93,92.88 138.16,90.01 142.05,86.70 145.55,82.99" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="123.36" y="115.45" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">C</tspan></text><text x="123.36" y="115.45" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">C</tspan></text>
+</svg><figcaption>Triangle $ABC$ with included angle $C$ between sides $a$ and $b$.</figcaption></figure>
+<details class="mtph-aside"><summary>Answer &amp; solution</summary><div class="answer"><h3>Answer</h3><p>$ \tfrac{1}{2}\,a\,b\,\sin C $</p></div>
+<div class="solution"><h3>Solution</h3><p>Drop a perpendicular from $B$ to line $AC$; its length is $a\sin C$. Taking $b$ as the<br>
+base, the area is<br>
+$$\text{Area} = \tfrac{1}{2}\,b\,(a\sin C) = \tfrac{1}{2}\,a\,b\,\sin C.$$</p></div></details></main>
+</body>
+</html>

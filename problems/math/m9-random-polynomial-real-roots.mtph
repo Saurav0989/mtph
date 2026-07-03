@@ -1,0 +1,218 @@
+---
+mtph: "0.2"
+id: m9-random-polynomial-real-roots
+title: Expected Number of Real Roots of a Random Polynomial
+subject: math
+topic: probability/random-matrix-theory
+difficulty: 5
+tags: [random-polynomial, real-roots, kac-rice, gaussian-process, asymptotic, log-scaling]
+---
+
+Let $a_0, a_1, \dots, a_n$ be independent standard normal random variables, $\mathcal{N}(0,1)$. Consider the random polynomial
+
+$$P_n(x) = \sum_{k=0}^{n} a_k \, x^k.$$
+
+Let $N_n$ denote the number of real roots of $P_n(x) = 0$. This problem derives the asymptotic expected number of real roots as $n \to \infty$, using the Kac–Rice formula.
+
+```plot caption="A random degree-20 polynomial with Gaussian coefficients. Real roots appear as intersections with the $x$-axis."
+mode: function
+f(x) = 0.3*x^20 - 0.7*x^19 + 1.2*x^18 + 0.5*x^17 - 1.8*x^16 + 0.2*x^15 + 2.1*x^14 - 0.9*x^13 - 1.5*x^12 + 1.1*x^11 + 0.6*x^10 - 0.4*x^9 - 2.3*x^8 + 0.8*x^7 + 1.7*x^6 - 0.3*x^5 - 1.1*x^4 + 0.9*x^3 + 0.4*x^2 - 0.6*x + 0.2
+```
+
+**(a)** The Kac–Rice formula for the expected number of zeros of a smooth random process gives
+
+$$\mathbb{E}[N_n] = \int_{-\infty}^{\infty} dx \int_{-\infty}^{\infty} |y| \, p_{(P_n(x), P_n'(x))}(0, y) \, dy,$$
+
+where $p_{(U,V)}(u,v)$ is the joint probability density of the random vector $(U, V) = (P_n(x), P_n'(x))$ evaluated at the point $(u, v)$. At each fixed $x$, the pair $(P_n(x), P_n'(x))$ is jointly Gaussian with zero mean (since each $a_k$ has zero mean). For a bivariate Gaussian $(U,V)$ with zero mean, variances $\sigma_U^2, \sigma_V^2$, and correlation coefficient $\rho = \operatorname{Cov}(U,V)/(\sigma_U \sigma_V)$, the inner integral evaluates to
+
+$$\int_{-\infty}^{\infty} |y| \, p_{(U,V)}(0, y) \, dy = \frac{1}{\pi} \frac{\sigma_V}{\sigma_U} \sqrt{1 - \rho^2}.$$
+
+Thus the **real-root density** (expected number of roots per unit $x$-interval) is
+
+$$\rho_n(x) = \frac{1}{\pi} \frac{\sigma_{P'}(x)}{\sigma_P(x)} \sqrt{1 - \rho(x)^2},$$
+
+where $\sigma_P(x)^2 = \operatorname{Var}[P_n(x)]$, $\sigma_{P'}(x)^2 = \operatorname{Var}[P_n'(x)]$, and $\rho(x) = \operatorname{Cov}(P_n(x), P_n'(x))/(\sigma_P(x)\sigma_{P'}(x))$.
+
+**(b)** Compute the required variances and covariance in closed form. Since the $a_k$ are i.i.d. $\mathcal{N}(0,1)$:
+
+$$\begin{aligned}
+V_0(x) &:= \operatorname{Var}[P_n(x)] = \sum_{k=0}^{n} x^{2k} = \frac{x^{2n+2} - 1}{x^2 - 1} \quad (x \neq 1), \qquad V_0(1) = n+1. \\
+V_1(x) &:= \operatorname{Var}[P_n'(x)] = \sum_{k=1}^{n} k^2 x^{2k-2} = \frac{d}{dx}\!\left(x \frac{d}{dx} V_0(x)\right) \Big/ x^2? \quad \text{More directly: } \sum_{k=1}^n k^2 x^{2k-2}. \\
+C(x) &:= \operatorname{Cov}(P_n(x), P_n'(x)) = \sum_{k=1}^{n} k \, x^{2k-1} = \frac{1}{2} \frac{d}{dx} V_0(x).
+\end{aligned}$$
+
+Show that for $x \neq \pm 1$,
+
+$$C(x) = \frac{x}{(x^2-1)^2}\Bigl[ (n+1)x^{2n+2} - n x^{2n} - 1 \Bigr? \text{ — derive carefully.}$$
+
+Evaluate the sums:
+
+$$V_0(x) = \frac{x^{2n+2} - 1}{x^2 - 1}, \qquad
+V_1(x) = \frac{1}{(x^2-1)^3}\Bigl[ n^2 x^{2n+4} - 2n(n+1)x^{2n+2} + (n+1)^2 x^{2n} + \cdots \Bigr], \qquad
+C(x) = \frac{1}{(x^2-1)^2}\Bigl[ n x^{2n+3} - (n+1)x^{2n+1} + x \Bigr].$$
+
+(Full closed forms are standard; the important feature is their asymptotic behaviour.)
+
+**(c)** Analyse the density $\rho_n(x)$ for large $n$ in three regimes.
+
+**Regime I: $|x|$ bounded away from 1.** For $|x| < 1 - \delta$ (with $\delta > 0$ independent of $n$), $x^{2n} \to 0$ exponentially fast. Hence $V_0(x) \sim 1/(1-x^2)$, $V_1(x) \sim (1+x^2)/(1-x^2)^3$, and $C(x) \sim x/(1-x^2)^2$. One then computes
+
+$$\rho_n(x) \sim \frac{1}{\pi} \frac{1}{|1-x^2|} \qquad (|x| < 1).$$
+
+For $|x| > 1 + \delta$, the leading term of each sum comes from $k=n$, so $V_0(x) \sim x^{2n}/(x^2-1)$, $V_1(x) \sim n^2 x^{2n-2}/(x^2-1)$, and $C(x) \sim n x^{2n-1}/(x^2-1)$. Consequently $\rho_n(x) \sim (1/\pi)\, 1/(x^2-1)$, which is the same functional form. Thus, away from $x = \pm 1$,
+
+$$\rho_n(x) \approx \frac{1}{\pi} \frac{1}{|1-x^2|}.$$
+
+**Regime II: Near $x = \pm 1$.** At $x=1$, the sums are exact: $V_0(1) = n+1$, $V_1(1) = \sum_{k=1}^n k^2 = n(n+1)(2n+1)/6$, $C(1) = \sum_{k=1}^n k = n(n+1)/2$. Then
+
+$$\rho_n(1) = \frac{1}{\pi} \frac{\sqrt{n(n+1)(2n+1)/6}}{\sqrt{n+1}} \sqrt{1 - \frac{[n(n+1)/2]^2}{(n+1) \cdot n(n+1)(2n+1)/6}} = \frac{1}{\pi} \sqrt{\frac{n(2n+1)}{6}} \sqrt{1 - \frac{3n}{2(2n+1)}}.$$
+
+For large $n$, this is $\rho_n(1) \sim \frac{1}{\pi} \sqrt{\frac{n}{3}} \cdot \sqrt{\frac{n+2}{2(2n+1)}} \sim \frac{\sqrt{n}}{\pi \sqrt{3}} \cdot \frac{1}{\sqrt{4}} = \frac{\sqrt{n}}{2\pi\sqrt{3}}$? Let's compute carefully:
+
+$$\rho_n(1) = \frac{1}{\pi} \frac{\sqrt{n(n+1)(2n+1)/6}}{n+1} \sqrt{1 - \frac{3n(n+1)^2}{4(n+1)n(n+1)(2n+1)/6}}?$$
+
+Simplify: $\sigma_P = \sqrt{n+1}$, $\sigma_{P'} = \sqrt{n(n+1)(2n+1)/6}$, $\rho = \frac{n(n+1)/2}{\sqrt{n+1}\sqrt{n(n+1)(2n+1)/6}} = \sqrt{\frac{3}{2}} \sqrt{\frac{n}{2n+1}}$. Then
+
+$$\rho_n(1) = \frac{1}{\pi} \frac{\sqrt{n(n+1)(2n+1)/6}}{\sqrt{n+1}} \sqrt{1 - \frac{3n}{2(2n+1)}} = \frac{1}{\pi} \sqrt{\frac{n(2n+1)}{6}} \sqrt{\frac{n+2}{2(2n+1)}} = \frac{1}{\pi} \sqrt{\frac{n(n+2)}{12}}.$$
+
+For large $n$, $\rho_n(1) \sim \frac{\sqrt{n}}{\pi\sqrt{12}} = \frac{\sqrt{n}}{2\pi\sqrt{3}}$. (If one redefines with different scaling, the important fact is $\rho_n(\pm 1) \sim c\sqrt{n}$ with $c = 1/(\pi\sqrt{3})$ for a particular normalisation — the canonical Kac result uses slightly different indexing; the essential point is the $\sqrt{n}$ divergence at $x = \pm 1$.)
+
+**Regime III: Transition.** There is a boundary layer of width $O(1/\sqrt{n})$ around $x = \pm 1$ where the density transitions from the $1/|1-x^2|$ behaviour to the peak of height $\sim\sqrt{n}$.
+
+**(d)** Integrate $\rho_n(x)$ to obtain $\mathbb{E}[N_n]$. The integral $\int_{-\infty}^{\infty} \frac{1}{\pi|1-x^2|} dx$ diverges logarithmically at $x = \pm 1$. Truncating at the boundary layer $|x \mp 1| \sim 1/\sqrt{n}$ (where the $\sqrt{n}$ peak takes over), the contribution from $|x|<1$ is
+
+$$\int_{0}^{1 - c/\sqrt{n}} \frac{1}{\pi(1-x^2)} dx \sim \frac{1}{2\pi} \int_{c/\sqrt{n}}^{1} \frac{du}{u} \sim \frac{1}{2\pi} \ln n + O(1).$$
+
+Similarly, the region $|x|>1$ contributes $\frac{1}{2\pi} \ln n + O(1)$. The peak at $x = \pm 1$ contributes $O(1)$. Hence
+
+$$\mathbb{E}[N_n] = \frac{2}{\pi} \ln n + C + o(1) \quad \text{as } n \to \infty.$$
+
+The constant $C$ was determined by Kac (1943) to be
+
+$$C = \frac{2}{\pi}\left(\ln 2 + \gamma\right) + 1 + o(1)?$$
+
+More precisely, the known result (Kac, 1943; subsequently refined by many authors) is
+
+$$\mathbb{E}[N_n] \sim \frac{2}{\pi} \log n + 0.6257358072\dots$$
+
+The constant has an explicit representation in terms of an integral involving the correlation function of the limiting Gaussian process.
+
+**(e)** **Modified coefficient distribution.** Suppose instead that the coefficients are independent Gaussians with *decreasing* variances: $a_k \sim \mathcal{N}(0, 1/k!)$. Thus $P_n(x)$ behaves like a random Taylor polynomial of an entire function. Recompute the variance functions:
+
+$$V_0(x) = \sum_{k=0}^n \frac{x^{2k}}{k!} \sim e^{x^2} \quad \text{for large } n,$$
+$$V_1(x) = \sum_{k=1}^n \frac{k^2 x^{2k-2}}{k!} = \sum_{k=1}^n \frac{k x^{2k-2}}{(k-1)!} = \sum_{j=0}^{n-1} \frac{(j+1) x^{2j}}{j!} \sim (1+x^2) e^{x^2}.$$
+$$C(x) = \sum_{k=1}^n \frac{k x^{2k-1}}{k!} = \sum_{j=0}^{n-1} \frac{x^{2j+1}}{j!} = x e^{x^2}.$$
+
+These sums converge as $n \to \infty$ for any fixed $x$! The density becomes
+
+$$\rho_\infty(x) = \frac{1}{\pi} \frac{\sqrt{1+x^2}}{1} \sqrt{1 - \frac{x^2}{1+x^2}} = \frac{1}{\pi} \frac{\sqrt{1+x^2}}{1} \cdot \frac{1}{\sqrt{1+x^2}} = \frac{1}{\pi}.$$
+
+Wait — let's compute: $\sigma_P = e^{x^2/2}$, $\sigma_{P'} = \sqrt{1+x^2}\, e^{x^2/2}$, $\rho = \frac{x e^{x^2}}{e^{x^2/2} \cdot \sqrt{1+x^2}\, e^{x^2/2}} = \frac{x}{\sqrt{1+x^2}}$. Then $\sqrt{1-\rho^2} = \sqrt{1 - x^2/(1+x^2)} = 1/\sqrt{1+x^2}$. So $\rho_\infty(x) = \frac{1}{\pi} \frac{\sqrt{1+x^2}}{1} \cdot \frac{1}{\sqrt{1+x^2}} = \frac{1}{\pi}$.
+
+Thus the real-root density is *constant*! Integrating over $\mathbb{R}$ gives a *divergent* expected number of roots, but this is the $n \to \infty$ limit of a process that is an entire function with infinitely many real roots (in fact, $e^{-x^2/2} P_\infty(x)$ is a random analytic function whose real zeros have linear density). For finite $n$, the range of $x$ where the sums have approximately converged is $|x| \lesssim \sqrt{n}$ (by Stirling, $k! \sim (k/e)^k$, so $x^{2k}/k!$ peaks at $k \approx x^2$). Thus the effective degree contributing to the polynomial at point $x$ is $\sim x^2$, and the total number of real roots scales as
+
+$$\mathbb{E}[N_n] \sim \int_{-\sqrt{n}}^{\sqrt{n}} \frac{1}{\pi} \, dx = \frac{2}{\pi} \sqrt{n}.$$
+
+This is radically different from the $\frac{2}{\pi}\log n$ scaling for constant-variance coefficients. The rapid decay of coefficient variances makes the polynomial "local" in $x$, so the real roots are spread uniformly over an interval of length $\sim\sqrt{n}$, rather than clustering logarithmically near $x = \pm 1$.
+
+```answer type=expression part=a
+\rho_n(x) = \frac{1}{\pi} \frac{\sigma_{P'}(x)}{\sigma_P(x)} \sqrt{1 - \rho(x)^2}
+```
+
+```answer type=expression part=b
+V_0(x) = \frac{x^{2n+2}-1}{x^2-1},\; V_1(x) = \sum_{k=1}^n k^2 x^{2k-2},\; C(x) = \sum_{k=1}^n k x^{2k-1}
+```
+
+```answer type=expression part=c
+\rho_n(x) \sim \frac{1}{\pi|1-x^2|} \;(|x|\neq 1), \quad \rho_n(\pm 1) \sim \frac{\sqrt{n}}{\pi\sqrt{3}}
+```
+
+```answer type=expression part=d
+\mathbb{E}[N_n] = \frac{2}{\pi}\log n + O(1)
+```
+
+```answer type=expression part=e
+\mathbb{E}[N_n] \sim \frac{2}{\pi}\sqrt{n}
+```
+
+`````solution
+## Necessary Insight
+
+The Kac–Rice formula converts the expected number of real roots into an integral of a local density expressed purely in terms of the variance and covariance of the Gaussian process $(P_n(x), P_n'(x))$. The non-trivial asymptotic $\frac{2}{\pi}\log n$ arises from the logarithmic divergence of $\int dx/|1-x^2|$ near $x = \pm 1$, cut off by a boundary layer where the density peaks at height $\sim\sqrt{n}$. The *False Attractor* is the naive guess $\mathbb{E}[N_n] \sim n/2$, based on the mistaken assumption that each root is independently real with probability $1/2$. In reality, the roots are strongly correlated and most are complex.
+
+---
+
+### (a) Kac–Rice formula
+
+At each $x$, the event that $P_n$ has a root in $[x, x+dx]$ requires $P_n(x) \approx 0$ and $P_n'(x) \neq 0$. By the co-area formula (or the expectation of the number of level crossings), the expected number of zeros is
+
+$$\mathbb{E}[N_n] = \int_{-\infty}^{\infty} \mathbb{E}\bigl[ |P_n'(x)| \;\big|\; P_n(x)=0 \bigr] \, p_{P_n(x)}(0) \, dx.$$
+
+For a Gaussian process, the conditional distribution of $P_n'(x)$ given $P_n(x)=0$ is Gaussian with mean $\rho \frac{\sigma_{P'}}{\sigma_P} \cdot 0 = 0$ and variance $\sigma_{P'}^2(1-\rho^2)$. The expected absolute value of a $\mathcal{N}(0, \sigma^2)$ variable is $\sigma\sqrt{2/\pi}$. Hence
+
+$$\mathbb{E}\bigl[|P_n'(x)| \mid P_n(x)=0\bigr] = \sqrt{\frac{2}{\pi}} \sigma_{P'}\sqrt{1-\rho^2}.$$
+
+And $p_{P_n(x)}(0) = 1/(\sqrt{2\pi}\sigma_P)$. Multiplying: $\sqrt{2/\pi} \cdot 1/(\sqrt{2\pi}) = 1/\pi$. Thus
+
+$$\rho_n(x) = \frac{1}{\pi} \frac{\sigma_{P'}}{\sigma_P} \sqrt{1-\rho^2}.$$
+
+---
+
+### (b) Variance computations
+
+With i.i.d. $\mathcal{N}(0,1)$ coefficients:
+
+- $V_0(x) = \mathbb{E}[(\sum a_k x^k)^2] = \sum x^{2k} = (x^{2n+2}-1)/(x^2-1)$ for $x \neq 1$.
+- $P_n'(x) = \sum_{k=1}^n k a_k x^{k-1}$, so $V_1(x) = \sum k^2 x^{2k-2}$. In closed form: differentiate the geometric series twice. $V_1(x) = \frac{d}{dx}(x \frac{d}{dx} V_0(x))$? Actually: $\sum_{k=1}^n k x^{2k-1} = C(x)$. Then $V_1(x) = C'(x)/x$ (check: $\frac{d}{dx}\sum k x^{2k-1} = \sum k(2k-1)x^{2k-2}$, not quite $k^2$). Direct closed form via sums: $V_1(x) = \frac{1}{(x^2-1)^3}[n^2 x^{2n+4} - 2n(n+1)x^{2n+2} + (n+1)^2 x^{2n} - x^2 - 1]$ for $x \neq 1$.
+- $C(x) = \mathbb{E}[P_n(x)P_n'(x)] = \sum k x^{2k-1} = \frac{d}{dx}(\frac{1}{2}V_0(x)) = \frac{x}{(x^2-1)^2}[(n+1)x^{2n+2} - (n+2)x^{2n} + 1]$ (after careful algebra).
+
+At $x=1$: $V_0(1)=n+1$, $V_1(1)=n(n+1)(2n+1)/6$, $C(1)=n(n+1)/2$.
+
+---
+
+### (c) Asymptotic regimes
+
+For $|x| < 1$, $x^{2n} \to 0$ exponentially. Then $V_0(x) \to 1/(1-x^2)$, $V_1(x) \to (1+x^2)/(1-x^2)^3$, $C(x) \to x/(1-x^2)^2$. Compute:
+
+$$\frac{\sigma_{P'}}{\sigma_P} \sim \frac{\sqrt{1+x^2}/(1-x^2)^{3/2}}{1/\sqrt{1-x^2}} = \frac{\sqrt{1+x^2}}{1-x^2},$$
+$$\rho \sim \frac{x/(1-x^2)^2}{\sqrt{1/(1-x^2)} \cdot \sqrt{(1+x^2)/(1-x^2)^3}} = \frac{x}{\sqrt{1+x^2}},$$
+$$\sqrt{1-\rho^2} = \frac{1}{\sqrt{1+x^2}}.$$
+
+Hence $\rho_n(x) \sim \frac{1}{\pi} \frac{\sqrt{1+x^2}}{1-x^2} \cdot \frac{1}{\sqrt{1+x^2}} = \frac{1}{\pi(1-x^2)}$. For $|x|>1$, similar analysis (pulling out $x^{2n}$ from each sum) gives the same $\frac{1}{\pi(x^2-1)}$.
+
+At $x=1$: $\sigma_P = \sqrt{n+1}$, $\sigma_{P'} = \sqrt{n(n+1)(2n+1)/6} \sim n\sqrt{n/3}$, so $\sigma_{P'}/\sigma_P \sim \sqrt{n/3} \cdot n/\sqrt{n} = n/\sqrt{3}$? Let's do the exact asymptotics: $V_1/V_0 \sim n(2n)/6 = n^2/3$, so $\sigma_{P'}/\sigma_P \sim n/\sqrt{3}$. Actually: $\sigma_{P'}^2 \sim n^3/3$, $\sigma_P^2 \sim n$, ratio $\sim n/\sqrt{3}$.
+
+Correlation: $\rho(1) = \frac{n(n+1)/2}{\sqrt{n+1}\sqrt{n(n+1)(2n+1)/6}} \sim \frac{n^2/2}{n^{3/2}\sqrt{n/3}} = \frac{\sqrt{3}}{2}$? Wait: $\sigma_P \sim \sqrt{n}$, $\sigma_{P'} \sim n^{3/2}/\sqrt{3}$, product $\sim n^2/\sqrt{3}$, so $\rho \sim \frac{n^2/2}{n^2/\sqrt{3}} = \sqrt{3}/2$. Then $\sqrt{1-\rho^2} = \sqrt{1-3/4} = 1/2$. So $\rho_n(1) \sim \frac{1}{\pi} \frac{n/\sqrt{3}}{\sqrt{n}} \cdot \frac{1}{2} = \frac{\sqrt{n}}{2\pi\sqrt{3}}$. More careful algebra gives $\rho_n(1) = \frac{1}{\pi}\sqrt{\frac{n(n+2)}{12}} \sim \frac{\sqrt{n}}{\pi\sqrt{12}}$.
+
+---
+
+### (d) Integration
+
+$$\mathbb{E}[N_n] = \int_{-\infty}^{\infty} \rho_n(x) \, dx.$$
+
+Split: $\int_{-\infty}^{-1-\delta} + \int_{-1-\delta}^{-1+\delta} + \int_{-1+\delta}^{1-\delta} + \int_{1-\delta}^{1+\delta} + \int_{1+\delta}^{\infty}$, with $\delta \sim n^{-1/2}$.
+
+The outer integrals ($|x|>1+\delta$ and $|x|<1-\delta$) each give $\sim \frac{1}{\pi}\int \frac{dx}{|1-x^2|} = \frac{1}{2\pi}\ln n + O(1)$. Two such regions contribute $\frac{1}{\pi}\ln n$ from the outer parts, plus another $\frac{1}{\pi}\ln n$ from the inner part? Let's be systematic:
+
+$$\int_{0}^{1-\varepsilon} \frac{dx}{\pi(1-x^2)} = \frac{1}{2\pi} \ln\frac{1}{1-x}\Big|_{0}^{1-\varepsilon} + \frac{1}{2\pi}\ln(1+x)\Big|_{0}^{1-\varepsilon} \sim \frac{1}{2\pi}\ln\frac{1}{\varepsilon} + O(1).$$
+
+Similarly, $\int_{1+\varepsilon}^{\infty} \frac{dx}{\pi(x^2-1)} \sim \frac{1}{2\pi}\ln\frac{1}{\varepsilon} + O(1)$. With $\varepsilon \sim 1/\sqrt{n}$, each contributes $\frac{1}{4\pi}\ln n$. Over both sides ($x< -1$ and $x>1$, and similarly $-1<x<0$ and $0<x<1$), we get $4 \times \frac{1}{4\pi}\ln n = \frac{1}{\pi}\ln n$? Actually the full line integral: $(-\infty, -1)$ gives $\frac{1}{2\pi}\ln n$, $(-1, 1)$ gives $\frac{1}{\pi}\ln n$ (two log divergences at $\pm 1$), $(1, \infty)$ gives $\frac{1}{2\pi}\ln n$. Total: $\frac{2}{\pi}\ln n$.
+
+The boundary layer integrals are $O(1)$. Thus $\mathbb{E}[N_n] = \frac{2}{\pi}\ln n + C + o(1)$.
+
+---
+
+### (e) Decaying coefficients
+
+With $\operatorname{Var}[a_k] = 1/k!$, the sums converge for each fixed $x$:
+
+$$V_0(x) \to e^{x^2}, \quad C(x) = \sum_{k=1}^\infty \frac{k x^{2k-1}}{k!} = x e^{x^2}, \quad V_1(x) = \sum_{k=1}^\infty \frac{k^2 x^{2k-2}}{k!} = (1+x^2)e^{x^2}.$$
+
+Then $\sigma_{P'}/\sigma_P = \sqrt{1+x^2}$, $\rho = x/\sqrt{1+x^2}$, $\sqrt{1-\rho^2} = 1/\sqrt{1+x^2}$, so $\rho_\infty(x) = 1/\pi$.
+
+But for finite $n$, the infinite-series truncation matters: $x^{2k}/k!$ is maximised at $k \approx x^2$ (by Stirling, $k! \sim (k/e)^k$, so $x^{2k}/k! \sim (e x^2/k)^k$, which peaks when $k = x^2$). Terms with $k > n$ are missing. So the sums have converged only when $x^2 \ll n$, i.e., $|x| \ll \sqrt{n}$. The region where $\rho_n(x) \approx 1/\pi$ is $|x| \lesssim \sqrt{n}$, giving
+
+$$\mathbb{E}[N_n] \approx \int_{-\sqrt{n}}^{\sqrt{n}} \frac{1}{\pi} dx = \frac{2}{\pi} \sqrt{n}.$$
+
+This is a completely different universality class — the "local" regime where the polynomial's effective degree at point $x$ is determined by where the coefficient weights peak, rather than the "global" regime where all coefficients contribute equally.
+`````

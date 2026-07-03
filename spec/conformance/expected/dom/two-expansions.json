@@ -1,0 +1,86 @@
+{
+  "blocks": [
+    {
+      "text": "An ideal gas of $n$ moles starts in volume $V$ at temperature $T$ and ends in volume $2V$ at the\nsame temperature, by two different routes.\n\n**(a)** Route 1 is a *quasi-static isothermal* expansion against a piston. Find $\\Delta S_{\\mathrm{gas}}$\nfrom $\\int \\mathrm{d}Q/T$. **(b)** Route 2 is a *free expansion* into an evacuated chamber (no\npiston, no heat, no work). A tempting claim: *\"no heat flows, so $\\Delta S_{\\mathrm{gas}} = 0$.\"* Is\nit? **(c)** Reconcile the two routes using \\ref{eq:dS}, and say where the irreversibility of Route 2\nactually lives.",
+      "type": "prose"
+    },
+    {
+      "source": "layout row\n# Route 1: quasi-static\ncontainer at=(0,0) width=2 height=2.4\ngas at=(0.15,0.15) width=1.7 height=1.35 n=10\npiston at=(1,1.65) width=2 thickness=0.2 rod=0.6\nvector from=(1,2.65) to=(1,3.35) label=\"slow\"\n---\n# Route 2: free expansion\ncontainer at=(0,0) width=3.4 height=2\ngas at=(0.15,0.15) width=1.3 height=1.7 n=10\nline from=(1.65,0) to=(1.65,2) style=dashed\nlabel text=\"vacuum\" at=(2.5,1) anchor=center",
+      "type": "figure"
+    },
+    {
+      "text": "The entropy change is fixed by the endpoints alone, because $S$ is a state function:",
+      "type": "prose"
+    },
+    {
+      "latex": "\\Delta S_{\\mathrm{gas}} = \\int_V^{2V}\\frac{nR}{V'}\\,\\mathrm{d}V' = nR\\ln 2 \\label{eq:dS}",
+      "type": "math"
+    },
+    {
+      "text": "The isotherm the quasi-static route rides along:",
+      "type": "prose"
+    },
+    {
+      "source": "x: 0.6..2.4\nf(x) = 1/x\nmark: (1, 1) label=\"start\"\nmark: (2, 0.5) label=\"end\"\nxlabel: \"V\"\nylabel: \"P\"\ngrid: true",
+      "type": "plot"
+    },
+    {
+      "part": "a",
+      "type": "answer",
+      "value": "\\Delta S_{\\mathrm{gas}} = nR\\ln 2"
+    },
+    {
+      "part": "b",
+      "type": "answer",
+      "value": "\\Delta S_{\\mathrm{gas}} = nR\\ln 2 \\ \\text{(same — } S \\text{ is a state function; not } 0)."
+    },
+    {
+      "answer_type": "freeform",
+      "part": "c",
+      "type": "answer",
+      "value": "$\\Delta S_{\\mathrm{gas}}=nR\\ln2$ for **both** routes. Route 1 is reversible:\n$\\Delta S_{\\mathrm{surr}} = -nR\\ln2$, so $\\Delta S_{\\mathrm{univ}}=0$. Route 2 does no work on\nanything, so $\\Delta S_{\\mathrm{surr}}=0$ and $\\Delta S_{\\mathrm{univ}} = nR\\ln2 > 0$ — the\nirreversibility lives in the **universe**, not in the gas."
+    },
+    {
+      "blocks": [
+        {
+          "text": "**Necessary insight.** $S$ is a *state function*: $\\Delta S_{\\mathrm{gas}}$ depends only on the\nendpoints, so it is identical for the two routes. To compute it, integrate along *any* reversible\npath connecting them — the quasi-static isotherm — even for the free expansion.\n\n**(a)** Isothermal, so $\\mathrm{d}U=0$ and $\\mathrm{d}Q = \\mathrm{d}W = P\\,\\mathrm{d}V = nRT\\,\n\\mathrm{d}V/V$. Then $\\Delta S_{\\mathrm{gas}} = \\int \\mathrm{d}Q/T = nR\\ln 2$ — equation \\ref{eq:dS}.\n\n**(b)** The false attractor is \"$Q=0 \\Rightarrow \\Delta S=0$.\" That formula, $\\Delta S=\\int\n\\mathrm{d}Q/T$, holds only for a *reversible* path; the free expansion is irreversible. Because $S$\nis a state function and the endpoints are identical, $\\Delta S_{\\mathrm{gas}} = nR\\ln 2$ here too.\n(For an ideal gas $U=U(T)$, and $T$ is unchanged, consistent with this.)\n\n**(c)** Route 1: the surroundings lose the same entropy the gas gains, $\\Delta S_{\\mathrm{univ}}=0$\n(reversible). Route 2: nothing else changes, so $\\Delta S_{\\mathrm{univ}} = nR\\ln 2 > 0$. Same gas,\nsame $\\Delta S_{\\mathrm{gas}}$ — the routes differ only in what happens to the *rest of the world*.",
+          "type": "prose"
+        }
+      ],
+      "type": "solution"
+    }
+  ],
+  "meta": {
+    "difficulty": 4,
+    "grading": [
+      {
+        "criteria": "Quasi-static isothermal $\\Delta S_{\\mathrm{gas}} = nR\\ln 2$ from $\\int dQ/T$.",
+        "part": "a",
+        "points": 3
+      },
+      {
+        "criteria": "Free expansion: recognises $\\Delta S_{\\mathrm{gas}}$ is the same (state function), not zero.",
+        "part": "b",
+        "points": 4
+      },
+      {
+        "criteria": "Distinguishes $\\Delta S_{\\mathrm{gas}}$ from $\\Delta S_{\\mathrm{universe}}$; irreversibility located.",
+        "part": "c",
+        "points": 3
+      }
+    ],
+    "id": "two-expansions",
+    "notation": "american",
+    "subject": "physics",
+    "tags": [
+      "entropy",
+      "state-function",
+      "free-expansion",
+      "irreversibility",
+      "false-attractor"
+    ],
+    "title": "Two Roads to the Same State, One Entropy",
+    "topic": "thermodynamics/entropy"
+  },
+  "mtph": "0.2"
+}

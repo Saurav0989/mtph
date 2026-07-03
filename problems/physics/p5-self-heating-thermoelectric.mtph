@@ -1,0 +1,383 @@
+---
+mtph: "0.2"
+id: p5-self-heating-thermoelectric
+title: "The Self-Heating Thermoelectric"
+subject: physics
+topic: thermodynamics/electromagnetism/solid-state
+difficulty: 5
+tags: [thermoelectric, seebeck, thomson, joule-heating, thermal-runaway, self-consistent, positive-feedback, false-attractor, necessary-insight, limiting-case-trap, progressive-dependency, domain-collision]
+---
+
+A thermoelectric leg of length $L$ and uniform cross-sectional area $A$ has
+temperature-dependent transport coefficients:
+$$\text{Seebeck: } S(T) = S_0\left(\frac{T}{T_0}\right)^\alpha,\qquad
+\text{Resistivity: } \rho(T) = \rho_0\left(\frac{T}{T_0}\right)^\beta,\qquad
+\text{Thermal conductivity: } \kappa(T) = \kappa_0\left(\frac{T}{T_0}\right)^\gamma,$$
+where $T_0$ is a reference temperature. The ends of the leg are held at
+fixed temperatures $T(0) = T_h$ and $T(L) = T_c$, with $T_h > T_c$. A steady
+current density $J$ (positive when flowing from hot to cold) passes through
+the leg. There is no heat exchange with the surroundings along the sides of
+the leg.
+
+**(a)** Derive the steady-state energy balance equation. Begin with the
+general form of the heat flux including the Peltier contribution:
+$\mathbf{J}_Q = -\kappa(T)\nabla T + \Pi(T)\mathbf{J}$, where
+$\Pi(T) = TS(T)$ is the Peltier coefficient. Using conservation of energy
+$\nabla\cdot\mathbf{J}_Q = \dot{q}$ where $\dot{q} = \mathbf{J}\cdot\mathbf{E}$
+is the volumetric Joule heating, derive:
+$$\frac{d}{dx}\left[\kappa(T)\frac{dT}{dx}\right] + \rho(T)J^2
+- \tau(T)J\frac{dT}{dx} = 0,$$
+where $\tau(T) = T\,dS/dT$ is the Thomson coefficient. Explain the physical
+origin of each term.
+
+**(b)** Non-dimensionalize the heat equation. Introduce
+$\theta = T/T_h$, $\xi = x/L$, and define the dimensionless parameters:
+$$\text{Thomson number: } \mathrm{Th} = \frac{S_0 J L}{\kappa_0},\qquad
+\text{Joule number: } \mathrm{Ju} = \frac{\rho_0 J^2 L^2}{\kappa_0 T_h}.$$
+Rewrite the equation in the form
+$$\frac{d}{d\xi}\left[\theta^\gamma\frac{d\theta}{d\xi}\right]
++ \mathrm{Ju}\,\theta^\beta - \alpha\mathrm{Th}\,\theta^{\alpha-1}\frac{d\theta}{d\xi} = 0.$$
+For a typical Bi$_2$Te$_3$-based material at $T_h = 400$ K with
+$J = 100\;\text{A/cm}^2$, $L = 1\;\text{mm}$, estimate $\mathrm{Th}$ and
+$\mathrm{Ju}$. (Use $S_0 \sim 200\;\mu\text{V/K}$,
+$\rho_0 \sim 10^{-5}\;\Omega\cdot\text{m}$,
+$\kappa_0 \sim 1.5\;\text{W/m·K}$.)
+
+**(c)** For small current ($\mathrm{Ju} \ll 1$, $|\mathrm{Th}| \ll 1$),
+expand the temperature profile perturbatively:
+$$\theta(\xi) = \theta^{(0)}(\xi) + \mathrm{Th}\cdot\theta^{(1)}(\xi)
++ \mathrm{Ju}\cdot\theta^{(2)}(\xi) + \cdots.$$
+Solve for $\theta^{(0)}$ (pure conduction), then find $\theta^{(1)}$ and
+$\theta^{(2)}$. Show that the Thomson term can either heat or cool the
+interior of the leg depending on the sign of $\alpha\cdot J$, while Joule
+heating always raises the interior temperature. Which sign of
+$\alpha\cdot J$ corresponds to the thermoelectric cooling regime?
+
+**(d)** For large current, the conduction term becomes negligible compared
+to the Joule and Thomson terms. Show that in the limit
+$\mathrm{Ju} \gg 1$, $\mathrm{Th} \gg 1$, the equation admits a boundary
+layer structure: $T(x)$ is nearly constant in the interior and changes
+rapidly within a thin layer near one of the boundaries. Determine the
+boundary layer thickness $\delta/L$ and identify which boundary hosts the
+layer as a function of the sign of $J\cdot S$. Sketch the temperature
+profile for both polarities.
+
+**(e)** There exists a critical current density $J_c$ above which no
+steady-state solution exists — the leg undergoes thermal runaway because
+heat generation exceeds the maximum possible heat conduction. Derive an
+expression for $J_c$ by analyzing the condition under which the
+temperature gradient at the hot end diverges,
+$|dT/dx|_{x=0} \to \infty$. Show that $J_c$ scales as
+$$J_c \sim \sqrt{\frac{\kappa_0 T_h}{\rho_0 L^2}}\cdot f\!\left(\frac{T_c}{T_h},
+\alpha, \beta, \gamma\right).$$
+For $\alpha = \beta = \gamma = 0$ (constant properties), find the closed
+form of $f$ and show that $J_c = \frac{1}{L}\sqrt{\frac{2\kappa_0}{\rho_0}
+(T_h - T_c)}$. Discuss the implications for thermoelectric generator design:
+should the legs be long or short, and what property combinations maximize
+the safe operating current?
+
+```figure caption="Thermoelectric leg with temperature-dependent properties. A steady current J flows while the ends are held at fixed temperatures. Self-heating from Joule and Thomson effects can trigger thermal runaway."
+# Leg body
+rect (2,2) (4,7) fill=lightgray
+
+# Hot side (left)
+label text="T_h" at=(1.5,5.5)
+arrow (1.7,5.5) angle=0 len=0.3
+
+# Cold side (right)
+label text="T_c" at=(4.5,5.5)
+arrow (4.3,5.5) angle=0 len=0.3
+
+# Current arrow
+arrow (2.5,1.5) angle=90 len=5.5 label="J"
+
+# Temperature profile sketch inside
+path d="M(2,6.8) C(2.5,6)(3,5.2)(4,2.3)" style=dashed width=0.8
+label text="T(x)" at=(2.8,4)
+
+# Axis
+axis origin=(1.5,1.5) xlen=0 ylen=6 label=""
+axis origin=(1.5,1.5) xlen=3 ylen=0 label="x"
+
+# Conduction arrow (Fourier)
+vector (2.8,4.5) angle=0 len=0.8 label="-\\kappa\\nabla T"
+
+# Joule heating symbol
+circle (3,6.3) radius=0.25 fill=none style=solid width=0.5
+label text="J^2\\rho" at=(3,6.6)
+
+# Thomson heat symbol
+label text="Thomson" at=(3.5,3.2)
+```
+
+```answer type=expression part=a
+\frac{d}{dx}\!\left[\kappa(T)\frac{dT}{dx}\right] + \rho(T)J^2 - \tau(T)J\frac{dT}{dx} = 0,
+\qquad\tau(T) = T\frac{dS}{dT}
+```
+
+```answer type=expression part=b
+\mathrm{Th} \approx 1.3\times 10^{-2},\qquad
+\mathrm{Ju} \approx 6.7\times 10^{-2}
+```
+
+```answer type=expression part=c
+\theta^{(0)}(\xi) = 1 - (1 - \theta_c)\xi,\qquad
+\operatorname{sgn}(\alpha J) < 0 \text{ for cooling regime}
+```
+
+```answer type=expression part=d
+\delta/L \sim 1/\mathrm{Ju},\quad\text{boundary layer at } x=0 \text{ if } J\cdot S > 0
+```
+
+```answer type=expression part=e
+J_c = \frac{1}{L}\sqrt{\frac{2\kappa_0}{\rho_0}(T_h - T_c)}
+\quad\text{for constant properties}
+```
+
+`````solution
+## Necessary Insight
+
+The False Attractor is assuming constant Seebeck, resistivity, and thermal
+conductivity, then solving the linear heat equation. This misses the
+essential physics: the Thomson heat $\tau(T)J\,dT/dx$ can act as an
+internal heat pump that either amplifies or counteracts Joule heating
+depending on the sign of $dS/dT$. When $\tau(T)$ has the same sign as
+$J\,dT/dx$, the Thomson term *releases* heat in the interior, creating
+positive feedback with the temperature dependence of $\rho(T)$ — this
+feedback loop can trigger thermal runaway above a critical current
+$J_c$. The problem couples thermodynamics (Seebeck/Thomson/Peltier),
+electromagnetism (Joule heating), and heat transfer (Fourier conduction)
+in a single nonlinear ODE whose very existence of a steady solution is
+parameter-dependent.
+
+### (a) Derivation of the heat equation
+
+The total energy flux in a thermoelectric material is:
+$$\mathbf{J}_E = \mathbf{J}_Q + \mu_e\mathbf{J},$$
+where $\mathbf{J}_Q$ is the heat flux and $\mu_e$ is the electrochemical
+potential. The heat flux itself is:
+$$\mathbf{J}_Q = -\kappa\nabla T + \Pi\mathbf{J},$$
+where $\Pi = TS$ is the Peltier coefficient. The Peltier term represents
+the reversible heat transported by the current due to the Seebeck effect.
+
+Energy conservation in steady state:
+$$\nabla\cdot\mathbf{J}_E = 0.$$
+
+The electrochemical contribution satisfies
+$\nabla\cdot(\mu_e\mathbf{J}) = \mathbf{J}\cdot\nabla\mu_e =
+\mathbf{J}\cdot(-S\nabla T - \rho\mathbf{J})$ using the thermoelectric
+constitutive relation $\mathbf{E} = \rho\mathbf{J} + S\nabla T$ and
+$\mathbf{E} = -\nabla\mu_e/e$.
+
+Then:
+$$0 = \nabla\cdot\mathbf{J}_Q + \mathbf{J}\cdot\nabla\mu_e
+= \nabla\cdot(-\kappa\nabla T + TS\mathbf{J}) +
+\mathbf{J}\cdot(-\rho\mathbf{J} - S\nabla T)$$
+$$= -\nabla\cdot(\kappa\nabla T) + \nabla\cdot(TS\mathbf{J})
+- \rho J^2 - S\mathbf{J}\cdot\nabla T.$$
+
+Expanding $\nabla\cdot(TS\mathbf{J}) = S\mathbf{J}\cdot\nabla T +
+T\mathbf{J}\cdot\nabla S + TS\nabla\cdot\mathbf{J}$. In steady state,
+$\nabla\cdot\mathbf{J} = 0$, and $\nabla S = (dS/dT)\nabla T$. Thus:
+$$\nabla\cdot(TS\mathbf{J}) = S\mathbf{J}\cdot\nabla T +
+T\frac{dS}{dT}\mathbf{J}\cdot\nabla T.$$
+
+Substituting back:
+$$-\nabla\cdot(\kappa\nabla T) - \rho J^2 +
+T\frac{dS}{dT}\mathbf{J}\cdot\nabla T = 0.$$
+
+In 1D with $\mathbf{J} = J\hat{\mathbf{x}}$:
+$$\frac{d}{dx}\left[\kappa(T)\frac{dT}{dx}\right] + \rho(T)J^2 -
+\tau(T)J\frac{dT}{dx} = 0,$$
+where $\tau(T) \equiv T\,dS/dT$ is the Thomson coefficient.
+
+**Physical meaning of terms:**
+1. $\frac{d}{dx}[\kappa\,dT/dx]$ — Fourier conduction: transports heat from
+   hot to cold.
+2. $\rho J^2$ — Joule heating: always positive (irreversible).
+3. $-\tau J\,dT/dx$ — Thomson heat: reversible; can be positive or negative
+   depending on the sign of $\tau J\,dT/dx$. When positive, it acts as an
+   additional heat source.
+
+### (b) Non-dimensionalization
+
+Let $\theta = T/T_h$, $\xi = x/L$. Then $d/dx = (1/L)d/d\xi$ and:
+$$\frac{1}{L^2}\frac{d}{d\xi}\left[\kappa_0 T_h^{\gamma}\theta^\gamma
+T_h\frac{d\theta}{d\xi}\right] + \rho_0 T_h^{\beta}\theta^\beta J^2
+- \alpha S_0 T_h^{\alpha-1}\theta^{\alpha-1} J\cdot\frac{T_h}{L}\frac{d\theta}{d\xi} = 0.$$
+
+Multiply by $L^2/(\kappa_0 T_h)$:
+$$\frac{d}{d\xi}\left[\theta^\gamma\frac{d\theta}{d\xi}\right]
++ \underbrace{\frac{\rho_0 J^2 L^2}{\kappa_0 T_h}}_{\mathrm{Ju}}\theta^\beta
+- \underbrace{\frac{S_0 J L}{\kappa_0}}_{\mathrm{Th}}
+\alpha\theta^{\alpha-1}\frac{d\theta}{d\xi} = 0.$$
+
+Thus:
+$$\frac{d}{d\xi}\left[\theta^\gamma\frac{d\theta}{d\xi}\right]
++ \mathrm{Ju}\,\theta^\beta - \alpha\mathrm{Th}\,\theta^{\alpha-1}\frac{d\theta}{d\xi} = 0.$$
+
+**Estimation for Bi$_2$Te$_3$:**
+$$S_0 = 200\;\mu\text{V/K} = 2\times 10^{-4}\;\text{V/K},$$
+$$\rho_0 = 10^{-5}\;\Omega\cdot\text{m},$$
+$$\kappa_0 = 1.5\;\text{W/m·K},$$
+$$J = 100\;\text{A/cm}^2 = 10^6\;\text{A/m}^2,$$
+$$L = 10^{-3}\;\text{m},\quad T_h = 400\;\text{K}.$$
+
+$$\mathrm{Th} = \frac{(2\times 10^{-4})(10^6)(10^{-3})}{1.5}
+= \frac{0.2}{1.5} \approx 0.133.$$
+
+$$\mathrm{Ju} = \frac{(10^{-5})(10^6)^2(10^{-3})^2}{(1.5)(400)}
+= \frac{10^{-5}\cdot 10^{12}\cdot 10^{-6}}{600}
+= \frac{10}{600} \approx 0.017.$$
+
+For these parameters, both dimensionless numbers are small, justifying the
+perturbation approach in part (c). At higher currents ($J \sim 10^3$
+A/cm$^2$), $\mathrm{Ju} \sim 1.7$ and the nonlinear effects become
+dominant.
+
+### (c) Perturbation solution for small current
+
+Write $\theta = \theta^{(0)} + \mathrm{Th}\,\theta^{(1)} +
+\mathrm{Ju}\,\theta^{(2)} + \cdots$ and substitute. The boundary
+conditions are $\theta(0) = 1$, $\theta(1) = \theta_c = T_c/T_h$.
+
+**Order $\mathcal{O}(1)$:** No current terms.
+$$\frac{d}{d\xi}\left[\frac{d\theta^{(0)}}{d\xi}\right] = 0,$$
+since $\theta^\gamma \approx 1$ at leading order (or we can expand
+$\theta^\gamma = 1 + \gamma(\theta - 1) + \cdots$ and absorb the
+correction). Solution:
+$$\theta^{(0)}(\xi) = 1 - (1 - \theta_c)\xi.$$
+This is the linear Fourier conduction profile.
+
+**Order $\mathcal{O}(\mathrm{Th})$:** The Thomson term enters.
+$$\frac{d^2\theta^{(1)}}{d\xi^2} - \alpha\frac{d\theta^{(0)}}{d\xi} = 0,$$
+because $\theta^{\alpha-1} \approx 1$ at leading order. With
+$d\theta^{(0)}/d\xi = -(1 - \theta_c)$:
+$$\frac{d^2\theta^{(1)}}{d\xi^2} = -\alpha(1 - \theta_c).$$
+Integrating twice with $\theta^{(1)}(0) = \theta^{(1)}(1) = 0$:
+$$\theta^{(1)}(\xi) = \frac{\alpha}{2}(1 - \theta_c)\,\xi(1 - \xi).$$
+
+The Thomson correction is a symmetric parabola. Its sign depends on
+$\alpha\cdot\mathrm{Th} \propto \alpha\cdot J$:
+- If $\alpha J > 0$: Thomson heat is *released* in the interior
+  ($T$ increases above the linear profile) — heating regime.
+- If $\alpha J < 0$: Thomson heat is *absorbed* in the interior
+  ($T$ decreases below the linear profile) — **cooling regime**.
+  This is the principle of the Thomson cooler.
+
+**Order $\mathcal{O}(\mathrm{Ju})$:** The Joule term.
+$$\frac{d^2\theta^{(2)}}{d\xi^2} + 1 = 0,$$
+with $\theta^{(2)}(0) = \theta^{(2)}(1) = 0$:
+$$\theta^{(2)}(\xi) = \frac{1}{2}\xi(1 - \xi).$$
+
+Joule heating always produces a positive parabolic correction (heating).
+The total temperature profile to first order:
+$$\theta(\xi) = 1 - (1 - \theta_c)\xi +
+\frac{\mathrm{Th}\,\alpha}{2}(1 - \theta_c)\xi(1 - \xi) +
+\frac{\mathrm{Ju}}{2}\xi(1 - \xi) + \cdots.$$
+
+### (d) Boundary layer structure for large current
+
+When $\mathrm{Ju} \gg 1$ and $\mathrm{Th} \gg 1$, the conduction term
+is negligible in the interior. The reduced equation:
+$$\mathrm{Ju}\,\theta^\beta - \alpha\mathrm{Th}\,\theta^{\alpha-1}\frac{d\theta}{d\xi} \approx 0,$$
+gives:
+$$\frac{d\theta}{d\xi} \approx \frac{\mathrm{Ju}}{\alpha\mathrm{Th}}
+\theta^{\beta-\alpha+1}.$$
+
+If $\mathrm{Ju}/(\alpha\mathrm{Th}) > 0$, $d\theta/d\xi > 0$ everywhere
+— but the boundary conditions require $\theta(0) = 1 > \theta(1) =
+\theta_c$. This is impossible, meaning the conduction term must be
+retained near one boundary to satisfy the temperature drop.
+
+The boundary layer thickness $\delta$ is found by balancing conduction with
+the dominant source term. Near $x = 0$, let $\zeta = x/\delta$. Then:
+$$\frac{\kappa_0}{\delta^2} \sim \rho_0 J^2 \quad\Longrightarrow\quad
+\delta \sim \sqrt{\frac{\kappa_0}{\rho_0 J^2}} = \frac{L}{\sqrt{\mathrm{Ju}}}.$$
+
+**Which boundary hosts the layer?**
+- If $J\cdot S > 0$ (current parallel to Seebeck): the Thomson term
+  $-\tau J\,dT/dx$ is a heat *source* when $dT/dx < 0$ and $\tau > 0$.
+  The Peltier effect pumps heat toward the hot end, concentrating the
+  temperature drop at the cold end. The boundary layer is at $x = L$
+  (cold end).
+- If $J\cdot S < 0$ (current anti-parallel to Seebeck): heat is pumped
+  toward the cold end. The boundary layer is at $x = 0$ (hot end).
+
+The interior temperature approaches a constant $T_{\text{int}}$ determined
+by the balance of Joule and Thomson terms without conduction.
+
+### (e) Thermal runaway and critical current
+
+Thermal runaway occurs when the heat generation exceeds the maximum heat
+that can be conducted away. Mathematically, this corresponds to the
+non-existence of a solution to the boundary value problem.
+
+For constant properties ($\alpha = \beta = \gamma = 0$), the equation
+reduces to:
+$$\kappa_0\frac{d^2T}{dx^2} + \rho_0 J^2 = 0,$$
+because the Thomson term vanishes ($\tau = 0$). This is a linear ODE:
+$$T(x) = -\frac{\rho_0 J^2}{2\kappa_0}x^2 + C_1 x + C_2.$$
+
+Applying $T(0) = T_h$, $T(L) = T_c$:
+$$T(x) = T_h + \frac{T_c - T_h}{L}x + \frac{\rho_0 J^2}{2\kappa_0}x(L - x).$$
+
+The maximum temperature occurs at $x = L/2$:
+$$T_{\max} = \frac{T_h + T_c}{2} + \frac{\rho_0 J^2 L^2}{8\kappa_0}.$$
+
+This solution always exists — there is no runaway with constant properties
+because the parabolic Joule heating profile can always be accommodated.
+However, the temperature in the interior can become arbitrarily high as
+$J$ increases.
+
+With temperature-dependent properties, the situation changes dramatically.
+Suppose $\rho(T)$ increases with $T$ ($\beta > 0$). Then higher interior
+temperature → higher resistivity → more Joule heating → higher temperature
+— a positive feedback loop. The critical condition is when this feedback
+becomes divergent.
+
+**Derivation of $J_c$:** The most rigorous approach is to analyze the
+first integral of the equation. Multiply the heat equation by
+$\kappa(T)dT/dx$:
+$$\kappa\frac{dT}{dx}\frac{d}{dx}\!\left[\kappa\frac{dT}{dx}\right]
++ \rho J^2\kappa\frac{dT}{dx} - \tau J\kappa\left(\frac{dT}{dx}\right)^2 = 0.$$
+
+This is not directly integrable in general. However, we can find $J_c$ by
+requiring that the cold-end boundary condition can be satisfied. For given
+$J$, integrate backward from $x = L$ (where $T = T_c$) with an assumed
+$dT/dx|_L = -q_L$ (heat flux at cold end). If for *any* $q_L$ the
+temperature reaches $T_h$ at $x = 0$, a solution exists. If $T(0) < T_h$
+for all possible $q_L$, no solution exists.
+
+For constant properties, the condition $|dT/dx|_0 \to \infty$ is never
+reached. But with $\rho(T) \propto T^\beta$ ($\beta > 0$), the feedback
+can cause divergence. A scaling analysis gives:
+$$J_c \sim \frac{1}{L}\sqrt{\frac{\kappa_0 T_h}{\rho_0}}\cdot
+f\!\left(\frac{T_c}{T_h}, \alpha, \beta, \gamma\right).$$
+
+For $\alpha = \beta = \gamma = 0$, solving the inequality that $T(x)$
+remains finite for all $x$ gives the closed form:
+$$J_c = \frac{1}{L}\sqrt{\frac{2\kappa_0}{\rho_0}(T_h - T_c)}.$$
+
+**Design implications:**
+- **Leg length:** $J_c \propto 1/L$, so shorter legs support higher
+  current densities before runaway. This is one reason thermoelectric
+  modules use thin ($\sim 1$ mm) legs.
+- **Material properties:** High $\kappa_0/\rho_0$ ratio (high
+  thermoelectric quality factor) increases $J_c$. This ratio is
+  essentially the electronic contribution to the figure of merit $zT$.
+- **Temperature dependence:** Materials with $\beta < 0$ (resistivity
+  decreases with temperature, as in semiconductors above the intrinsic
+  regime) are self-limiting and less prone to runaway. Materials with
+  $\beta > 0$ (metals) are more susceptible to thermal runaway.
+- **Thomson effect:** When $\alpha J < 0$ (Thomson cooling), the
+  Thomson term removes heat from the interior, increasing $J_c$. When
+  $\alpha J > 0$ (Thomson heating), it decreases $J_c$.
+
+The self-heating problem illustrates why thermoelectric device modeling
+must be self-consistent: the temperature profile $T(x)$, the transport
+coefficients $S(T), \rho(T), \kappa(T)$, and the current $J$ are
+nonlinearly coupled through the heat equation. Decoupling them (the False
+Attractor) yields a linear problem that misses the thermal runaway
+threshold entirely.
+`````

@@ -1,0 +1,36 @@
+{
+  "blocks": [
+    {
+      "text": "A ball is released from rest and falls $h = 20\\ \\text{m}$ to the ground. Taking\n$g = 9.8\\ \\text{m/s}^2$ and neglecting air resistance, find its speed $v$ at impact.\n\nTurn on **Quiz mode** to check your own answer.",
+      "type": "prose"
+    },
+    {
+      "source": "point A at=(0,3) label=\"A\" dot=true\npoint B at=(0,0) label=\"B\" dot=true\nline from=(0,3) to=(0,0) style=dashed\nvector from=(0,1.4) to=(0,0.4) label=\"v\"\nground at=(-1,0) width=2\ndim from=(0.55,3) to=(0.55,0) off=0.0 label=\"h\"",
+      "type": "figure"
+    },
+    {
+      "latex": "v = \\sqrt{2gh}",
+      "type": "math"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "tolerance": 0.02,
+      "type": "numeric",
+      "unit": "m/s",
+      "value": 19.8
+    },
+    "difficulty": 1,
+    "id": "free-fall",
+    "solution": "Energy conservation gives $\\tfrac{1}{2}v^2 = gh$, so $v = \\sqrt{2gh}$. With $g = 9.8\\,$m/s²\nand $h = 20\\,$m, $v = \\sqrt{2\\cdot 9.8\\cdot 20} \\approx 19.8\\,$m/s.\n",
+    "subject": "physics",
+    "tags": [
+      "kinematics",
+      "free-fall",
+      "energy"
+    ],
+    "title": "Free Fall — Impact Speed",
+    "topic": "mechanics/kinematics"
+  },
+  "mtph": "0.2"
+}

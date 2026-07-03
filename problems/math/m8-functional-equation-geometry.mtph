@@ -1,0 +1,167 @@
+---
+mtph: "0.2"
+id: m8-functional-equation-geometry
+title: A Functional Equation from Hyperbolic Geometry
+subject: math
+topic: functional-equations/convex-geometry
+difficulty: 5
+tags: [functional-equation, dalembert, hyperbolic-cosine, transformation, geometric-origin]
+---
+
+Find all continuous functions $f : \mathbb{R}^+ \to \mathbb{R}^+$ satisfying the functional equation
+
+$$f(x)f(y) = f(xy) + f\!\left(\frac{x}{y}\right) \qquad \text{for all } x, y > 0.$$
+
+The problem traces the equation's solution, its connection to the d'Alembert (cosine) functional equation, and its geometric origin in hyperbolic trigonometry.
+
+```figure caption="The Poincaré half-plane: points $u$ and $v$ on the positive real axis. The hyperbolic distance $d(u,v) = |\ln(u/v)|$ is the length of the geodesic (dashed arc)."
+# --- boundary line (real axis) ---
+path d="M(0,0) L(12,0)" stroke=black width=0.8
+# --- two points on the axis ---
+path d="M(2.5,0) L(2.5,0)" stroke=black width=3
+path d="M(9.5,0) L(9.5,0)" stroke=black width=3
+text at=(2.5,-0.8) text="$u$"
+text at=(9.5,-0.8) text="$v$"
+# --- geodesic (semi-circle orthogonal to boundary) ---
+path d="M(2.5,0) C(6,6)(6,6)(9.5,0)" stroke=black width=0.8 style=dashed
+# --- half-plane shading hint ---
+text at=(10,5) text="$\mathbb{H}^2$"
+text at=(10,4) text="(upper half-plane)"
+# --- distance label ---
+text at=(5.8,3.2) text="$d(u,v)$"
+```
+
+**(a)** By making strategic choices of $x$ and $y$, derive constraints on $f(1)$. Set $x = y = 1$ to obtain $f(1)^2 = 2f(1)$, so $f(1) = 2$ (since $f(1) > 0$). Then set $x = 1$ to obtain $f(1)f(y) = f(y) + f(1/y)$, which with $f(1)=2$ gives $f(y) = f(1/y)$ — the function is symmetric under inversion. Next, set $y = x$ to get $f(x)^2 = f(x^2) + f(1) = f(x^2) + 2$. Setting $y = 1/x$ yields $f(x)f(1/x) = f(1) + f(x^2)$, which using $f(1/x) = f(x)$ gives $f(x)^2 = f(x^2) + 2$, consistent with the previous relation.
+
+**(b)** Define $g(t) = f(e^t)$ for all $t \in \mathbb{R}$. Since $f$ maps $\mathbb{R}^+ \to \mathbb{R}^+$, $g : \mathbb{R} \to \mathbb{R}^+$ is continuous. Substitute $x = e^u$, $y = e^v$ into the functional equation:
+
+$$f(e^u) f(e^v) = f(e^{u+v}) + f(e^{u-v}),$$
+
+which becomes
+
+$$g(u) g(v) = g(u+v) + g(u-v) \qquad \text{for all } u, v \in \mathbb{R}.$$
+
+This is the classical **d'Alembert functional equation** (also known as the cosine functional equation). Show that $g(0) = f(1) = 2$, and that setting $u = v$ gives $g(u)^2 = g(2u) + 2$.
+
+**(c)** Solve the d'Alembert equation under the continuity assumption. The continuous solutions of $g(u)g(v) = g(u+v) + g(u-v)$ with $g(0) = 2$ are
+
+$$g(t) = 2\cosh(\alpha t) = e^{\alpha t} + e^{-\alpha t}$$
+
+for some constant $\alpha \in \mathbb{R}$ (the case $\alpha = 0$ gives the constant solution $g(t) = 2$, corresponding to $f(x) \equiv 2$, which one checks indeed satisfies the original equation). If $\alpha$ is imaginary, $\alpha = i\beta$, then $g(t) = 2\cos(\beta t)$, but this would make $g$ negative for some $t$, contradicting $g(t) = f(e^t) > 0$. Hence $\alpha \in \mathbb{R}$.
+
+*Proof sketch.* From $g(u)^2 = g(2u) + 2$, iterating gives $g(nu)$ expressed in terms of Chebyshev polynomials in $g(u)$: $g(nu) = 2T_n(g(u)/2)$. For rational $t = p/q$, one obtains $g(p/q) = 2\cosh(\alpha p/q)$ where $\alpha = \operatorname{arcosh}(g(1)/2)$. Continuity extends this to all real $t$.
+
+Returning to $f$, we have $f(x) = g(\ln x) = 2\cosh(\alpha \ln x) = x^{\alpha} + x^{-\alpha}$. The general continuous solution is therefore
+
+$$f(x) = x^{\alpha} + x^{-\alpha}, \qquad \alpha \in \mathbb{R}.$$
+
+One verifies directly: $(x^\alpha + x^{-\alpha})(y^\alpha + y^{-\alpha}) = (xy)^\alpha + (xy)^{-\alpha} + (x/y)^\alpha + (x/y)^{-\alpha}$.
+
+**(d)** What if we relax the continuity hypothesis? If $f$ is only assumed to be **Lebesgue measurable** (i.e., $\{x : f(x) > c\}$ is measurable for all $c$), then $g(t) = f(e^t)$ is measurable on $\mathbb{R}$. A theorem of Ostrowski and Kestelman states that every measurable solution of the d'Alembert equation is either continuous or of a particular pathological form — and in fact measurable solutions are necessarily continuous almost everywhere, and the functional equation forces continuity everywhere. Thus $f(x) = x^\alpha + x^{-\alpha}$ remains the only measurable solution.
+
+If no regularity is assumed at all, then there exist **wildly discontinuous** solutions constructed using a Hamel basis of $\mathbb{R}$ over $\mathbb{Q}$. Treating $\mathbb{R}$ as a vector space over $\mathbb{Q}$, one can define additive functions $\varphi : \mathbb{R} \to \mathbb{R}$ that are not linear (i.e., not of the form $\varphi(t) = \alpha t$) and set $g(t) = 2\cosh(\varphi(t))$. One must check whether this satisfies the d'Alembert equation: we need $2\cosh(\varphi(u)) \cdot 2\cosh(\varphi(v)) = 2\cosh(\varphi(u+v)) + 2\cosh(\varphi(u-v))$. Using the identity $2\cosh A \cosh B = \cosh(A+B) + \cosh(A-B)$, the equation reduces to $\cosh(\varphi(u)+\varphi(v)) + \cosh(\varphi(u)-\varphi(v)) = \cosh(\varphi(u+v)) + \cosh(\varphi(u-v))$. This holds if $\varphi(u+v) = \pm(\varphi(u) \pm \varphi(v))$ for appropriate choices of signs — but in general it does NOT hold for arbitrary additive $\varphi$. The d'Alembert equation actually forces $\varphi$ to be linear over $\mathbb{R}$, i.e., $\varphi(t) = \alpha t$. So even without continuity, the functional equation is rigid enough that ALL solutions (with the positivity constraint) are of the form $x^\alpha + x^{-\alpha}$. (This is a deeper result; the problem may note the contrast with Cauchy's equation $f(x+y) = f(x) + f(y)$, which does admit Hamel-basis pathologies.)
+
+**(e)** **Geometric origin.** In the Poincaré half-plane model of hyperbolic geometry, the hyperbolic distance between two points on the positive real axis is
+
+$$d(u,v) = \left| \ln\frac{u}{v} \right|.$$
+
+Now consider the function $f(x) = x^\alpha + x^{-\alpha}$. Setting $\alpha = 1$ for simplicity, this function satisfies the given equation. Why? The hyperbolic law of cosines states that for a hyperbolic triangle with side lengths $A, B, C$,
+
+$$\cosh C = \cosh A \cosh B - \sinh A \sinh B \cos\gamma,$$
+
+where $\gamma$ is the angle opposite side $C$. If we take a degenerate triangle with $\gamma = \pi$ (points collinear on a geodesic), this becomes $\cosh(A+B) = \cosh A \cosh B + \sinh A \sinh B$, which is equivalent to the addition formula for $\cosh$. Now rearrange:
+
+$$2\cosh A \cosh B = \cosh(A+B) + \cosh(A-B).$$
+
+Identify $A = \alpha \ln x = \ln(x^\alpha)$, $B = \alpha \ln y = \ln(y^\alpha)$. Then $A+B = \ln((xy)^\alpha)$ and $A-B = \ln((x/y)^\alpha)$. Multiplying the hyperbolic-cosine identity by 2:
+
+$$2\cosh(\alpha\ln x) \cdot 2\cosh(\alpha\ln y) = 2\cosh(\alpha\ln(xy)) + 2\cosh(\alpha\ln(x/y)).$$
+
+But $2\cosh(\alpha\ln x) = x^\alpha + x^{-\alpha} = f(x)$. So the identity IS the functional equation:
+
+$$f(x) f(y) = f(xy) + f(x/y).$$
+
+Thus the functional equation encodes the addition formula for hyperbolic cosine, with the group structure $(\mathbb{R}^+, \times)$ parameterising the geodesic through the identity. The problem is the statement that the *only* continuous isomorphisms from the multiplicative group of distances to the additive group of hyperbolic translations are the powers $x \mapsto x^\alpha$.
+
+```answer type=expression part=a
+f(1) = 2, \quad f(x) = f(1/x)
+```
+
+```answer type=expression part=b
+g(u) = f(e^u), \quad g(u)g(v) = g(u+v) + g(u-v), \quad g(0)=2
+```
+
+```answer type=expression part=c
+f(x) = x^\alpha + x^{-\alpha}, \quad \alpha \in \mathbb{R}
+```
+
+```answer type=expression part=d
+\text{Measurable } \Rightarrow \text{ continuous } \Rightarrow f(x) = x^\alpha + x^{-\alpha}. \text{ Without regularity, same result (rigidity of d'Alembert).}
+```
+
+```answer type=expression part=e
+f(x) = 2\cosh(\ln(x^\alpha)), \quad \text{satisfies the equation by the identity } 2\cosh A \cosh B = \cosh(A+B) + \cosh(A-B)
+```
+
+`````solution
+## Necessary Insight
+
+The substitution $g(t) = f(e^t)$ transforms the multiplicative functional equation $f(x)f(y) = f(xy) + f(x/y)$ into the additive **d'Alembert equation** $g(u)g(v) = g(u+v) + g(u-v)$. This is a classical equation whose continuous solutions are hyperbolic cosines. The *False Attractor* is guessing $f(x) = x^\alpha + x^{-\alpha}$ by pattern-matching without proving completeness, or attempting methods from Cauchy's equation that fail because the equation is not of Cauchy type.
+
+---
+
+### (a) Basic constraints
+
+- $x = y = 1$: $f(1)^2 = f(1) + f(1) = 2f(1)$. Since $f(1) > 0$ (codomain $\mathbb{R}^+$), $f(1) = 2$.
+- $x = 1$, arbitrary $y$: $f(1)f(y) = f(y) + f(1/y)$. With $f(1)=2$, $2f(y) = f(y) + f(1/y)$, so $f(y) = f(1/y)$.
+- $y = x$: $f(x)^2 = f(x^2) + f(1) = f(x^2) + 2$.
+- $y = 1/x$: $f(x)f(1/x) = f(1) + f(x^2)$. Using $f(1/x)=f(x)$, we get $f(x)^2 = 2 + f(x^2)$, consistent.
+
+---
+
+### (b) Reduction to d'Alembert
+
+$g(t) = f(e^t)$. Since $x,y > 0$, write $x = e^u$, $y = e^v$ with $u,v \in \mathbb{R}$. Then $xy = e^{u+v}$, $x/y = e^{u-v}$. The left side: $f(e^u)f(e^v) = g(u)g(v)$. The right side: $f(e^{u+v}) + f(e^{u-v}) = g(u+v) + g(u-v)$. Hence $g(u)g(v) = g(u+v) + g(u-v)$.
+
+$g(0) = f(e^0) = f(1) = 2$. Setting $u=v$: $g(u)^2 = g(2u) + g(0) = g(2u) + 2$.
+
+---
+
+### (c) Solving the d'Alembert equation
+
+Assume $g$ is continuous and $g(0) = 2$, $g(t) > 0$ for all $t$.
+
+First, show $g$ is even: set $u=0$: $g(0)g(v) = g(v) + g(-v)$, so $2g(v) = g(v) + g(-v)$, hence $g(-v) = g(v)$.
+
+From $g(u)^2 = g(2u) + 2$, we see $g(2u) = g(u)^2 - 2$. This is the duplication formula for $2\cosh$: $2\cosh(2t) = 2(2\cosh^2 t - 1) = (2\cosh t)^2 - 2$. Indeed, if $g(t) = 2\cosh(\alpha t)$, then $g(2t) = 2\cosh(2\alpha t) = 2(2\cosh^2(\alpha t) - 1) = [2\cosh(\alpha t)]^2 - 2 = g(t)^2 - 2$.
+
+For rational $t = m/2^n$, iterate the duplication formula to relate $g(m/2^n)$ to $g(1)$. Since $g$ is continuous, the values on dyadic rationals determine $g$ everywhere. Define $\alpha$ by $g(1) = 2\cosh\alpha$ (possible since $g(1)^2 - 2 = g(2) > -2$ implies $g(1) \ge 2$; if $g(1) < 2$, then $g(2) < 2$, and iterating gives negative values eventually, contradicting positivity. Actually $g(t)$ can be $\le 2$ without violating positivity — e.g., $\cosh$ has minimum 1 at 0. If $g(1) = 2\cos\beta$ with $\beta$ real, then $g(t) = 2\cos(\beta t)$. But $\cos$ oscillates and becomes negative, contradicting $g(t) > 0$ for large $t$. For $g(t) > 0$ for all $t$, we need $\alpha \in \mathbb{R}$, giving $g(t) = 2\cosh(\alpha t)$.
+
+Therefore $f(x) = g(\ln x) = 2\cosh(\alpha \ln x) = e^{\alpha \ln x} + e^{-\alpha \ln x} = x^\alpha + x^{-\alpha}$.
+
+---
+
+### (d) Regularity conditions
+
+- **Measurable:** A theorem of Sierpiński–Banach type: any measurable solution of $g(u)g(v) = g(u+v) + g(u-v)$ with $g(0)=2$ is continuous. (The proof uses the fact that a measurable function bounded on a set of positive measure has a point of continuity, and the functional equation propagates continuity.) So measurability suffices.
+
+- **No regularity (Hamel basis):** Unlike Cauchy's equation $h(x+y) = h(x) + h(y)$, which admits discontinuous $\mathbb{Q}$-linear solutions, the d'Alembert equation is more rigid. One can show that ANY solution $g : \mathbb{R} \to \mathbb{R}^+$ with $g(0)=2$ must be of the form $g(t) = 2\cosh(\varphi(t))$ where $\varphi$ is additive AND satisfies the cosine addition law. This forces $\varphi(t) = \alpha t$ even without continuity. The key step: from $g(u)g(v) = g(u+v) + g(u-v)$, one derives $[g(u+v) - g(u-v)]^2 = [g(2u)-2][g(2v)-2]$, and then using $g(2t) = g(t)^2 - 2$, one shows that the function $h(t) = \operatorname{arcosh}(g(t)/2)$ satisfies $h(u+v) + h(u-v) = 2h(u)$ and $h(u+v) - h(u-v) = \cdots$, eventually forcing linearity. So even the Hamel-basis loophole closes: $f(x) = x^\alpha + x^{-\alpha}$ is the general solution.
+
+---
+
+### (e) Hyperbolic geometry connection
+
+In the Poincaré half-plane $\mathbb{H}^2 = \{(x,y) : y > 0\}$ with metric $ds^2 = (dx^2 + dy^2)/y^2$, the geodesics are vertical lines and semicircles orthogonal to the $x$-axis. For two points on the positive real axis (the boundary is $y=0$, but we can consider limits as $y \to 0$; more properly we consider points on the positive $x$-axis viewed as the boundary at infinity — or, within the hyperboloid model, the points $(x,0)$ correspond to directions).
+
+Actually, the clean geometric setting: in the **hyperboloid model** (or the one-dimensional hyperbolic space $\mathbb{H}^1$), distances add under the group law. The positive reals with multiplication $(\mathbb{R}^+, \times)$ are isomorphic to the additive reals $(\mathbb{R}, +)$ via the logarithm. The distance between $x$ and $y$ (as points on the 1-dimensional hyperbolic line $\mathbb{R}^+$) is $d(x,y) = |\ln x - \ln y| = |\ln(x/y)|$.
+
+The functional equation $f(x)f(y) = f(xy) + f(x/y)$ is exactly the statement that $f(x) = 2\cosh(d(1,x)^\alpha)$ satisfies the addition formula for hyperbolic cosine along the geodesic. To see this, note that $d(1, x) = |\ln x|$, $d(1, y) = |\ln y|$, and for $x,y > 0$, the triplet of distances satisfies the triangle equality on the geodesic: $d(1, xy) = d(1, x) + d(1, y)$ and $d(1, x/y) = |d(1,x) - d(1,y)|$ (assuming $x \ge y$ without loss). Then
+
+$$f(x)f(y) = (x^\alpha + x^{-\alpha})(y^\alpha + y^{-\alpha}) = (xy)^\alpha + (xy)^{-\alpha} + (x/y)^\alpha + (x/y)^{-\alpha} = f(xy) + f(x/y).$$
+
+The identity is the manifest algebraic consequence of the hyperbolic addition formula:
+
+$$2\cosh(A+B) + 2\cosh(A-B) = (e^{A+B}+e^{-A-B}) + (e^{A-B}+e^{-A+B}) = (e^A+e^{-A})(e^B+e^{-B}) = (2\cosh A)(2\cosh B).$$
+
+Dividing by 2 gives $\cosh A \cosh B = \frac{1}{2}[\cosh(A+B) + \cosh(A-B)]$, which is precisely $g(u)g(v) = g(u+v) + g(u-v)$ when $g = 2\cosh$. The functional equation is thus *equivalent* to the hyperbolic cosine addition theorem.
+`````

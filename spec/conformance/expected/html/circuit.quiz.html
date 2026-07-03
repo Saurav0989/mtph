@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Resistors in Series</title>
+<style>
+:root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f7f7f8;
+  --chip-bg:#eef0f3; --chip-ink:#445; --code-bg:#f0f0f2; --summary:#334; --ok:#2a7; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+    --chip-bg:#2a2c33; --chip-ink:#c3cbe0; --code-bg:#26282e; --summary:#c3cbe0; --ok:#4cd6a0; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,serif; }
+main { max-width:760px; margin:40px auto; background:var(--paper); padding:40px 48px;
+  border:1px solid var(--line); border-radius:10px; line-height:1.6; }
+h1 { font-size:1.6rem; margin:0 0 .4rem; }
+.meta { margin-bottom:1.6rem; }
+.chip { display:inline-block; font-size:.74rem; background:var(--chip-bg); color:var(--chip-ink);
+  padding:2px 9px; border-radius:20px; margin-right:6px; }
+.tag { font-size:.74rem; color:var(--muted); margin-right:6px; }
+.mtph-prose { margin:1rem 0; }
+.mtph-math { margin:1.3rem 0; text-align:center; overflow-x:auto; }
+.mtph-math.numbered { position:relative; padding-right:2.5rem; }
+.mtph-math.numbered .eqno { position:absolute; right:0; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-variant-numeric:tabular-nums; }
+.eqref { text-decoration:none; color:inherit; border-bottom:1px dotted var(--muted); }
+.mtph-figure { margin:1.6rem 0; text-align:center; }
+/* Diagrams/plots draw their default ink with currentColor, so they follow the page theme;
+   the white knock-out fills and label halos are re-themed to the paper colour here. */
+.mtph-figure svg { max-width:100%; height:auto; color:var(--ink); }
+.mtph-figure svg .mtph-pp { fill:var(--paper); }
+.mtph-figure svg .mtph-lbl { fill:var(--paper); stroke:var(--paper); }
+figcaption { font-size:.85rem; color:var(--muted); margin-top:.4rem; }
+.mtph-aside { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-aside summary { cursor:pointer; font-weight:600; color:var(--summary); }
+.answer, .solution { margin-top:1rem; }
+.answer h3, .solution h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.6rem 0 .3rem; }
+.choices li.correct { font-weight:700; }
+.choices li.correct::after { content:" ✓"; color:var(--ok); }
+.grading .rubric { list-style:none; padding-left:0; }
+.grading .rubric li { margin:.25rem 0; }
+.grading .pts { display:inline-block; min-width:3.6em; font-variant-numeric:tabular-nums;
+  font-weight:600; color:var(--muted); }
+.grading .total { font-weight:600; margin-top:.4rem; }
+code { background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.92em; }
+.mtph-quiz { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-quiz h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.4rem 0 .7rem; }
+.mtph-quiz .q { margin:.55rem 0; }
+.mtph-quiz .q-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mtph-quiz .q-in { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:6px;
+  background:var(--paper); color:var(--ink); width:8em; }
+.mtph-quiz .q-unit { color:var(--muted); }
+.mtph-quiz button { font:inherit; font-size:.85rem; padding:4px 12px; border:1px solid var(--line);
+  border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; }
+.mtph-quiz button:hover { border-color:var(--summary); }
+.mtph-quiz .q-choices { list-style:none; padding-left:0; display:flex; flex-direction:column;
+  gap:6px; margin:.3rem 0; }
+.mtph-quiz .q-opt { text-align:left; width:100%; }
+.mtph-quiz .q-opt.sel { border-color:var(--summary); font-weight:600; }
+.mtph-quiz .q-fb { font-weight:600; }
+.mtph-quiz .q-fb.ok { color:var(--ok); }
+.mtph-quiz .q-fb.no { color:#cc4b37; }
+.mtph-quiz .q-reveal { margin-top:1rem; border-top:1px solid var(--line); padding-top:.8rem; }
+.mtph-quiz .q-reveal summary { cursor:pointer; font-weight:600; color:var(--summary); }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false,errorColor:"#cc0000"});});</script>
+</head>
+<body>
+<main><h1>Resistors in Series</h1>
+<div class="meta"><span class="chip">physics</span><span class="chip">electromagnetism/circuits</span><span class="chip">difficulty 1/5</span><span class="tag">#ohm</span><span class="tag">#series</span><span class="tag">#resistance</span></div>
+<div class="mtph-prose"><p>A battery of EMF $V$ drives a current through two resistors $R_1$ and $R_2$ connected in<br>
+<strong>series</strong>. Find the equivalent resistance $R_{eq}$ of the pair.</p></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 374.6 242.2" width="375" height="242" font-family="Georgia, 'Times New Roman', serif">
+<circle cx="57.52" cy="212.80" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<circle cx="305.52" cy="212.80" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<circle cx="305.52" cy="64.00" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<circle cx="57.52" cy="64.00" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<line x1="57.52" y1="212.80" x2="57.52" y2="138.40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="57.52" y1="128.48" x2="57.52" y2="64.00" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="37.68" y1="138.40" x2="77.36" y2="138.40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="46.36" y1="128.48" x2="68.68" y2="128.48" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<text class="mtph-lbl" x="37.52" y="138.40" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">V</tspan></text><text x="37.52" y="138.40" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">V</tspan></text>
+<line x1="57.52" y1="64.00" x2="71.16" y2="64.00" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="291.88" y1="64.00" x2="305.52" y2="64.00" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<polyline points="71.16,64.00 106.48,64.00 118.98,54.08 131.49,73.92 144.00,54.08 156.51,73.92 169.01,54.08 181.52,73.92 194.03,54.08 206.53,73.92 219.04,54.08 231.55,73.92 244.06,54.08 256.56,64.00 291.88,64.00" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="181.52" y="44.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">R</tspan><tspan dy="5.40" font-size="13.0">1</tspan></text><text x="181.52" y="44.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">R</tspan><tspan dy="5.40" font-size="13.0">1</tspan></text>
+<line x1="305.52" y1="64.00" x2="305.52" y2="77.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="305.52" y1="199.16" x2="305.52" y2="212.80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<polyline points="305.52,77.64 305.52,97.08 315.44,103.97 295.60,110.86 315.44,117.74 295.60,124.63 315.44,131.51 295.60,138.40 315.44,145.29 295.60,152.17 315.44,159.06 295.60,165.94 315.44,172.83 305.52,179.72 305.52,199.16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="325.52" y="138.40" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">R</tspan><tspan dy="5.40" font-size="13.0">2</tspan></text><text x="325.52" y="138.40" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">R</tspan><tspan dy="5.40" font-size="13.0">2</tspan></text>
+<line x1="305.52" y1="212.80" x2="57.52" y2="212.80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg><figcaption>Two resistors in series across a battery of EMF $V$.</figcaption></figure>
+<div class="mtph-quiz"><h3>Check your answer</h3><details class="q-reveal"><summary>Show answer &amp; solution</summary><div class="answer"><h3>Answer</h3><p>$ R_{eq} = R_1 + R_2 $</p></div>
+<div class="solution"><h3>Solution</h3><p>The same current $I$ flows through both resistors, and the potential drops add:<br>
+$V = IR_1 + IR_2 = I(R_1 + R_2)$. Comparing with $V = I R_{eq}$ gives<br>
+$$R_{eq} = R_1 + R_2.$$</p></div></details></div></main>
+<script>(function(){document.querySelectorAll('.mtph-quiz .q').forEach(function(q){var t=q.getAttribute('data-type');var fb=q.querySelector('.q-fb');if(t==='numeric'){var c=parseFloat(q.getAttribute('data-correct'));var tol=parseFloat(q.getAttribute('data-tol'))||0.01;var inp=q.querySelector('.q-in');var go=function(){var v=parseFloat((inp.value||'').replace(',','.'));if(isNaN(v)){fb.textContent='enter a number';fb.className='q-fb';return;}var ok=Math.abs(v-c)<=tol*Math.max(Math.abs(c),1e-12);fb.textContent=ok?'\u2713 correct':'\u2717 try again';fb.className='q-fb '+(ok?'ok':'no');};q.querySelector('.q-check').addEventListener('click',go);inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});}else if(t==='choice'){var ci=parseInt(q.getAttribute('data-correct'),10);q.querySelectorAll('.q-opt').forEach(function(b){b.addEventListener('click',function(){q.querySelectorAll('.q-opt').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');var ok=parseInt(b.getAttribute('data-i'),10)===ci;fb.textContent=ok?'\u2713 correct':'\u2717 not that one';fb.className='q-fb '+(ok?'ok':'no');});});}});})();</script>
+</body>
+</html>

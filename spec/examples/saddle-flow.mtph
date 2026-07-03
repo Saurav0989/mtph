@@ -1,0 +1,58 @@
+---
+mtph: "0.2"
+id: saddle-flow
+title: The Stagnation Point That Isn't Stable
+subject: physics
+topic: fluids/potential-flow
+difficulty: 4
+notation: irodov
+tags: [potential-flow, stagnation, stability, vector-field]
+---
+
+A steady, incompressible, irrotational 2-D flow near a stagnation point has velocity field
+$\vec u = (a x,\,-a y)$ with $a>0$. A neutrally buoyant tracer is released near the origin.
+
+**(a)** Show the field is both divergence-free and irrotational. **(b)** Write the tracer's
+trajectory $y(x)$ from $\dot x = a x,\ \dot y = -a y$, and use it to decide whether the origin is a
+stable equilibrium for the tracer. **(c)** A common claim is "a stagnation point is where the fluid
+is at rest, so a tracer placed there stays there." Identify the false attractor in this claim and
+state \ref{eq:traj}'s verdict precisely.
+
+```plot
+mode: vectorfield
+x: -2..2
+y: -2..2
+u(x,y) = x
+v(x,y) = -y
+```
+
+The streamlines are the hyperbolae $xy = \text{const}$:
+
+```math
+y(x) = \frac{C}{x} \label{eq:traj}
+```
+
+```answer type=expression part=a
+\nabla\cdot\vec u = 0,\quad (\nabla\times\vec u)_z = 0.
+```
+
+```answer type=expression part=b
+xy = \text{const};\quad \text{the origin is a saddle — unstable along } x.
+```
+
+```answer type=freeform part=c
+"Zero velocity ⇒ stable" is the false attractor. Stability is set by the field's *gradient*
+$\mathrm{diag}(a,-a)$, not by the velocity being zero: the origin is a saddle, so tracers are
+swept away along $x$.
+```
+
+````solution
+**(a)** $\nabla\cdot\vec u = a - a = 0$ and $(\nabla\times\vec u)_z = \partial_x(-ay) - \partial_y(ax) = 0$.
+
+**(b)** $\dot x = ax \Rightarrow x = x_0 e^{at}$ (grows) while $\dot y = -ay \Rightarrow y = y_0 e^{-at}$
+(decays), so $xy = x_0 y_0$ is constant — equation \ref{eq:traj}. The $x$-direction is repelling.
+
+**(c)** The false attractor: "velocity zero ⇒ stable." The origin is a **saddle**; any tracer with
+$x_0 \neq 0$ is swept away exponentially. Zero velocity at a point says nothing about the stability
+of nearby trajectories — that is set by the field's *gradient*, here $\mathrm{diag}(a,-a)$.
+````

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Block on a Frictionless Incline</title>
+<style>
+:root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f7f7f8;
+  --chip-bg:#eef0f3; --chip-ink:#445; --code-bg:#f0f0f2; --summary:#334; --ok:#2a7; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+    --chip-bg:#2a2c33; --chip-ink:#c3cbe0; --code-bg:#26282e; --summary:#c3cbe0; --ok:#4cd6a0; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,serif; }
+main { max-width:760px; margin:40px auto; background:var(--paper); padding:40px 48px;
+  border:1px solid var(--line); border-radius:10px; line-height:1.6; }
+h1 { font-size:1.6rem; margin:0 0 .4rem; }
+.meta { margin-bottom:1.6rem; }
+.chip { display:inline-block; font-size:.74rem; background:var(--chip-bg); color:var(--chip-ink);
+  padding:2px 9px; border-radius:20px; margin-right:6px; }
+.tag { font-size:.74rem; color:var(--muted); margin-right:6px; }
+.mtph-prose { margin:1rem 0; }
+.mtph-math { margin:1.3rem 0; text-align:center; overflow-x:auto; }
+.mtph-math.numbered { position:relative; padding-right:2.5rem; }
+.mtph-math.numbered .eqno { position:absolute; right:0; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-variant-numeric:tabular-nums; }
+.eqref { text-decoration:none; color:inherit; border-bottom:1px dotted var(--muted); }
+.mtph-figure { margin:1.6rem 0; text-align:center; }
+/* Diagrams/plots draw their default ink with currentColor, so they follow the page theme;
+   the white knock-out fills and label halos are re-themed to the paper colour here. */
+.mtph-figure svg { max-width:100%; height:auto; color:var(--ink); }
+.mtph-figure svg .mtph-pp { fill:var(--paper); }
+.mtph-figure svg .mtph-lbl { fill:var(--paper); stroke:var(--paper); }
+figcaption { font-size:.85rem; color:var(--muted); margin-top:.4rem; }
+.mtph-aside { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-aside summary { cursor:pointer; font-weight:600; color:var(--summary); }
+.answer, .solution { margin-top:1rem; }
+.answer h3, .solution h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.6rem 0 .3rem; }
+.choices li.correct { font-weight:700; }
+.choices li.correct::after { content:" ✓"; color:var(--ok); }
+.grading .rubric { list-style:none; padding-left:0; }
+.grading .rubric li { margin:.25rem 0; }
+.grading .pts { display:inline-block; min-width:3.6em; font-variant-numeric:tabular-nums;
+  font-weight:600; color:var(--muted); }
+.grading .total { font-weight:600; margin-top:.4rem; }
+code { background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.92em; }
+.mtph-quiz { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-quiz h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.4rem 0 .7rem; }
+.mtph-quiz .q { margin:.55rem 0; }
+.mtph-quiz .q-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mtph-quiz .q-in { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:6px;
+  background:var(--paper); color:var(--ink); width:8em; }
+.mtph-quiz .q-unit { color:var(--muted); }
+.mtph-quiz button { font:inherit; font-size:.85rem; padding:4px 12px; border:1px solid var(--line);
+  border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; }
+.mtph-quiz button:hover { border-color:var(--summary); }
+.mtph-quiz .q-choices { list-style:none; padding-left:0; display:flex; flex-direction:column;
+  gap:6px; margin:.3rem 0; }
+.mtph-quiz .q-opt { text-align:left; width:100%; }
+.mtph-quiz .q-opt.sel { border-color:var(--summary); font-weight:600; }
+.mtph-quiz .q-fb { font-weight:600; }
+.mtph-quiz .q-fb.ok { color:var(--ok); }
+.mtph-quiz .q-fb.no { color:#cc4b37; }
+.mtph-quiz .q-reveal { margin-top:1rem; border-top:1px solid var(--line); padding-top:.8rem; }
+.mtph-quiz .q-reveal summary { cursor:pointer; font-weight:600; color:var(--summary); }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false,errorColor:"#cc0000"});});</script>
+</head>
+<body>
+<main><h1>Block on a Frictionless Incline</h1>
+<div class="meta"><span class="chip">physics</span><span class="chip">mechanics/dynamics</span><span class="chip">difficulty 2/5</span><span class="tag">#newton</span><span class="tag">#incline</span><span class="tag">#free-body</span></div>
+<div class="mtph-prose"><p>A block of mass $m$ rests on a <strong>frictionless</strong> incline that makes an angle $\theta$ with the<br>
+horizontal. Find the magnitude of its acceleration down the slope.</p></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 443.6 276.4" width="444" height="276" font-family="Georgia, 'Times New Roman', serif">
+<polygon points="70.64,236.77 392.80,236.77 392.80,50.77" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<line x1="39.64" y1="236.77" x2="417.60" y2="236.77" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="39.64" y1="236.77" x2="26.00" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="59.48" y1="236.77" x2="45.84" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="79.32" y1="236.77" x2="65.68" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="99.16" y1="236.77" x2="85.52" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="119.00" y1="236.77" x2="105.36" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="138.84" y1="236.77" x2="125.20" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="158.68" y1="236.77" x2="145.04" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="178.52" y1="236.77" x2="164.88" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="198.36" y1="236.77" x2="184.72" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="218.20" y1="236.77" x2="204.56" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="238.04" y1="236.77" x2="224.40" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="257.88" y1="236.77" x2="244.24" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="277.72" y1="236.77" x2="264.08" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="297.56" y1="236.77" x2="283.92" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="317.40" y1="236.77" x2="303.76" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="337.24" y1="236.77" x2="323.60" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="357.08" y1="236.77" x2="343.44" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="376.92" y1="236.77" x2="363.28" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="396.76" y1="236.77" x2="383.12" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="416.60" y1="236.77" x2="402.96" y2="250.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<polygon points="179.66,109.39 227.98,81.49 255.88,129.82 207.56,157.72" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<text class="mtph-lbl" x="229.90" y="112.60" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">m</tspan></text><text x="229.90" y="112.60" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">m</tspan></text>
+<line x1="217.77" y1="119.60" x2="217.77" y2="190.90" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><polygon points="217.77,190.90 213.57,180.90 221.97,180.90" fill="currentColor"/>
+<text class="mtph-lbl" x="217.77" y="206.90" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">mg</tspan></text><text x="217.77" y="206.90" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">mg</tspan></text>
+<line x1="217.77" y1="119.60" x2="182.12" y2="57.86" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><polygon points="182.12,57.86 190.76,64.42 183.48,68.62" fill="currentColor"/>
+<text class="mtph-lbl" x="174.12" y="44.00" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">N</tspan></text><text x="174.12" y="44.00" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">N</tspan></text>
+<polyline points="114.04,236.77 113.95,233.93 113.67,231.10 113.21,228.30 112.56,225.53 111.74,222.82 110.74,220.16 109.56,217.57 108.23,215.07" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="129.33" y="221.04" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">θ</tspan></text><text x="129.33" y="221.04" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">θ</tspan></text>
+</svg><figcaption>Free-body diagram: weight $mg$ and normal force $N$.</figcaption></figure>
+<details class="mtph-aside"><summary>Answer &amp; solution</summary><div class="answer"><h3>Answer</h3><p>$ a = g\sin\theta $</p></div>
+<div class="solution"><h3>Solution</h3><p>Resolve forces along and perpendicular to the surface. Perpendicular to the incline the<br>
+block is in equilibrium, so $N = mg\cos\theta$. Along the incline only gravity contributes,<br>
+giving<br>
+$$mg\sin\theta = ma \implies a = g\sin\theta.$$</p></div></details></main>
+</body>
+</html>

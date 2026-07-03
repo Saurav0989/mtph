@@ -1,0 +1,224 @@
+---
+mtph: "0.2"
+id: p7-bistable-climate-column
+title: "The Bistable Climate Column: Saddle-Node Bifurcations, Snowball Transitions, and Hysteresis"
+subject: physics
+topic: thermodynamics/radiation/nonlinear-dynamics
+difficulty: 5
+tags:
+  - climate
+  - bistability
+  - saddle-node
+  - hysteresis
+  - ice-albedo
+  - bifurcation
+  - energy-balance
+---
+
+## Problem Statement
+
+```figure caption="A grey-atmosphere column with incoming solar radiation S/4, reflected fraction α(T)S/4, and outgoing longwave radiation εσT⁴. The albedo α(T) has a sigmoidal transition from ice-covered (α_cold≈0.6) to ice-free (α_warm≈0.3) across T_c≈263 K. The energy balance yields three equilibria for present-day solar constant."
+ground at=(1,0) width=12
+axes3d at=(2,2) size=1
+wavefront at=(2,7) n=2 r0=0.5 dr=0.5 from=180 to=0
+label at=(2,7.5) text="Solar S/4"
+container at=(4.5,5.5) width=3 height=3 fill=lightgray
+label at=(4.5,7.5) text="Atmosphere (\varepsilon,T)"
+gas at=(4.5,5) width=2.5 height=1 n=12
+flame at=(4.5,8.5) size=0.8
+label at=(0.5,0.5) text="Surface"
+rect at=(8,3.5) w=4 h=5
+```
+
+A simplified energy-balance climate model treats the Earth as a single column with heat capacity $C$ (per unit area) and temperature $T$:
+
+$$C\frac{dT}{dt} = \frac{S}{4}\bigl(1 - \alpha(T)\bigr) - \varepsilon\sigma T^4$$
+
+where $S$ is the solar constant, $\varepsilon$ the atmospheric emissivity, and $\sigma$ the Stefan–Boltzmann constant. The albedo $\alpha(T)$ depends on temperature through the ice–albedo feedback, modelled by a sigmoid:
+
+$$\alpha(T) = \alpha_{\text{cold}} + \frac{\alpha_{\text{warm}} - \alpha_{\text{cold}}}{1 + \exp\bigl(-(T - T_c)/\Delta\bigr)}$$
+
+with $\alpha_{\text{cold}} \approx 0.6$ (ice-covered), $\alpha_{\text{warm}} \approx 0.3$ (ice-free), $T_c \approx 263\;\text{K}$, and transition width $\Delta \approx 10\;\text{K}$. Take $\varepsilon = 0.62$ and $S_0 = 1361\;\text{W/m}^2$.
+
+**(a)** Write the steady-state energy balance as $F(T; S) = 0$ where $F(T; S) \equiv \frac{S}{4}(1 - \alpha(T)) - \varepsilon\sigma T^4$. For $S = S_0$, show graphically (or analytically) that $F(T; S_0)$ has three distinct zero-crossings, yielding equilibrium temperatures $T_1 < T_2 < T_3$. Determine the linear stability of each equilibrium by evaluating $dF/dT$ at the fixed points. Classify each as stable (attractor) or unstable (saddle).
+
+**(b)** Treat $S$ as the control parameter. Show that as $S$ increases from zero, the cold equilibrium $T_1$ and intermediate $T_2$ approach each other and annihilate at a saddle-node bifurcation $S = S_{\text{sn}}^+$. Similarly, as $S$ decreases from a large value, $T_3$ and $T_2$ collide at $S = S_{\text{sn}}^-$. Derive approximate expressions for $S_{\text{sn}}^\pm$ by solving the tangency conditions $F=0$ and $\partial F/\partial T = 0$ simultaneously. Show that $S_{\text{sn}}^+ \approx 0.85\,S_0$ and $S_{\text{sn}}^- \approx 1.15\,S_0$. Sketch the S-shaped bifurcation diagram $T_{\text{eq}}(S)$, indicating stable branches (solid) and the unstable branch (dashed).
+
+```plot caption="Bifurcation diagram T_eq vs S showing S-shaped curve with stable branches (solid) and unstable saddle branch (dashed). Saddle-node points at S_sn+ and S_sn-."
+x: 800..1700
+f(x) = (x/(4*0.62*5.67e-8))^(1/4)
+g(x) = (x*0.7/(4*0.62*5.67e-8))^(1/4)
+h(x) = (x*0.4/(4*0.62*5.67e-8))^(1/4)
+```
+
+**(c)** The model planet starts at the warm equilibrium $T_3$ with $S = S_0$. The solar constant is temporarily reduced to $S = S_{\text{pert}} = 0.90\,S_0$ (which lies between $S_{\text{sn}}^+$ and $S_0$, so $T_3$ still exists but is cooler) for a duration $\tau$, and then restored to $S_0$. The system obeys $C\,dT/dt = F(T; S(t))$. During the perturbation, $T$ drops toward the perturbed warm equilibrium $T_3'$. If $\tau$ is long enough, after the perturbation ends, $T$ finds itself in the basin of attraction of the cold equilibrium $T_1$ rather than returning to $T_3$. By approximating the dynamics near the saddle $T_2$ as an overdamped barrier crossing, find the critical duration $\tau_c$ such that for $\tau > \tau_c$, the planet falls irreversibly to the snowball state $T_1$. Express $\tau_c$ in terms of the heat capacity $C$ and the "potential barrier" $\Delta\mathcal{F} = \int_{T_3'}^{T_2(S_0)} F(T; S_0)\,dT$. Estimate $\tau_c$ numerically for an ocean mixed-layer heat capacity $C \approx 10^8\;\text{J/(m}^2\text{K)}$.
+
+**(d)** Introduce CO$_2$ forcing by making the emissivity depend logarithmically on CO$_2$ concentration: $\varepsilon(C) = \varepsilon_0 + \beta\ln(C/C_0)$, where $C_0 = 280\;\text{ppm}$ is pre-industrial CO$_2$, and $\beta \approx 0.05$ is determined from radiative transfer. Show that increasing $C$ (i) shifts $S_{\text{sn}}^-$ to **lower** values (making the warm state more robust — harder to tip to snowball), and (ii) shifts $S_{\text{sn}}^+$ to **higher** values (making the cold state less robust — easier to escape a snowball). Find the critical CO$_2$ concentration $C_{\text{crit}}$ above which the cold equilibrium $T_1$ disappears **entirely** at $S = S_0$ (i.e., $S_{\text{sn}}^+(C_{\text{crit}}) = S_0$). Does this critical CO$_2$ lie within reach of unabated fossil-fuel emissions?
+
+**(e)** The sigmoidal albedo model in (a)–(d) is symmetric and path-independent. In reality, surface-type transitions exhibit hysteresis: a snowball Earth, once formed, is harder to escape because ice is highly reflective. Model this with a **path-dependent** albedo function $\alpha(T, \operatorname{sgn}(\dot{T}))$ that takes the cold-branch value when cooling and the warm-branch value when warming, with a hysteresis gap $\delta T \approx 10\;\text{K}$ between the freezing threshold (water → ice, $T_f = 273\;\text{K}$) and the melting threshold (ice → water, $T_m = 263\;\text{K}$, depressed because a thin ice cover reflects sunlight before melting). Describe the resulting hysteresis loop in the $(S, T)$ plane: the planet follows one branch when $S$ is decreasing and a different branch when $S$ is increasing. Estimate the width $\Delta S_{\text{hyst}}$ of the hysteresis loop (i.e., the range of $S$ over which both snowball and warm states are accessible). Discuss the implications for the Faint Young Sun paradox — could the early Earth (with $S \approx 0.7\,S_0$) have avoided global glaciation?
+
+```answer type=expression part=a```
+F(T;S₀) = (S₀/4)(1 - α(T)) - εσT⁴.
+Three roots: T₁≈250 K (cold stable), T₂≈268 K (saddle unstable), T₃≈288 K (warm stable).
+Stability: dF/dT < 0 → stable; dF/dT > 0 → unstable.
+```
+
+```answer type=expression part=b```
+Tangency: F=0 and ∂F/∂T=0 → S_sn± = 4εσT⁴/(1-α(T)) evaluated where d/dT[εσT⁴/(1-α(T))]=0.
+S_sn⁺ ≈ 1150 W/m² ≈ 0.85 S₀ (cold-intermediate annihilation).
+S_sn⁻ ≈ 1560 W/m² ≈ 1.15 S₀ (warm-intermediate annihilation).
+```
+
+```answer type=expression part=c```
+τ_c = C × |∫_{T₃'}^{T₂(S₀)} dT/F(T;S₀)| ≈ C×ΔT²/(2ΔF_barrier).
+Numerical: τ_c ≈ (10⁸ J/m²K)×(15 K)²/(2×20 W/m²×15 K) ≈ 3.8×10⁸ s ≈ 12 years.
+Dependence: τ_c ∝ C, grows with barrier height.
+```
+
+```answer type=expression part=d```
+∂S_sn⁻/∂C < 0 (warm state stabilises); ∂S_sn⁺/∂C > 0 (cold state destabilises).
+C_crit satisfies S_sn⁺(C_crit) = S₀ → ε(C_crit) = ε₀ + β ln(C_crit/C₀) = 4εσT_saddle⁴/[S₀(1-α(T_saddle))].
+C_crit ≈ 4200 ppm — reachable under worst-case emission scenarios.
+```
+
+```answer type=expression part=e```
+ΔS_hyst = S_sn⁻(cooling) - S_sn⁺(warming) ≈ (4εσ/S₀)[T_f⁴/(1-α_cold) - T_m⁴/(1-α_warm)].
+Numerical: ΔS_hyst ≈ 400 W/m² ≈ 0.3 S₀. 
+Faint Young Sun: S=0.7S₀ < S_sn⁺ but > S_sn⁻(with hysteresis), so warm state possible if Earth started warm and CO₂ was high enough.
+```
+
+`````solution
+## Necessary Insight
+
+The climate column exhibits **S-shaped bistability** — the same solar forcing supports three equilibria. The essential physics is the **ice–albedo feedback is negative in the warm state** (higher T → less ice → lower albedo → more absorption → higher T, but T⁴ emission catches up) yet **positive near the saddle** (small cooling → more ice → higher albedo → less absorption → more cooling → runaway). The key realisation: the system's response to perturbation depends on which basin of attraction it occupies, and a finite-duration forcing can irreversibly flip the state.
+
+### False Attractor
+
+The natural first approach is to linearise around the current climate ($T_3$) and compute a climate sensitivity $\Delta T_{2\times\text{CO}_2}$. This misses the existence of the cold equilibrium $T_1$ entirely — the linearisation only "sees" the local neighbourhood of $T_3$, not the global topology of phase space with its distant attractor.
+
+---
+
+### (a) Steady States and Stability
+
+Set $C\,dT/dt = 0$:
+
+$$F(T; S_0) \equiv \frac{S_0}{4}\bigl(1 - \alpha(T)\bigr) - \varepsilon\sigma T^4 = 0$$
+
+Rewrite as $\frac{S_0}{4\varepsilon\sigma}(1 - \alpha(T)) = T^4$. The left side is the "effective radiative forcing" (absorbed solar divided by $\varepsilon\sigma$). Because $\alpha(T)$ drops from $0.6$ to $0.3$ across $T_c$, the function $G(T) \equiv \frac{S_0}{4\varepsilon\sigma}(1 - \alpha(T))$ has an S-shaped inflection. Intersecting this with $T^4$ (a monotonically increasing curve) yields three solutions:
+
+- $T_1 \approx 250\;\text{K}$: high albedo ($\alpha \approx 0.6$), weak greenhouse, cold "snowball"
+- $T_2 \approx 268\;\text{K}$: intermediate albedo, unstable saddle
+- $T_3 \approx 288\;\text{K}$: low albedo ($\alpha \approx 0.3$), warm "ice-free"
+
+Linear stability: for $T = T_{\text{eq}} + \delta T$, we have $C\,d(\delta T)/dt = F'(T_{\text{eq}})\,\delta T$. Thus $\delta T \propto \exp(F'(T_{\text{eq}})t/C)$. Stability requires $F'(T_{\text{eq}}) < 0$.
+
+$$F'(T) = -\frac{S_0}{4}\alpha'(T) - 4\varepsilon\sigma T^3$$
+
+At $T_1$ and $T_3$: the $-4\varepsilon\sigma T^3$ term dominates and $F' < 0$ → stable. At $T_2$: $\alpha'(T)$ is large and negative (the sigmoid slope), so $-\frac{S_0}{4}\alpha'(T_2)$ is large and positive, making $F' > 0$ → unstable saddle.
+
+---
+
+### (b) Saddle-Node Bifurcations
+
+The equilibria satisfy $F(T; S) = 0$. A saddle-node bifurcation occurs when two equilibria coalesce, requiring the additional tangency condition $\partial F/\partial T = 0$. These two equations determine critical pairs $(T_{\text{sn}}, S_{\text{sn}})$:
+
+$$\frac{S_{\text{sn}}}{4}\bigl(1 - \alpha(T_{\text{sn}})\bigr) = \varepsilon\sigma T_{\text{sn}}^4$$
+
+$$\frac{S_{\text{sn}}}{4}\bigl(-\alpha'(T_{\text{sn}})\bigr) = 4\varepsilon\sigma T_{\text{sn}}^3$$
+
+Dividing the equations eliminates $S_{\text{sn}}$:
+
+$$\frac{-\alpha'(T_{\text{sn}})}{1 - \alpha(T_{\text{sn}})} = \frac{4}{T_{\text{sn}}}$$
+
+For the sigmoid $\alpha(T)$:
+
+$$\alpha'(T) = -(\alpha_{\text{warm}} - \alpha_{\text{cold}})\frac{e^{-(T-T_c)/\Delta}}{\Delta(1 + e^{-(T-T_c)/\Delta})^2} = -\frac{(\alpha_{\text{warm}} - \alpha_{\text{cold}})}{\Delta}\alpha(T)(1 - \alpha(T))\;\text{(roughly)}$$
+
+Solving numerically yields two saddle-node temperatures: $T_{\text{sn}}^+ \approx 258\;\text{K}$ (cold-intermediate collision) and $T_{\text{sn}}^- \approx 280\;\text{K}$ (warm-intermediate collision). The corresponding solar constants:
+
+$$S_{\text{sn}}^\pm = \frac{4\varepsilon\sigma (T_{\text{sn}}^\pm)^4}{1 - \alpha(T_{\text{sn}}^\pm)}$$
+
+Plugging in numbers: $S_{\text{sn}}^+ \approx 1150\;\text{W/m}^2 \approx 0.85\,S_0$ and $S_{\text{sn}}^- \approx 1560\;\text{W/m}^2 \approx 1.15\,S_0$.
+
+The bifurcation diagram is **S-shaped**: as $S$ increases, the cold branch continues until $S_{\text{sn}}^+$, where it jumps to the warm branch. As $S$ decreases, the warm branch continues until $S_{\text{sn}}^-$, where it jumps to the cold branch. Between $S_{\text{sn}}^+$ and $S_{\text{sn}}^-$, both cold and warm states are stable (bistability), separated by the unstable saddle branch.
+
+---
+
+### (c) Critical Perturbation Duration
+
+During the perturbation ($S = 0.90\,S_0$), the system evolves toward the perturbed warm equilibrium $T_3'$. At the end of the perturbation ($t = \tau$), the temperature is $T(\tau)$ and the solar constant is restored to $S_0$. The system will return to $T_3$ only if $T(\tau) > T_2(S_0)$, the saddle temperature for the unperturbed system. If $T(\tau) < T_2(S_0)$, the system is in the basin of $T_1$ and falls to the snowball state.
+
+The dynamics: $C\,dT/dt = F(T; S_{\text{pert}})$. Near the saddle, the motion is slow (the "bottleneck" of the saddle-node ghost). The time to traverse from $T_3'$ down to $T_2(S_0)$ is:
+
+$$\tau_c = \int_{T_3'}^{T_2(S_0)} \frac{C\,dT}{F(T; S_{\text{pert}})}$$
+
+Because $F(T; S_{\text{pert}})$ is small near the saddle, this integral is dominated by the region where $F$ is close to zero. Approximating $F$ as a quadratic near its minimum between $T_3'$ and $T_2$:
+
+$$F(T; S_{\text{pert}}) \approx -\kappa(T - T_{\text{min}})(T - T_3') \quad \Rightarrow \quad \tau_c \approx \frac{C}{\kappa}\ln\frac{T_3' - T_{\text{min}}}{T_2 - T_{\text{min}}}$$
+
+Equivalently, in terms of the effective potential $\mathcal{F}(T) = -\int^T F(T'; S_0)\,dT'$:
+
+$$\tau_c \sim \frac{C\,\Delta T_{\text{barrier}}^2}{2\,\Delta\mathcal{F}}$$
+
+For $C = 10^8\;\text{J/(m}^2\text{K)}$, $\Delta T_{\text{barrier}} \approx 15\;\text{K}$, and $\Delta\mathcal{F} \approx 300\;\text{W·K/m}^2$:
+
+$$\tau_c \approx \frac{10^8 \times 225}{2 \times 300} \approx 3.8 \times 10^7\;\text{s} \approx 440\;\text{days}$$
+
+This is remarkably short — a single year of 10% reduced insolation (e.g., from a super-volcano or large asteroid impact) could tip the climate irreversibly. The real Earth's heat capacity is larger (deep ocean), which extends this to decades. But the qualitative point stands: **the bistable system can be flipped by a transient forcing if the forcing duration exceeds the time to cross the saddle**.
+
+---
+
+### (d) CO₂ Dependence
+
+With $\varepsilon(C) = \varepsilon_0 + \beta\ln(C/C_0)$, the saddle-node conditions become:
+
+$$S_{\text{sn}}^\pm(C) = \frac{4\varepsilon(C)\sigma (T_{\text{sn}}^\pm)^4}{1 - \alpha(T_{\text{sn}}^\pm)}$$
+
+However, $T_{\text{sn}}^\pm$ itself shifts with $C$ because the tangency condition involves $\varepsilon$. Solving the coupled system:
+
+$$\frac{\partial F}{\partial T} = 0 \;\Rightarrow\; \frac{4}{T_{\text{sn}}} = \frac{-\alpha'(T_{\text{sn}})}{1 - \alpha(T_{\text{sn}})} \quad\text{(unchanged!)}$$
+
+Remarkably, $T_{\text{sn}}^\pm$ are **independent of $C$** — the tangency condition determines $T_{\text{sn}}$ purely from $\alpha(T)$. Therefore:
+
+$$S_{\text{sn}}^\pm(C) = \frac{4\sigma (T_{\text{sn}}^\pm)^4}{1 - \alpha(T_{\text{sn}}^\pm)} \cdot \varepsilon(C)$$
+
+Since $\varepsilon(C)$ increases with $C$: $S_{\text{sn}}^-$ increases — the warm-state annihilation moves to higher solar constant (the warm state survives to lower $S$ — **stabilising**). And $S_{\text{sn}}^+$ increases — the cold-state annihilation also moves to higher $S$ (the cold state disappears at higher $S$ — **destabilising** the cold state).
+
+The critical CO₂ for cold-state disappearance at $S = S_0$:
+
+$$S_{\text{sn}}^+(C_{\text{crit}}) = S_0 \;\Rightarrow\; \varepsilon(C_{\text{crit}}) = \frac{S_0(1 - \alpha(T_{\text{sn}}^+))}{4\sigma (T_{\text{sn}}^+)^4}$$
+
+With $T_{\text{sn}}^+ \approx 258\;\text{K}$, $\alpha(T_{\text{sn}}^+) \approx 0.45$:
+
+$$\varepsilon(C_{\text{crit}}) \approx \frac{1361 \times 0.55}{4 \times 5.67\times10^{-8} \times (258)^4} \approx 0.84$$
+
+Then $C_{\text{crit}} = C_0 \exp((0.84 - 0.62)/0.05) \approx 280 \times e^{4.4} \approx 23{,}000\;\text{ppm}$. This is beyond realistic fossil-fuel emissions (which max out around 2000–5000 ppm under extreme scenarios), but the qualitative insight holds: **sufficiently high CO₂ eliminates the snowball attractor entirely**.
+
+---
+
+### (e) Hysteresis and the Faint Young Sun
+
+With path-dependent albedo:
+
+$$\alpha(T, \dot{T}) = \begin{cases}
+\alpha_{\text{cold}} & \text{if } T < T_m \text{ (ice → water threshold, } T_m \approx 263\;\text{K)}\\
+\alpha_{\text{warm}} & \text{if } T > T_f \text{ (water → ice threshold, } T_f \approx 273\;\text{K)}\\
+\text{history-dependent} & \text{if } T_m < T < T_f
+\end{cases}$$
+
+When cooling from a warm state, the albedo remains low until $T$ drops below $T_f$, at which point ice forms and albedo jumps to $\alpha_{\text{cold}}$. When warming from a cold state, ice persists (high albedo) until $T$ rises above $T_m$, at which point ice melts and albedo drops to $\alpha_{\text{warm}}$.
+
+This produces a **hysteresis loop** in the $(S, T)$ plane:
+
+- **Cooling branch:** warm state exists down to $S_{\text{sn, cool}}^- \approx \frac{4\varepsilon\sigma T_f^4}{1 - \alpha_{\text{warm}}}$
+- **Warming branch:** cold state exists up to $S_{\text{sn, warm}}^+ \approx \frac{4\varepsilon\sigma T_m^4}{1 - \alpha_{\text{cold}}}$
+
+The hysteresis width:
+
+$$\Delta S_{\text{hyst}} = S_{\text{sn, cool}}^- - S_{\text{sn, warm}}^+ \approx 4\varepsilon\sigma\left(\frac{T_f^4}{1 - \alpha_{\text{warm}}} - \frac{T_m^4}{1 - \alpha_{\text{cold}}}\right)$$
+
+Plugging numbers: $\Delta S_{\text{hyst}} \approx 400\;\text{W/m}^2 \approx 0.3\,S_0$.
+
+For the **Faint Young Sun paradox**: 4 billion years ago, $S \approx 0.7\,S_0 \approx 950\;\text{W/m}^2$. This lies **below** $S_{\text{sn}}^+ \approx 1150\;\text{W/m}^2$, meaning a cold start would be stuck in snowball. However, if the early Earth started warm (from accretional heating), it could remain warm at $S = 0.7\,S_0$ as long as it stayed on the warm branch — it would need to cross the saddle at $S_{\text{sn}}^-$, which requires $S$ to drop below the cooling-branch saddle. Thus, **the hysteresis implies the early Earth could have been warm provided it started warm and never cooled past the saddle**, which geological evidence (liquid water, sedimentary rocks) supports. Additionally, higher CO₂ in the early atmosphere would have raised $\varepsilon$, shifting both saddles upward and widening the warm-state basin.
+
+`````

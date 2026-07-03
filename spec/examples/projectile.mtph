@@ -1,0 +1,36 @@
+---
+mtph: "0.2"
+id: projectile-range
+title: Projectile Range
+subject: physics
+topic: mechanics/kinematics
+difficulty: 3
+tags: [projectile, kinematics, parabola]
+answer:
+  type: numeric
+  value: 19.9
+  unit: 'm'
+  tolerance: 0.3
+solution: |
+  The range of a projectile launched from the ground is
+  $R = \dfrac{v_0^2 \sin 2\theta}{g}$. With $v_0 = 15\ \text{m/s}$, $\theta = 30^\circ$ and
+  $g = 9.8\ \text{m/s}^2$,
+  $$R = \frac{15^2 \sin 60^\circ}{9.8} \approx 19.9\ \text{m}.$$
+---
+
+A projectile is launched from the ground with speed $v_0 = 15\ \text{m/s}$ at an angle
+$\theta = 30^\circ$ above the horizontal. Taking $g = 9.8\ \text{m/s}^2$, its trajectory is
+
+$$y(x) = x\tan\theta - \frac{g\,x^2}{2\,v_0^2\cos^2\theta}.$$
+
+Estimate the horizontal range $R$ — the value of $x$ at which the projectile returns to the
+ground ($y = 0$).
+
+```plot caption="Trajectory $y(x)$, in metres."
+x: 0..21
+f(x) = 0.5774*x - 0.02904*x^2
+hline: 0
+grid: true
+xlabel: "x (m)"
+ylabel: "y (m)"
+```

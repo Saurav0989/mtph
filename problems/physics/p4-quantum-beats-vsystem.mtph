@@ -1,0 +1,301 @@
+---
+mtph: "0.2"
+id: p4-quantum-beats-vsystem
+title: "Quantum Beats in a V-System"
+subject: physics
+topic: quantum-mechanics/electromagnetism/quantum-optics
+difficulty: 5
+tags: [v-system, quantum-beats, which-path, coherence, spontaneous-emission, spectral-resolution, false-attractor, necessary-insight, symmetry-camouflage, progressive-dependency]
+---
+
+A three-level atom has a ground state $|g\rangle$ and two excited states
+$|e_1\rangle$, $|e_2\rangle$ with energies $\hbar\omega_1$, $\hbar\omega_2$.
+Two continuous-wave lasers drive transitions $|g\rangle \leftrightarrow
+|e_1\rangle$ with Rabi frequency $\Omega_1$ and detuning $\delta_1$, and
+$|g\rangle \leftrightarrow |e_2\rangle$ with $\Omega_2$, $\delta_2$. Both
+excited states decay to the ground state via spontaneous emission with rates
+$\gamma_1$, $\gamma_2$. The laser linewidths are negligible.
+
+**(a)** Write the master equation for the reduced density matrix $\rho$ in
+Lindblad form, including the coherent driving and spontaneous emission.
+Restrict attention to the $\{|e_1\rangle, |e_2\rangle\}$ subspace, and show
+that the effective non-Hermitian Hamiltonian is
+$$\hat{H}_{\text{eff}} = \begin{pmatrix}
+-\hbar\delta_1 - i\hbar\gamma_1/2 & 0 \\
+0 & -\hbar\delta_2 - i\hbar\gamma_2/2
+\end{pmatrix} + \frac{\hbar\Omega_1}{2}\hat{\sigma}_x^{(1)} +
+\frac{\hbar\Omega_2}{2}\hat{\sigma}_x^{(2)}.$$
+Find its eigenvalues $\lambda_\pm$. The imaginary parts give the decay rates
+of the dressed states.
+
+**(b)** The steady-state fluorescence spectrum $S(\omega)$ is given by the
+Wiener-Khinchin theorem:
+$$S(\omega) = \operatorname{Re}\int_0^\infty d\tau\,e^{-i\omega\tau}
+\langle\hat{\sigma}^\dagger(t+\tau)\hat{\sigma}(t)\rangle_{\text{ss}},$$
+where $\hat{\sigma} = |g\rangle\langle e_1| + |g\rangle\langle e_2|$ is the
+total dipole lowering operator. Using the quantum regression theorem, show
+that when $\delta_1 = \delta_2 = 0$ and $\Omega_1 = \Omega_2 = \Omega$,
+$S(\omega)$ contains an interference term oscillating at the beat frequency
+$|\omega_1 - \omega_2|$:
+$$S(\omega) = S_1(\omega) + S_2(\omega) + S_{12}(\omega)\cos[(\omega_1 - \omega_2)\tau + \phi].$$
+This is the quantum beat signal.
+
+**(c)** A real detector has finite spectral resolution $\Delta\omega$
+(e.g., a Fabry-Perot interferometer or a grating spectrometer). The
+measured spectrum is the convolution
+$\tilde{S}(\omega) = \int d\omega'\,S(\omega')F(\omega - \omega')$ where
+$F(\omega)$ is the instrument function of width $\Delta\omega$. Show that
+the beat visibility, defined as
+$V = (\tilde{S}_{\max} - \tilde{S}_{\min})/(\tilde{S}_{\max} +
+\tilde{S}_{\min})$ near the average transition frequency, satisfies
+$$V = V_0\cdot\frac{\gamma_{12}}{\gamma_{12} + \Delta\omega},$$
+where $\gamma_{12} = (\gamma_1 + \gamma_2)/2$ and $V_0$ is the visibility
+with perfect resolution. Interpret this result: as $\Delta\omega \gg
+\gamma_{12}$, the detector acquires which-path information from the photon
+frequency which destroys the quantum interference.
+
+**(d)** Consider the case where the two transitions have orthogonal
+polarizations: $|g\rangle \to |e_1\rangle$ is driven by $\sigma^+$
+polarized light and $|g\rangle \to |e_2\rangle$ by $\sigma^-$ polarized
+light. Answer the following: (i) Can a polarization-insensitive detector
+still observe quantum beats? (ii) If a linear polarizer is placed before
+the detector at $45^\circ$ to both axes, what is the beat visibility?
+(iii) If the polarizer is aligned with one of the transitions, what
+happens to the beats? Explain how the polarizer acts as a which-path
+marker.
+
+**(e)** Generalize to an $N$-level V-system with excited states
+$|e_1\rangle, \ldots, |e_N\rangle$, all coupled to a single ground state
+$|g\rangle$. The fluorescence spectrum contains beat frequencies
+$\omega_i - \omega_j$ for all pairs. Show that there are $N(N-1)/2$
+distinct beat frequencies. As $N \to \infty$ with equally spaced levels
+over a bandwidth $\Gamma$, argue that the fluorescence becomes
+indistinguishable from classical thermal noise — a manifestation of the
+quantum-to-classical transition via spectral crowding. Identify the
+critical $N^*$ above which the beats are unresolvable.
+
+```figure caption="V-type three-level atom. Two excited states decay to a common ground state. Two lasers drive the transitions. The emitted fluorescence carries which-path information encoded in the photon frequency."
+# Ground state
+point G at=(3,1) size=small fill=black
+label text="|g\rangle" at=(3,0.6)
+
+# Excited states
+point E1 at=(1,5) size=small fill=black
+point E2 at=(5,5) size=small fill=black
+label text="|e_1\rangle" at=(0.5,5.2)
+label text="|e_2\rangle" at=(5.5,5.2)
+
+# Laser arrows (upward)
+vector from=(1,1.5) to=(1,4.5) style=dashed width=1
+vector from=(5,1.5) to=(5,4.5) style=dashed width=1
+
+# Laser labels
+label text="\Omega_1" at=(0.5,3)
+label text="\Omega_2" at=(5.5,3)
+
+# Decay arrows (downward wiggly)
+path d="M(1,4.5) Q(1.3,3.5)(1.1,2.5) Q(0.9,1.5)(1,1)" style=solid width=1
+path d="M(5,4.5) Q(5.3,3.5)(5.1,2.5) Q(4.9,1.5)(5,1)" style=solid width=1
+
+# Decay rate labels
+label text="\gamma_1" at=(0.5,3.5)
+label text="\gamma_2" at=(5.5,3.5)
+
+# Energy level dashed lines
+line from=(0.5,5) to=(2.5,5) style=dashed width=0.5
+line from=(3.5,5) to=(5.5,5) style=dashed width=0.5
+line from=(0.5,1) to=(5.5,1) style=dashed width=0.5
+
+# Energy axis
+axis origin=(0,0.5) xlen=0 ylen=6
+label text="E" at=(-0.3,6.2)
+
+# Detector symbol (simplified)
+rect at=(2,6.5) w=2 h=0.7 fill=gray
+label text="detector" at=(3,6.9)
+vector from=(3,6.5) to=(3,6.0)
+```
+
+```answer type=expression part=a
+\lambda_\pm = -\frac{\hbar}{2}\left[(\delta_1+\delta_2) + i\frac{\gamma_1+\gamma_2}{2}\right]
+\pm \frac{\hbar}{2}\sqrt{(\delta_1-\delta_2)^2 + \Omega^2 - \frac{(\gamma_1-\gamma_2)^2}{4}}
+```
+
+```answer type=expression part=b
+S_{12}(\tau) \propto e^{-(\gamma_1+\gamma_2)\tau/2}\cos[(\omega_1-\omega_2)\tau]
+```
+
+```answer type=expression part=c
+V = V_0\cdot\frac{\gamma_{12}}{\gamma_{12} + \Delta\omega}
+```
+
+```answer type=expression part=d
+V_{\text{pol}} = V_0\cos^2\theta,\quad V(45^\circ) = \frac{V_0}{2}
+```
+
+```answer type=expression part=e
+N_{\text{beat}} = \frac{N(N-1)}{2},\qquad
+N^* \sim \frac{\Gamma}{\gamma}\quad\text{(critical for unresolvability)}
+```
+
+`````solution
+## Necessary Insight
+
+The False Attractor is treating the V-system as two independent two-level
+atoms, each fluorescing independently — which gives no beats. The ground
+state couples coherently to *both* excited states; the total dipole moment
+is the sum of the two transition dipoles. Quantum beats arise because the
+photon emitted from the superposition $|e_1\rangle + |e_2\rangle$ carries
+no which-path label — until the detector's spectral resolution becomes
+fine enough to distinguish $\omega_1$ from $\omega_2$, at which point the
+detector acquires which-path information and the interference vanishes.
+This is a manifestation of Bohr's complementarity principle: wave-like
+interference (beats) and particle-like which-path information are mutually
+exclusive.
+
+### (a) Master equation and effective Hamiltonian
+
+The Lindblad master equation:
+$$\frac{d\rho}{dt} = -\frac{i}{\hbar}[H,\rho] + \sum_{j=1}^{2}\gamma_j
+\mathcal{D}[|g\rangle\langle e_j|]\rho,$$
+where $\mathcal{D}[L]\rho = L\rho L^\dagger - \frac{1}{2}\{L^\dagger L, \rho\}$.
+
+In the rotating frame at the laser frequencies $\omega_{L1}$, $\omega_{L2}$,
+the Hamiltonian is ($\hbar = 1$):
+$$H = -\delta_1|e_1\rangle\langle e_1| - \delta_2|e_2\rangle\langle e_2|
++ \frac{\Omega_1}{2}(|e_1\rangle\langle g| + |g\rangle\langle e_1|)
++ \frac{\Omega_2}{2}(|e_2\rangle\langle g| + |g\rangle\langle e_2|),$$
+with $\delta_j = \omega_{Lj} - \omega_j$.
+
+In the excited-state subspace, the non-Hermitian effective Hamiltonian
+governs the conditional evolution when no photon has been emitted:
+$$H_{\text{eff}} = H - \frac{i}{2}\sum_j\gamma_j|e_j\rangle\langle e_j|.$$
+
+For the subspace $\{|e_1\rangle, |e_2\rangle\}$:
+$$H_{\text{eff}} = \begin{pmatrix}
+-\delta_1 - i\gamma_1/2 & 0 \\
+0 & -\delta_2 - i\gamma_2/2
+\end{pmatrix} + \frac{1}{2}\begin{pmatrix}
+0 & \Omega \\
+\Omega & 0
+\end{pmatrix},$$
+where the second term comes from the two-photon coupling via the ground
+state (valid when $\Omega_j \ll |\delta_j + i\gamma_j/2|$, i.e., in the
+weak-driving limit, or more generally by adiabatic elimination of
+$|g\rangle$).
+
+The eigenvalues:
+$$\lambda_\pm = -\frac{\delta_1 + \delta_2}{2} - i\frac{\gamma_1 + \gamma_2}{4}
+\pm \frac{1}{2}\sqrt{(\delta_1 - \delta_2)^2 + \Omega^2 - \frac{(\gamma_1 - \gamma_2)^2}{4}}.$$
+
+For $\delta_1 = \delta_2$ and $\gamma_1 = \gamma_2 = \gamma$:
+$$\lambda_\pm = -\delta - i\frac{\gamma}{2} \pm \frac{\Omega}{2}.$$
+
+The imaginary parts $-\gamma/2 \pm 0$ show that both dressed states decay
+at the same rate $\gamma/2$. The real parts differ by $\Omega$, giving
+Rabi oscillations at frequency $\Omega$ in the excited-state population.
+
+### (b) Fluorescence spectrum and quantum beats
+
+The steady-state correlation function factorizes via the quantum regression
+theorem. For the total dipole operator
+$\hat{\sigma} = |g\rangle\langle e_1| + |g\rangle\langle e_2|$:
+$$\langle\hat{\sigma}^\dagger(t+\tau)\hat{\sigma}(t)\rangle_{\text{ss}} =
+\sum_{i,j=1}^{2}\langle\hat{\sigma}_i^\dagger(\tau)\hat{\sigma}_j(0)\rangle
+e^{-i\omega_i\tau},$$
+where $\hat{\sigma}_j = |g\rangle\langle e_j|$.
+
+For $\delta_1 = \delta_2 = 0$ and $\Omega_1 = \Omega_2 = \Omega$, the
+steady state has coherence $\rho_{e_1e_2} \neq 0$. The correlation function
+contains cross-terms:
+$$\langle\hat{\sigma}_1^\dagger(\tau)\hat{\sigma}_2(0)\rangle \propto
+e^{-(\gamma_1+\gamma_2)\tau/2}e^{-i\omega_1\tau}\rho_{e_1e_2}(0).$$
+
+The Fourier transform yields:
+$$S(\omega) = \frac{\rho_{e_1e_1}^{\text{ss}}\gamma_1}{(\omega-\omega_1)^2 + \gamma_1^2/4}
++ \frac{\rho_{e_2e_2}^{\text{ss}}\gamma_2}{(\omega-\omega_2)^2 + \gamma_2^2/4}
++ \frac{2\gamma_{12}\operatorname{Re}[\rho_{e_1e_2}^{\text{ss}}e^{i\phi}]}
+{(\omega-\bar\omega)^2 + \gamma_{12}^2},$$
+where $\bar\omega = (\omega_1+\omega_2)/2$, $\gamma_{12} = (\gamma_1+\gamma_2)/2$,
+and $\phi$ is a phase.
+
+The third term is the interference (beat) term. In the time domain, it
+oscillates at $|\omega_1 - \omega_2|$. The beat arises from the coherence
+$\rho_{e_1e_2}$ established by the common ground state — two independent
+two-level atoms would have $\rho_{e_1e_2} = 0$ and no beats.
+
+### (c) Spectral resolution and which-path information
+
+Convolving $S(\omega)$ with a Lorentzian instrument function
+$F(\omega) = (\Delta\omega/\pi)/(\omega^2 + \Delta\omega^2)$:
+
+The two main peaks broaden from $\gamma_j$ to $\gamma_j + \Delta\omega$.
+More importantly, the interference term is attenuated. The beat modulation
+in the overlap region of the two peaks has visibility:
+$$V = V_0 \cdot \frac{\gamma_{12}}{\gamma_{12} + \Delta\omega}.$$
+
+**Interpretation:** When $\Delta\omega \ll \gamma_{12}$, the detector
+cannot distinguish whether a photon came from the $|e_1\rangle$ or
+$|e_2\rangle$ decay — the two paths interfere, and beats are visible.
+When $\Delta\omega \gg \gamma_{12}$, the detector's energy resolution
+is sufficient to determine the photon's frequency, thereby identifying
+the decay channel (which-path information). This which-path knowledge
+destroys the quantum interference, and the beats vanish.
+
+This is a quantitative realization of the complementarity relation
+$\mathcal{V}^2 + \mathcal{D}^2 \leq 1$, where $\mathcal{V}$ is the
+fringe visibility (wave aspect) and $\mathcal{D}$ is the which-path
+distinguishability (particle aspect).
+
+### (d) Polarization as a which-path marker
+
+**(i)** A polarization-insensitive detector sums over both polarization
+modes, so it measures the total intensity regardless of polarization.
+If the two transitions have orthogonal polarizations, the emitted photons
+are distinguishable in principle — but a detector that doesn't measure
+polarization traces over that degree of freedom, erasing the which-path
+information. **Beats are still visible** with a polarization-insensitive
+detector.
+
+**(ii)** A polarizer at $45^\circ$ projects onto the superposition
+$(|\sigma^+\rangle + |\sigma^-\rangle)/\sqrt{2}$. Each transition has
+amplitude $1/\sqrt{2}$ after the polarizer. The beat visibility becomes:
+$$V(45^\circ) = \frac{V_0}{2}.$$
+The factor $1/2$ comes from the fact that the polarizer transmits only
+half the intensity of each polarization while preserving their relative
+coherence.
+
+**(iii)** A polarizer aligned with, say, $\sigma^+$ completely blocks
+photons from the $|e_2\rangle$ decay. With only one decay channel
+reaching the detector, there is no superposition and no beats:
+$V = 0$. The polarizer acts as a perfect which-path marker because it
+provides complete information about which excited state decayed.
+
+### (e) N-level generalization and quantum-to-classical transition
+
+With $N$ excited states, the total dipole operator is
+$\hat{\sigma} = \sum_{j=1}^{N}|g\rangle\langle e_j|$. The fluorescence
+correlation function contains $N$ autocorrelation terms and $N(N-1)$
+cross-correlation terms. In the frequency domain, this produces
+$N(N-1)/2$ distinct beat frequencies at $|\omega_i - \omega_j|$ (the
+factor $1/2$ because $\omega_i - \omega_j$ and $\omega_j - \omega_i$ give
+the same beat frequency).
+
+As $N \to \infty$ with levels uniformly spaced by $\Delta\omega_0$ over
+a bandwidth $\Gamma = N\Delta\omega_0$, the beat frequencies form a dense
+set. When the level spacing $\Delta\omega_0$ becomes smaller than the
+natural linewidth $\gamma$, individual beats overlap and merge into a
+quasi-continuous background:
+$$S(\omega) \to \int d\omega'\,\frac{\rho(\omega')\gamma}{(\omega-\omega')^2 + \gamma^2/4},$$
+which is exactly the spectrum of a classical noisy oscillator with
+spectral density $\rho(\omega')$.
+
+The critical $N$ for unresolvability is:
+$$N^* \sim \frac{\Gamma}{\gamma},$$
+i.e., when the number of levels within one linewidth becomes large. At
+this point, the quantum beat structure can no longer be resolved, and
+the fluorescence is operationally indistinguishable from classical
+noise. This is a concrete realization of the quantum-to-classical
+transition via spectral complexity: as the system's Hilbert space grows,
+its radiative output approaches that of a classical stochastic process.
+`````

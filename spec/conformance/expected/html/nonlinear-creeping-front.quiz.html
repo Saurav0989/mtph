@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>The Nonlinear Creeping Front</title>
+<style>
+:root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f7f7f8;
+  --chip-bg:#eef0f3; --chip-ink:#445; --code-bg:#f0f0f2; --summary:#334; --ok:#2a7; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+    --chip-bg:#2a2c33; --chip-ink:#c3cbe0; --code-bg:#26282e; --summary:#c3cbe0; --ok:#4cd6a0; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,serif; }
+main { max-width:760px; margin:40px auto; background:var(--paper); padding:40px 48px;
+  border:1px solid var(--line); border-radius:10px; line-height:1.6; }
+h1 { font-size:1.6rem; margin:0 0 .4rem; }
+.meta { margin-bottom:1.6rem; }
+.chip { display:inline-block; font-size:.74rem; background:var(--chip-bg); color:var(--chip-ink);
+  padding:2px 9px; border-radius:20px; margin-right:6px; }
+.tag { font-size:.74rem; color:var(--muted); margin-right:6px; }
+.mtph-prose { margin:1rem 0; }
+.mtph-math { margin:1.3rem 0; text-align:center; overflow-x:auto; }
+.mtph-math.numbered { position:relative; padding-right:2.5rem; }
+.mtph-math.numbered .eqno { position:absolute; right:0; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-variant-numeric:tabular-nums; }
+.eqref { text-decoration:none; color:inherit; border-bottom:1px dotted var(--muted); }
+.mtph-figure { margin:1.6rem 0; text-align:center; }
+/* Diagrams/plots draw their default ink with currentColor, so they follow the page theme;
+   the white knock-out fills and label halos are re-themed to the paper colour here. */
+.mtph-figure svg { max-width:100%; height:auto; color:var(--ink); }
+.mtph-figure svg .mtph-pp { fill:var(--paper); }
+.mtph-figure svg .mtph-lbl { fill:var(--paper); stroke:var(--paper); }
+figcaption { font-size:.85rem; color:var(--muted); margin-top:.4rem; }
+.mtph-aside { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-aside summary { cursor:pointer; font-weight:600; color:var(--summary); }
+.answer, .solution { margin-top:1rem; }
+.answer h3, .solution h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.6rem 0 .3rem; }
+.choices li.correct { font-weight:700; }
+.choices li.correct::after { content:" ✓"; color:var(--ok); }
+.grading .rubric { list-style:none; padding-left:0; }
+.grading .rubric li { margin:.25rem 0; }
+.grading .pts { display:inline-block; min-width:3.6em; font-variant-numeric:tabular-nums;
+  font-weight:600; color:var(--muted); }
+.grading .total { font-weight:600; margin-top:.4rem; }
+code { background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.92em; }
+.mtph-quiz { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-quiz h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.4rem 0 .7rem; }
+.mtph-quiz .q { margin:.55rem 0; }
+.mtph-quiz .q-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mtph-quiz .q-in { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:6px;
+  background:var(--paper); color:var(--ink); width:8em; }
+.mtph-quiz .q-unit { color:var(--muted); }
+.mtph-quiz button { font:inherit; font-size:.85rem; padding:4px 12px; border:1px solid var(--line);
+  border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; }
+.mtph-quiz button:hover { border-color:var(--summary); }
+.mtph-quiz .q-choices { list-style:none; padding-left:0; display:flex; flex-direction:column;
+  gap:6px; margin:.3rem 0; }
+.mtph-quiz .q-opt { text-align:left; width:100%; }
+.mtph-quiz .q-opt.sel { border-color:var(--summary); font-weight:600; }
+.mtph-quiz .q-fb { font-weight:600; }
+.mtph-quiz .q-fb.ok { color:var(--ok); }
+.mtph-quiz .q-fb.no { color:#cc4b37; }
+.mtph-quiz .q-reveal { margin-top:1rem; border-top:1px solid var(--line); padding-top:.8rem; }
+.mtph-quiz .q-reveal summary { cursor:pointer; font-weight:600; color:var(--summary); }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false,errorColor:"#cc0000"});});</script>
+</head>
+<body>
+<main><h1>The Nonlinear Creeping Front</h1>
+<div class="meta"><span class="chip">physics</span><span class="chip">nonlinear-diffusion/thermodynamics/moving-boundary</span><span class="chip">difficulty 5/5</span><span class="tag">#stefan-problem</span><span class="tag">#nonlinear-diffusion</span><span class="tag">#similarity-solution</span><span class="tag">#scaling-symmetry</span><span class="tag">#domain-collision</span><span class="tag">#false-attractor</span><span class="tag">#moving-boundary</span><span class="tag">#phase-change</span></div>
+<div class="mtph-prose"><p>A semi-infinite medium $x \ge 0$ is initially at uniform temperature $T_m$, the<br>
+melting (or phase-transition) temperature. At $t = 0$, the face $x = 0$ is brought to<br>
+and held at $T_0 &gt; T_m$. The thermal conductivity of the medium depends on temperature<br>
+as</p></div>
+<div class="mtph-math">$$ \kappa(T) = \kappa_0\left(\frac{T}{T_m}\right)^{\!p}, \qquad p \in \mathbb{R}, $$</div>
+<div class="mtph-prose"><p>with $\kappa_0$ constant. The medium has density $\rho$, specific heat $c_p$, and the<br>
+phase change at $T = T_m$ absorbs latent heat $L$ per unit mass.</p>
+<p>A sharp front at $x = s(t)$ separates the heated region ($T &gt; T_m$) from the undisturbed<br>
+medium ($T = T_m$). At the front the temperature is $T_m$ and the <strong>Stefan condition</strong> holds:</p></div>
+<div class="mtph-math">$$ -\kappa(T_m)\left.\frac{\partial T}{\partial x}\right|_{x = s(t)} = \rho L\,\frac{ds}{dt}. $$</div>
+<div class="mtph-prose"><p><strong>(a)</strong> By dimensional analysis, or by identifying the scaling symmetry of the governing<br>
+equations, argue that the front position must obey $s(t) \propto \sqrt{t}$. Introduce a<br>
+dimensionless temperature $u = (T - T_m)/(T_0 - T_m)$ and an appropriate similarity variable<br>
+$\eta$, and show that the problem reduces to a <strong>nonlinear ordinary differential equation</strong><br>
+for $f(\eta)$ on the interval $0 &lt; \eta &lt; \eta_s$, where $\eta_s = s(t)/\sqrt{\alpha_0 t}$<br>
+($\alpha_0 = \kappa_0/(\rho c_p)$) is a <em>constant</em> to be determined. Write down the ODE<br>
+and all boundary conditions, including the Stefan condition in similarity variables.</p>
+<p><strong>(b)</strong> Solve the problem <strong>exactly</strong> for the classical case $p = 0$ (constant conductivity).<br>
+Express $f(\eta)$ using the error function and derive the transcendental equation that<br>
+determines $\eta_s$ in terms of the <strong>Stefan number</strong> $\mathrm{Ste} = L/[c_p(T_0 - T_m)]$.</p>
+<p><strong>(c)</strong> For general $p$, the ODE does not yield an elementary closed form. However, by<br>
+integrating the ODE once, obtain a <strong>first integral</strong> relating the local heat flux<br>
+$J(\eta) = -\kappa_r(f)f&#x27;$ (where $\kappa_r = \kappa/\kappa_0$) to the cumulative heat<br>
+$\int_0^\eta f(s)\,ds$. Express this as an integro-differential equation of first order,<br>
+and interpret each term physically.</p>
+<p><strong>(d)</strong> Analyse the structure of the solution <strong>near the front</strong> ($\eta \to \eta_s^-$,<br>
+$f \to 0^+$). By balancing the leading terms in the ODE, determine the exponent $\gamma$<br>
+such that $f(\eta) \propto (\eta_s - \eta)^\gamma$, as a function of $p$. Describe the<br>
+qualitatively distinct behaviours for $p = 0$, $p = 1$, $p &gt; 1$, and $0 &lt; p &lt; 1$, and<br>
+sketch the resulting temperature profiles at the front.</p>
+<p><strong>(e)</strong> An engineer proposes the following shortcut: replace $\kappa(T)$ by its value at the<br>
+average temperature $(T_0 + T_m)/2$, and then apply the classical ($p = 0$) Neumann solution<br>
+from part (b). Under what conditions on $p$ and $\mathrm{Ste}$ does this approximation<br>
+fail <strong>catastrophically</strong>? Give a clear physical argument — not a calculation — for why<br>
+the error is largest in those regimes, and identify which physics the average-conductivity<br>
+approximation fundamentally misses.</p></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 837.6 478.6" width="838" height="479" font-family="Georgia, 'Times New Roman', serif">
+<line x1="67.60" y1="403.60" x2="67.60" y2="31.60" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="67.60" y1="403.60" x2="53.96" y2="389.96" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="383.76" x2="53.96" y2="370.12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="363.92" x2="53.96" y2="350.28" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="344.08" x2="53.96" y2="330.44" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="324.24" x2="53.96" y2="310.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="304.40" x2="53.96" y2="290.76" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="284.56" x2="53.96" y2="270.92" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="264.72" x2="53.96" y2="251.08" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="244.88" x2="53.96" y2="231.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="225.04" x2="53.96" y2="211.40" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="205.20" x2="53.96" y2="191.56" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="185.36" x2="53.96" y2="171.72" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="165.52" x2="53.96" y2="151.88" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="145.68" x2="53.96" y2="132.04" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="125.84" x2="53.96" y2="112.20" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="106.00" x2="53.96" y2="92.36" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="86.16" x2="53.96" y2="72.52" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="66.32" x2="53.96" y2="52.68" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="46.48" x2="53.96" y2="32.84" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="67.60" y1="403.60" x2="811.60" y2="403.60" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="67.60" y1="403.60" x2="53.96" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="87.44" y1="403.60" x2="73.80" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="107.28" y1="403.60" x2="93.64" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="127.12" y1="403.60" x2="113.48" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="146.96" y1="403.60" x2="133.32" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="166.80" y1="403.60" x2="153.16" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="186.64" y1="403.60" x2="173.00" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="206.48" y1="403.60" x2="192.84" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="226.32" y1="403.60" x2="212.68" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="246.16" y1="403.60" x2="232.52" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="266.00" y1="403.60" x2="252.36" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="285.84" y1="403.60" x2="272.20" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="305.68" y1="403.60" x2="292.04" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="325.52" y1="403.60" x2="311.88" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="345.36" y1="403.60" x2="331.72" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="365.20" y1="403.60" x2="351.56" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="385.04" y1="403.60" x2="371.40" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="404.88" y1="403.60" x2="391.24" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="424.72" y1="403.60" x2="411.08" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="444.56" y1="403.60" x2="430.92" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="464.40" y1="403.60" x2="450.76" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="484.24" y1="403.60" x2="470.60" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="504.08" y1="403.60" x2="490.44" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="523.92" y1="403.60" x2="510.28" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="543.76" y1="403.60" x2="530.12" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="563.60" y1="403.60" x2="549.96" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="583.44" y1="403.60" x2="569.80" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="603.28" y1="403.60" x2="589.64" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="623.12" y1="403.60" x2="609.48" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="642.96" y1="403.60" x2="629.32" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="662.80" y1="403.60" x2="649.16" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="682.64" y1="403.60" x2="669.00" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="702.48" y1="403.60" x2="688.84" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="722.32" y1="403.60" x2="708.68" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="742.16" y1="403.60" x2="728.52" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="762.00" y1="403.60" x2="748.36" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="781.84" y1="403.60" x2="768.20" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="801.68" y1="403.60" x2="788.04" y2="417.24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M 117.20 186.60 C 124.64 168.19 109.76 158.70 117.20 149.77 Q 124.64 138.61 117.20 130.80" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><polygon points="117.20,130.80 127.14,135.14 121.06,140.94" fill="currentColor"/>
+<path d="M 142.00 186.60 C 149.44 168.19 134.56 158.70 142.00 149.77 Q 149.44 138.61 142.00 130.80" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><polygon points="142.00,130.80 151.94,135.14 145.86,140.94" fill="currentColor"/>
+<path d="M 166.80 186.60 C 174.24 168.19 159.36 158.70 166.80 149.77 Q 174.24 138.61 166.80 130.80" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><polygon points="166.80,130.80 176.74,135.14 170.66,140.94" fill="currentColor"/>
+<text class="mtph-lbl" x="26.00" y="81.20" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">T</tspan><tspan dy="5.40" font-size="13.0">0</tspan></text><text x="26.00" y="81.20" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">T</tspan><tspan dy="5.40" font-size="13.0">0</tspan></text>
+<text class="mtph-lbl" x="26.00" y="354.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">T</tspan><tspan dy="5.40" font-size="13.0">m</tspan></text><text x="26.00" y="354.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">T</tspan><tspan dy="5.40" font-size="13.0">m</tspan></text>
+<path d="M 67.60 93.60 C 179.20 106.00 266.00 155.60 315.60 248.60 C 346.60 304.40 365.20 341.60 377.60 372.60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="230.60" y="217.60" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">T(x,t</tspan><tspan dy="5.40" font-size="13.0">1</tspan><tspan dy="-5.40">)</tspan></text><text x="230.60" y="217.60" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">T(x,t</tspan><tspan dy="5.40" font-size="13.0">1</tspan><tspan dy="-5.40">)</tspan></text>
+<path d="M 67.60 93.60 C 284.60 99.80 439.60 143.20 532.60 217.60 C 594.60 267.20 638.00 329.20 656.60 372.60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="385.60" y="199.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">T(x,t</tspan><tspan dy="5.40" font-size="13.0">2</tspan><tspan dy="-5.40">)</tspan></text><text x="385.60" y="199.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">T(x,t</tspan><tspan dy="5.40" font-size="13.0">2</tspan><tspan dy="-5.40">)</tspan></text>
+<line x1="377.60" y1="403.60" x2="377.60" y2="354.00" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="7 5"/>
+<text class="mtph-lbl" x="377.60" y="434.60" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">s(t</tspan><tspan dy="5.40" font-size="13.0">1</tspan><tspan dy="-5.40">)</tspan></text><text x="377.60" y="434.60" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">s(t</tspan><tspan dy="5.40" font-size="13.0">1</tspan><tspan dy="-5.40">)</tspan></text>
+<line x1="656.60" y1="403.60" x2="656.60" y2="354.00" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="7 5"/>
+<text class="mtph-lbl" x="656.60" y="434.60" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">s(t</tspan><tspan dy="5.40" font-size="13.0">2</tspan><tspan dy="-5.40">)</tspan></text><text x="656.60" y="434.60" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">s(t</tspan><tspan dy="5.40" font-size="13.0">2</tspan><tspan dy="-5.40">)</tspan></text>
+<polygon points="191.60,313.70 625.60,313.70 625.60,344.70 191.60,344.70" fill="#cccccc" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<text class="mtph-lbl" x="625.60" y="313.70" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">undisturbed ($T = T</tspan><tspan dy="5.40" font-size="13.0">m</tspan><tspan dy="-5.40">$)</tspan></text><text x="625.60" y="313.70" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">undisturbed ($T = T</tspan><tspan dy="5.40" font-size="13.0">m</tspan><tspan dy="-5.40">$)</tspan></text>
+<line x1="92.40" y1="93.60" x2="191.60" y2="93.60" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="191.60,93.60 181.60,97.80 181.60,89.40" fill="currentColor"/>
+<text class="mtph-lbl" x="207.60" y="93.60" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">q̇</tspan></text><text x="207.60" y="93.60" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">q̇</tspan></text>
+<text class="mtph-lbl" x="315.60" y="44.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">heated region</tspan></text><text x="315.60" y="44.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">heated region</tspan></text>
+<text class="mtph-lbl" x="315.60" y="168.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">κ(T) ∝ T</tspan><tspan dy="-7.56" font-size="13.0">p</tspan></text><text x="315.60" y="168.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">κ(T) ∝ T</tspan><tspan dy="-7.56" font-size="13.0">p</tspan></text>
+<circle cx="377.60" cy="378.80" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<circle cx="656.60" cy="378.80" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+</svg><figcaption>Semi-infinite medium with temperature-dependent conductivity $\kappa(T) \propto T^p$ and a moving phase front at $x = s(t)$. Temperature profiles at $t_1 &lt; t_2$ show the self-similar spreading $s(t) \propto \sqrt{t}$.</figcaption></figure>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 380" width="560" height="380" fill="currentColor" font-family="Georgia, 'Times New Roman', serif">
+<line x1="44.00" y1="18.00" x2="44.00" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="105.75" y1="18.00" x2="105.75" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="167.50" y1="18.00" x2="167.50" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="229.25" y1="18.00" x2="229.25" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="291.00" y1="18.00" x2="291.00" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="352.75" y1="18.00" x2="352.75" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="414.50" y1="18.00" x2="414.50" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="476.25" y1="18.00" x2="476.25" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="538.00" y1="18.00" x2="538.00" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="335.57" x2="538.00" y2="335.57" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="293.41" x2="538.00" y2="293.41" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="251.26" x2="538.00" y2="251.26" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="209.10" x2="538.00" y2="209.10" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="166.95" x2="538.00" y2="166.95" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="124.79" x2="538.00" y2="124.79" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="82.64" x2="538.00" y2="82.64" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="40.48" x2="538.00" y2="40.48" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="251.26" x2="538.00" y2="251.26" stroke="currentColor" stroke-width="1.4"/>
+<line x1="44.00" y1="18.00" x2="44.00" y2="344.00" stroke="currentColor" stroke-width="1.4"/>
+<line x1="105.75" y1="248.26" x2="105.75" y2="254.26" stroke="currentColor" stroke-width="1.2"/>
+<text x="105.75" y="264.26" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">0.5</tspan></text>
+<line x1="167.50" y1="248.26" x2="167.50" y2="254.26" stroke="currentColor" stroke-width="1.2"/>
+<text x="167.50" y="264.26" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">1</tspan></text>
+<line x1="229.25" y1="248.26" x2="229.25" y2="254.26" stroke="currentColor" stroke-width="1.2"/>
+<text x="229.25" y="264.26" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">1.5</tspan></text>
+<line x1="291.00" y1="248.26" x2="291.00" y2="254.26" stroke="currentColor" stroke-width="1.2"/>
+<text x="291.00" y="264.26" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">2</tspan></text>
+<line x1="352.75" y1="248.26" x2="352.75" y2="254.26" stroke="currentColor" stroke-width="1.2"/>
+<text x="352.75" y="264.26" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">2.5</tspan></text>
+<line x1="414.50" y1="248.26" x2="414.50" y2="254.26" stroke="currentColor" stroke-width="1.2"/>
+<text x="414.50" y="264.26" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">3</tspan></text>
+<line x1="476.25" y1="248.26" x2="476.25" y2="254.26" stroke="currentColor" stroke-width="1.2"/>
+<text x="476.25" y="264.26" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">3.5</tspan></text>
+<line x1="538.00" y1="248.26" x2="538.00" y2="254.26" stroke="currentColor" stroke-width="1.2"/>
+<text x="538.00" y="264.26" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">4</tspan></text>
+<line x1="41.00" y1="335.57" x2="47.00" y2="335.57" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="335.57" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">-0.4</tspan></text>
+<line x1="41.00" y1="293.41" x2="47.00" y2="293.41" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="293.41" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">-0.2</tspan></text>
+<line x1="41.00" y1="209.10" x2="47.00" y2="209.10" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="209.10" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">0.2</tspan></text>
+<line x1="41.00" y1="166.95" x2="47.00" y2="166.95" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="166.95" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">0.4</tspan></text>
+<line x1="41.00" y1="124.79" x2="47.00" y2="124.79" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="124.79" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">0.6</tspan></text>
+<line x1="41.00" y1="82.64" x2="47.00" y2="82.64" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="82.64" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">0.8</tspan></text>
+<line x1="41.00" y1="40.48" x2="47.00" y2="40.48" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="40.48" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">1</tspan></text>
+<polyline points="44.00,40.48 46.06,40.50 48.12,40.54 50.17,40.61 52.23,40.72 54.29,40.85 56.35,41.01 58.41,41.20 60.47,41.42 62.52,41.67 64.58,41.94 66.64,42.25 68.70,42.58 70.76,42.94 72.82,43.33 74.88,43.75 76.93,44.20 78.99,44.67 81.05,45.17 83.11,45.70 85.17,46.26 87.22,46.84 89.28,47.45 91.34,48.09 93.40,48.75 95.46,49.44 97.52,50.15 99.58,50.89 101.63,51.65 103.69,52.44 105.75,53.25 107.81,54.09 109.87,54.95 111.93,55.83 113.98,56.74 116.04,57.67 118.10,58.62 120.16,59.60 122.22,60.59 124.28,61.61 126.33,62.65 128.39,63.71 130.45,64.78 132.51,65.88 134.57,67.00 136.62,68.13 138.68,69.29 140.74,70.46 142.80,71.65 144.86,72.85 146.92,74.08 148.97,75.31 151.03,76.57 153.09,77.84 155.15,79.12 157.21,80.42 159.27,81.73 161.32,83.06 163.38,84.39 165.44,85.74 167.50,87.11 169.56,88.48 171.62,89.86 173.68,91.26 175.73,92.66 177.79,94.08 179.85,95.50 181.91,96.93 183.97,98.37 186.02,99.82 188.08,101.28 190.14,102.74 192.20,104.21 194.26,105.68 196.32,107.16 198.38,108.64 200.43,110.13 202.49,111.62 204.55,113.11 206.61,114.61 208.67,116.11 210.73,117.62 212.78,119.12 214.84,120.63 216.90,122.13 218.96,123.64 221.02,125.14 223.07,126.65 225.13,128.16 227.19,129.66 229.25,131.16 231.31,132.66 233.37,134.16 235.43,135.65 237.48,137.15 239.54,138.63 241.60,140.12 243.66,141.60 245.72,143.07 247.77,144.54 249.83,146.01 251.89,147.47 253.95,148.92 256.01,150.37 258.07,151.81 260.12,153.24 262.18,154.66 264.24,156.08 266.30,157.49 268.36,158.90 270.42,160.29 272.48,161.68 274.53,163.05 276.59,164.42 278.65,165.78 280.71,167.13 282.77,168.47 284.82,169.79 286.88,171.11 288.94,172.42 291.00,173.72 293.06,175.01 295.12,176.28 297.17,177.55 299.23,178.80 301.29,180.04 303.35,181.27 305.41,182.49 307.47,183.70 309.52,184.89 311.58,186.08 313.64,187.25 315.70,188.41 317.76,189.55 319.82,190.69 321.88,191.81 323.93,192.91 325.99,194.01 328.05,195.09 330.11,196.16 332.17,197.22 334.23,198.27 336.28,199.30 338.34,200.31 340.40,201.32 342.46,202.31 344.52,203.29 346.58,204.26 348.63,205.21 350.69,206.15 352.75,207.08 354.81,207.99 356.87,208.89 358.92,209.78 360.98,210.66 363.04,211.52 365.10,212.37 367.16,213.20 369.22,214.03 371.27,214.84 373.33,215.63 375.39,216.42 377.45,217.19 379.51,217.95 381.57,218.70 383.62,219.44 385.68,220.16 387.74,220.87 389.80,221.57 391.86,222.26 393.92,222.93 395.98,223.59 398.03,224.24 400.09,224.88 402.15,225.51 404.21,226.13 406.27,226.73 408.33,227.33 410.38,227.91 412.44,228.48 414.50,229.04 416.56,229.59 418.62,230.13 420.67,230.66 422.73,231.18 424.79,231.69 426.85,232.19 428.91,232.67 430.97,233.15 433.02,233.62 435.08,234.08 437.14,234.53 439.20,234.96 441.26,235.39 443.32,235.82 445.38,236.23 447.43,236.63 449.49,237.02 451.55,237.41 453.61,237.79 455.67,238.15 457.73,238.51 459.78,238.86 461.84,239.21 463.90,239.54 465.96,239.87 468.02,240.19 470.08,240.51 472.13,240.81 474.19,241.11 476.25,241.40 478.31,241.68 480.37,241.96 482.42,242.23 484.48,242.50 486.54,242.75 488.60,243.00 490.66,243.25 492.72,243.49 494.77,243.72 496.83,243.95 498.89,244.17 500.95,244.38 503.01,244.59 505.07,244.79 507.12,244.99 509.18,245.19 511.24,245.37 513.30,245.56 515.36,245.73 517.42,245.91 519.48,246.08 521.53,246.24 523.59,246.40 525.65,246.56 527.71,246.71 529.77,246.85 531.83,246.99 533.88,247.13 535.94,247.27 538.00,247.40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="44.00,40.48 46.06,41.65 48.12,42.82 50.17,44.00 52.23,45.17 54.29,46.34 56.35,47.51 58.41,48.68 60.47,49.85 62.52,51.02 64.58,52.19 66.64,53.36 68.70,54.53 70.76,55.71 72.82,56.88 74.88,58.05 76.93,59.22 78.99,60.39 81.05,61.56 83.11,62.73 85.17,63.90 87.22,65.07 89.28,66.24 91.34,67.42 93.40,68.59 95.46,69.76 97.52,70.93 99.58,72.10 101.63,73.27 103.69,74.44 105.75,75.61 107.81,76.78 109.87,77.95 111.93,79.12 113.98,80.30 116.04,81.47 118.10,82.64 120.16,83.81 122.22,84.98 124.28,86.15 126.33,87.32 128.39,88.49 130.45,89.66 132.51,90.83 134.57,92.01 136.62,93.18 138.68,94.35 140.74,95.52 142.80,96.69 144.86,97.86 146.92,99.03 148.97,100.20 151.03,101.37 153.09,102.54 155.15,103.72 157.21,104.89 159.27,106.06 161.32,107.23 163.38,108.40 165.44,109.57 167.50,110.74 169.56,111.91 171.62,113.08 173.68,114.25 175.73,115.43 177.79,116.60 179.85,117.77 181.91,118.94 183.97,120.11 186.02,121.28 188.08,122.45 190.14,123.62 192.20,124.79 194.26,125.96 196.32,127.14 198.38,128.31 200.43,129.48 202.49,130.65 204.55,131.82 206.61,132.99 208.67,134.16 210.73,135.33 212.78,136.50 214.84,137.67 216.90,138.84 218.96,140.02 221.02,141.19 223.07,142.36 225.13,143.53 227.19,144.70 229.25,145.87 231.31,147.04 233.37,148.21 235.43,149.38 237.48,150.55 239.54,151.73 241.60,152.90 243.66,154.07 245.72,155.24 247.77,156.41 249.83,157.58 251.89,158.75 253.95,159.92 256.01,161.09 258.07,162.26 260.12,163.44 262.18,164.61 264.24,165.78 266.30,166.95 268.36,168.12 270.42,169.29 272.48,170.46 274.53,171.63 276.59,172.80 278.65,173.97 280.71,175.15 282.77,176.32 284.82,177.49 286.88,178.66 288.94,179.83 291.00,181.00 293.06,182.17 295.12,183.34 297.17,184.51 299.23,185.68 301.29,186.85 303.35,188.03 305.41,189.20 307.47,190.37 309.52,191.54 311.58,192.71 313.64,193.88 315.70,195.05 317.76,196.22 319.82,197.39 321.88,198.56 323.93,199.74 325.99,200.91 328.05,202.08 330.11,203.25 332.17,204.42 334.23,205.59 336.28,206.76 338.34,207.93 340.40,209.10 342.46,210.27 344.52,211.45 346.58,212.62 348.63,213.79 350.69,214.96 352.75,216.13 354.81,217.30 356.87,218.47 358.92,219.64 360.98,220.81 363.04,221.98 365.10,223.16 367.16,224.33 369.22,225.50 371.27,226.67 373.33,227.84 375.39,229.01 377.45,230.18 379.51,231.35 381.57,232.52 383.62,233.69 385.68,234.86 387.74,236.04 389.80,237.21 391.86,238.38 393.92,239.55 395.98,240.72 398.03,241.89 400.09,243.06 402.15,244.23 404.21,245.40 406.27,246.57 408.33,247.75 410.38,248.92 412.44,250.09 414.50,251.26 416.56,252.43 418.62,253.60 420.67,254.77 422.73,255.94 424.79,257.11 426.85,258.28 428.91,259.46 430.97,260.63 433.02,261.80 435.08,262.97 437.14,264.14 439.20,265.31 441.26,266.48 443.32,267.65 445.38,268.82 447.43,269.99 449.49,271.17 451.55,272.34 453.61,273.51 455.67,274.68 457.73,275.85 459.78,277.02 461.84,278.19 463.90,279.36 465.96,280.53 468.02,281.70 470.08,282.88 472.13,284.05 474.19,285.22 476.25,286.39 478.31,287.56 480.37,288.73 482.42,289.90 484.48,291.07 486.54,292.24 488.60,293.41 490.66,294.58 492.72,295.76 494.77,296.93 496.83,298.10 498.89,299.27 500.95,300.44 503.01,301.61 505.07,302.78 507.12,303.95 509.18,305.12 511.24,306.29 513.30,307.47 515.36,308.64 517.42,309.81 519.48,310.98 521.53,312.15 523.59,313.32 525.65,314.49 527.71,315.66 529.77,316.83 531.83,318.00 533.88,319.18 535.94,320.35 538.00,321.52" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 5"/>
+<circle cx="229.25" cy="131.16" r="3.4" fill="currentColor"/>
+<text x="237.25" y="123.16" text-anchor="start" dominant-baseline="central" font-size="14" font-style="italic"><tspan dy="0.00">η</tspan><tspan dy="4.20" font-size="10.1">s</tspan></text>
+<text x="538.00" y="241.26" text-anchor="end" dominant-baseline="central" font-size="15" font-style="italic"><tspan dy="0.00">η</tspan></text>
+<text x="56.00" y="20.00" text-anchor="start" dominant-baseline="central" font-size="15" font-style="italic"><tspan dy="0.00">e</tspan><tspan dy="-6.30" font-size="10.8">-η^2/4</tspan></text>
+</svg><figcaption>Gaussian factor $e^{-\eta^2/4}$ appearing in the classical ($p=0$) flux solution. Near the front at $\eta_s$, the temperature profile $f(\eta)$ is proportional to the integral of this curve.</figcaption></figure>
+<div class="mtph-quiz"><h3>Check your answer</h3><details class="q-reveal"><summary>Show answer &amp; solution</summary><div class="answer"><h3>Answer</h3><p>$ \sqrt{\pi}\,\lambda\,e^{\lambda^2}\,\mathrm{erf}(\lambda) = \dfrac{c_p(T_0 - T_m)}{L} $</p></div>
+<div class="solution"><h3>Solution</h3><p><strong>(a) Scaling analysis and similarity reduction.</strong></p>
+<p>The problem has dimensional parameters: $\alpha_0 = \kappa_0/(\rho c_p)$ (diffusivity, $L^2/T$),<br>
+$T_0 - T_m$ (temperature scale, $\Theta$), and $L/c_p$ (latent heat scale, $\Theta$).<br>
+No length scale exists except $\sqrt{\alpha_0 t}$.<br>
+Therefore the front position must scale as $s(t) \propto \sqrt{\alpha_0 t}$.</p>
+<p>Define the similarity variable<br>
+$$\eta = \frac{x}{\sqrt{\alpha_0 t}}, \qquad u(x,t) = f(\eta), \qquad u = \frac{T - T_m}{T_0 - T_m}.$$</p>
+<p>The heat equation $\partial_t u = \alpha_0\,\partial_x[\kappa_r(u)\,\partial_x u]$ with<br>
+$\kappa_r(u) = \kappa(u)/\kappa_0 = (1 + a u)^p$, $a = T_0/T_m - 1$, reduces to:</p>
+<p>$$\boxed{\;\frac{d}{d\eta}\!\left[\kappa_r(f)\,f&#x27;\right] + \frac{\eta}{2}f&#x27; = 0\;}, \qquad 0 &lt; \eta &lt; \eta_s.$$</p>
+<p>Boundary conditions: $f(0) = 1$, $f(\eta_s) = 0$. The Stefan condition at the front<br>
+$- \kappa_0\,\kappa_r(0)\,(T_0 - T_m)\,f&#x27;(\eta_s)/\sqrt{\alpha_0 t} = \rho L \cdot \eta_s\sqrt{\alpha_0}/(2\sqrt{t})$<br>
+simplifies to:</p>
+<p>$$\boxed{\;f&#x27;(\eta_s) = -\frac{\mathrm{Ste}}{2}\,\eta_s\;}, \qquad \mathrm{Ste} \equiv \frac{L}{c_p(T_0 - T_m)}.$$</p>
+<p>$\eta_s$ is a constant determined by the solution; $s(t) = \eta_s\sqrt{\alpha_0 t}$.</p>
+<p><strong>(b) Classical solution: $p = 0$ (constant conductivity).</strong></p>
+<p>$\kappa_r = 1$. ODE: $f&#x27;&#x27; + (\eta/2)f&#x27; = 0$. Solve:<br>
+$$f&#x27;(\eta) = A e^{-\eta^2/4}, \quad f(\eta) = A\!\int_\eta^\infty\! e^{-s^2/4}\,ds + B.$$</p>
+<p>$f(\eta_s) = 0 \Rightarrow B = -A\sqrt{\pi}\,\mathrm{erfc}(\eta_s/2)$.<br>
+$f(0) = 1 \Rightarrow A\sqrt{\pi}\,\mathrm{erf}(\eta_s/2) = 1$.<br>
+Hence<br>
+$$f(\eta) = \frac{\mathrm{erfc}(\eta/2) - \mathrm{erfc}(\eta_s/2)}{\mathrm{erf}(\eta_s/2)}.$$</p>
+<p>$f&#x27;(\eta_s) = -\dfrac{2e^{-\eta_s^2/4}}{\sqrt{\pi}\,\mathrm{erf}(\eta_s/2)}$.<br>
+Stefan condition gives $\lambda \equiv \eta_s/2$ satisfying:</p>
+<p>$$\boxed{\;\sqrt{\pi}\,\lambda\,e^{\lambda^2}\,\mathrm{erf}(\lambda) = \frac{1}{\mathrm{Ste}} = \frac{c_p(T_0 - T_m)}{L}\;}.$$</p>
+<p>This is the classical Neumann transcendental equation. For $\mathrm{Ste} \ll 1$<br>
+(large latent heat), $\lambda \ll 1$ and $\lambda \approx \sqrt{\mathrm{Ste}/(2\pi)}$.<br>
+For $\mathrm{Ste} \gg 1$, $\lambda \gg 1$ and $\lambda \approx \sqrt{\ln(1/(\sqrt{\pi}\,\mathrm{Ste}\,\lambda))}$,<br>
+i.e. the front moves logarithmically slowly.</p>
+<p><strong>(c) First integral for arbitrary $p$.</strong></p>
+<p>Integrate the ODE from $0$ to $\eta$:<br>
+$$\kappa_r(f)f&#x27; + \frac{\eta}{2}f - \frac{1}{2}\!\int_0^\eta\! f(s)\,ds = -q,$$<br>
+where $q \equiv -\kappa_r(1)f&#x27;(0) &gt; 0$ is the dimensionless heat flux entering at $x=0$.<br>
+Equivalently, the local flux $J(\eta) = -\kappa_r(f)f&#x27;$ satisfies:<br>
+$$J(\eta) = q - \frac{\eta}{2}f(\eta) + \frac{1}{2}\!\int_0^\eta\! f(s)\,ds.$$</p>
+<p>Physically: the flux at $\eta$ equals the flux at the origin, minus the energy used to<br>
+heat the material in $[0,\eta]$, plus a correction from the $\eta f$ term (geometric spreading).<br>
+This integro-differential form reduces the second-order ODE to first order.</p>
+<p><strong>(d) Local behavior at the front.</strong></p>
+<p>Near $\eta = \eta_s$, set $\varepsilon = \eta_s - \eta \ll 1$, $f \approx A\varepsilon^\gamma$.<br>
+Then $f&#x27; \approx -\gamma A\varepsilon^{\gamma-1}$, $f^p f&#x27; \approx -\gamma A^{p+1}\varepsilon^{p\gamma + \gamma - 1}$.</p>
+<p>The ODE $(f^p f&#x27;)&#x27; + \frac{\eta}{2}f&#x27; = 0$ becomes<br>
+$$-\gamma A^{p+1}(p\gamma + \gamma - 1)\varepsilon^{p\gamma + \gamma - 2}
+  - \frac{\eta_s}{2}\gamma A\varepsilon^{\gamma-1} = 0.$$</p>
+<p>Dominant balance requires equal exponents: $p\gamma + \gamma - 2 = \gamma - 1 \;\Rightarrow\; p\gamma = 1$.<br>
+Thus</p>
+<p>$$\boxed{\;\gamma = \frac{1}{p}\;}, \qquad f(\eta) \propto (\eta_s - \eta)^{1/p}\;\; \text{as}\;\; \eta \to \eta_s^-.$$</p>
+<ul><li>$p = 0$: the nonlinear term vanishes; a separate balance gives $\gamma = 1$ (linear).</li><li>$p = 1$: $\gamma = 1$, linear approach; $f&#x27;$ is finite at the front.</li><li>$p &gt; 1$: $\gamma &lt; 1$, $f&#x27; \to \infty$ at the front — a <strong>steepening</strong> shock-like structure.</li><li>$0 &lt; p &lt; 1$: $\gamma &gt; 1$, $f&#x27; \to 0$ — the front is <strong>blunted</strong>, with vanishing gradient.</li></ul>
+<p><strong>Physical interpretation.</strong> When $\kappa$ grows with temperature ($p &gt; 0$), the hot side<br>
+conducts better than the cold side. Heat rushes through the hot region but stalls near the<br>
+front where $\kappa$ is low. This steepens the profile for $p &gt; 1$ and flattens it for $p &lt; 1$,<br>
+compared to the constant-conductivity case.</p>
+<p><strong>(e) Regime analysis and the engineer&#x27;s trap.</strong></p>
+<p>An engineer replaces $\kappa(T)$ by its value at the average temperature<br>
+$\bar{\kappa} = \kappa_0[(T_0 + T_m)/(2T_m)]^p$ and uses the $p = 0$ solution.<br>
+This gives a front speed $\eta_s^{\text{(eng)}}$ from the Neumann transcendental equation<br>
+with $\mathrm{Ste}_{\text{eff}} = \mathrm{Ste} \times (\bar{\kappa}/\kappa_0)$.</p>
+<p>The approximation fails <strong>catastrophically</strong> when:<br>
+1. <strong>$p$ is large and $\mathrm{Ste}$ is small.</strong> The true front steepens dramatically ($\gamma = 1/p \ll 1$),<br>
+   concentrating the thermal resistance near the front. The average conductivity misses this<br>
+   bottleneck entirely, overestimating front speed by a factor $\sim p$.<br>
+2. <strong>$p &lt; 0$ (unusual materials where $\kappa$ decreases with $T$).</strong> The front blunts and<br>
+   the effective resistance is dominated by the hot side, which the average also misrepresents.</p>
+<p>When $\mathrm{Ste} \gg 1$ (latent heat dominates), the temperature profile is nearly linear<br>
+and the detailed shape of $\kappa(T)$ matters little — the approximation becomes reasonable.<br>
+When $\mathrm{Ste} \ll 1$, the profile curvature is maximal and the nonlinearity is amplified.</p>
+<p><strong>Necessary Insight.</strong> The PDE is invariant under the scaling $x \to \lambda x$, $t \to \lambda^2 t$,<br>
+which forces $s(t) \propto \sqrt{t}$ and collapses the nonlinear PDE with the moving boundary<br>
+into a single ODE with a free boundary at $\eta_s$. Without recognizing this similarity structure,<br>
+the problem is intractable — the moving boundary makes separation of variables impossible,<br>
+and the nonlinearity defeats Green&#x27;s function methods. Once the similarity variable is found,<br>
+the problem reduces to analysis of a nonlinear ODE.</p></div></details></div></main>
+<script>(function(){document.querySelectorAll('.mtph-quiz .q').forEach(function(q){var t=q.getAttribute('data-type');var fb=q.querySelector('.q-fb');if(t==='numeric'){var c=parseFloat(q.getAttribute('data-correct'));var tol=parseFloat(q.getAttribute('data-tol'))||0.01;var inp=q.querySelector('.q-in');var go=function(){var v=parseFloat((inp.value||'').replace(',','.'));if(isNaN(v)){fb.textContent='enter a number';fb.className='q-fb';return;}var ok=Math.abs(v-c)<=tol*Math.max(Math.abs(c),1e-12);fb.textContent=ok?'\u2713 correct':'\u2717 try again';fb.className='q-fb '+(ok?'ok':'no');};q.querySelector('.q-check').addEventListener('click',go);inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});}else if(t==='choice'){var ci=parseInt(q.getAttribute('data-correct'),10);q.querySelectorAll('.q-opt').forEach(function(b){b.addEventListener('click',function(){q.querySelectorAll('.q-opt').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');var ok=parseInt(b.getAttribute('data-i'),10)===ci;fb.textContent=ok?'\u2713 correct':'\u2717 not that one';fb.className='q-fb '+(ok?'ok':'no');});});}});})();</script>
+</body>
+</html>

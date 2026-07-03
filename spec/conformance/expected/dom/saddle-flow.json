@@ -1,0 +1,60 @@
+{
+  "blocks": [
+    {
+      "text": "A steady, incompressible, irrotational 2-D flow near a stagnation point has velocity field\n$\\vec u = (a x,\\,-a y)$ with $a>0$. A neutrally buoyant tracer is released near the origin.\n\n**(a)** Show the field is both divergence-free and irrotational. **(b)** Write the tracer's\ntrajectory $y(x)$ from $\\dot x = a x,\\ \\dot y = -a y$, and use it to decide whether the origin is a\nstable equilibrium for the tracer. **(c)** A common claim is \"a stagnation point is where the fluid\nis at rest, so a tracer placed there stays there.\" Identify the false attractor in this claim and\nstate \\ref{eq:traj}'s verdict precisely.",
+      "type": "prose"
+    },
+    {
+      "source": "mode: vectorfield\nx: -2..2\ny: -2..2\nu(x,y) = x\nv(x,y) = -y",
+      "type": "plot"
+    },
+    {
+      "text": "The streamlines are the hyperbolae $xy = \\text{const}$:",
+      "type": "prose"
+    },
+    {
+      "latex": "y(x) = \\frac{C}{x} \\label{eq:traj}",
+      "type": "math"
+    },
+    {
+      "part": "a",
+      "type": "answer",
+      "value": "\\nabla\\cdot\\vec u = 0,\\quad (\\nabla\\times\\vec u)_z = 0."
+    },
+    {
+      "part": "b",
+      "type": "answer",
+      "value": "xy = \\text{const};\\quad \\text{the origin is a saddle — unstable along } x."
+    },
+    {
+      "answer_type": "freeform",
+      "part": "c",
+      "type": "answer",
+      "value": "\"Zero velocity ⇒ stable\" is the false attractor. Stability is set by the field's *gradient*\n$\\mathrm{diag}(a,-a)$, not by the velocity being zero: the origin is a saddle, so tracers are\nswept away along $x$."
+    },
+    {
+      "blocks": [
+        {
+          "text": "**(a)** $\\nabla\\cdot\\vec u = a - a = 0$ and $(\\nabla\\times\\vec u)_z = \\partial_x(-ay) - \\partial_y(ax) = 0$.\n\n**(b)** $\\dot x = ax \\Rightarrow x = x_0 e^{at}$ (grows) while $\\dot y = -ay \\Rightarrow y = y_0 e^{-at}$\n(decays), so $xy = x_0 y_0$ is constant — equation \\ref{eq:traj}. The $x$-direction is repelling.\n\n**(c)** The false attractor: \"velocity zero ⇒ stable.\" The origin is a **saddle**; any tracer with\n$x_0 \\neq 0$ is swept away exponentially. Zero velocity at a point says nothing about the stability\nof nearby trajectories — that is set by the field's *gradient*, here $\\mathrm{diag}(a,-a)$.",
+          "type": "prose"
+        }
+      ],
+      "type": "solution"
+    }
+  ],
+  "meta": {
+    "difficulty": 4,
+    "id": "saddle-flow",
+    "notation": "irodov",
+    "subject": "physics",
+    "tags": [
+      "potential-flow",
+      "stagnation",
+      "stability",
+      "vector-field"
+    ],
+    "title": "The Stagnation Point That Isn't Stable",
+    "topic": "fluids/potential-flow"
+  },
+  "mtph": "0.2"
+}

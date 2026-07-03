@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 374.6 242.2" width="375" height="242" font-family="Georgia, 'Times New Roman', serif">
+<circle cx="57.52" cy="212.80" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<circle cx="305.52" cy="212.80" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<circle cx="305.52" cy="64.00" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<circle cx="57.52" cy="64.00" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<line x1="57.52" y1="212.80" x2="57.52" y2="138.40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="57.52" y1="128.48" x2="57.52" y2="64.00" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="37.68" y1="138.40" x2="77.36" y2="138.40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="46.36" y1="128.48" x2="68.68" y2="128.48" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<text class="mtph-lbl" x="37.52" y="138.40" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">V</tspan></text><text x="37.52" y="138.40" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">V</tspan></text>
+<line x1="57.52" y1="64.00" x2="71.16" y2="64.00" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="291.88" y1="64.00" x2="305.52" y2="64.00" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<polyline points="71.16,64.00 106.48,64.00 118.98,54.08 131.49,73.92 144.00,54.08 156.51,73.92 169.01,54.08 181.52,73.92 194.03,54.08 206.53,73.92 219.04,54.08 231.55,73.92 244.06,54.08 256.56,64.00 291.88,64.00" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="181.52" y="44.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">R</tspan><tspan dy="5.40" font-size="13.0">1</tspan></text><text x="181.52" y="44.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">R</tspan><tspan dy="5.40" font-size="13.0">1</tspan></text>
+<line x1="305.52" y1="64.00" x2="305.52" y2="77.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="305.52" y1="199.16" x2="305.52" y2="212.80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<polyline points="305.52,77.64 305.52,97.08 315.44,103.97 295.60,110.86 315.44,117.74 295.60,124.63 315.44,131.51 295.60,138.40 315.44,145.29 295.60,152.17 315.44,159.06 295.60,165.94 315.44,172.83 305.52,179.72 305.52,199.16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="325.52" y="138.40" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">R</tspan><tspan dy="5.40" font-size="13.0">2</tspan></text><text x="325.52" y="138.40" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">R</tspan><tspan dy="5.40" font-size="13.0">2</tspan></text>
+<line x1="305.52" y1="212.80" x2="57.52" y2="212.80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>

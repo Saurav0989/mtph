@@ -1,0 +1,33 @@
+{
+  "blocks": [
+    {
+      "text": "A particle of mass $m$ and charge $+q$ enters a region of uniform magnetic field $\\vec B$\ndirected **into the page**, moving in the plane of the page with speed $v$.\n\n1. Show that the magnetic force does no work, and find the radius $r$ and period $T$ of the\n   resulting motion. What is surprising about $T$?\n2. A uniform electric field $\\vec E$ is now added so that the particle can pass through\n   **undeflected**. For what speed $v$ does this happen, and why is this useful?",
+      "type": "prose"
+    },
+    {
+      "caption": "Circular motion of $+q$ in a field $\\vec B$ into the page.",
+      "source": "bfield at=(0,0) width=5 height=4 dir=in n=5\npoint C at=(2.5,2.2)\ncircle at=(2.5,2.2) r=1.5 style=dashed\ncharge at=(2.5,0.7) sign=+\nlabel text=\"+q\" at=(2.5,0.7) anchor=end dx=-0.4\nvector from=(2.5,0.7) to=(3.9,0.7) label=\"v\"\nvector from=(2.5,0.7) to=(2.5,1.7) label=\"F\"\nline from=(2.5,2.2) to=(3.65,1.24)\nlabel text=\"r\" at=(3.25,1.95) anchor=center\nlabel text=\"B\" at=(0.5,4.35) anchor=center",
+      "type": "figure"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "type": "expression",
+      "value": "r = \\dfrac{mv}{qB}"
+    },
+    "difficulty": 3,
+    "id": "cyclotron-velocity-selector",
+    "notation": "irodov",
+    "solution": "**(a) No work, then the radius.** The magnetic force $\\vec F = q\\,\\vec v \\times \\vec B$ is\nalways perpendicular to $\\vec v$, so $\\vec F\\cdot\\vec v = 0$ and the speed is constant. The\nforce supplies the centripetal acceleration:\n$$qvB = \\frac{mv^2}{r} \\;\\Rightarrow\\; \\boxed{r = \\frac{mv}{qB}}, \\qquad\n  T = \\frac{2\\pi r}{v} = \\frac{2\\pi m}{qB}.$$\nThe period $T$ is **independent of $v$** — the cyclotron's key property.\n\n**(b) Velocity selector.** Add a uniform electric field $\\vec E$ in the plane, perpendicular\nto $\\vec v$. The particle travels straight only when the electric and magnetic forces cancel,\n$qE = qvB$, i.e. for the single speed\n$$v = \\frac{E}{B},$$\nindependent of both $q$ and $m$ — so the device selects a velocity, not a particle.\n",
+    "subject": "physics",
+    "tags": [
+      "magnetism",
+      "lorentz",
+      "circular-motion",
+      "velocity-selector"
+    ],
+    "title": "A Charge in a Magnetic Field",
+    "topic": "electromagnetism/magnetic-force"
+  },
+  "mtph": "0.2"
+}

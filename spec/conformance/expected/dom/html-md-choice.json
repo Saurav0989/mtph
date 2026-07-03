@@ -1,0 +1,30 @@
+{
+  "blocks": [
+    {
+      "text": "A synthetic fixture covering HTML render paths the curated bank misses: a multiple-choice\nanswer, an unordered list, and inline `code`.\n\nConsider the forces on a block:\n\n- gravity $mg$ acting downward\n- the normal force $N$ from the surface\n- friction, here taken as `mu = 0`\n\nWhich expression gives its acceleration down a frictionless incline of angle $\\theta$?",
+      "type": "prose"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "correct": 0,
+      "options": [
+        "$g\\sin\\theta$",
+        "$g\\cos\\theta$",
+        "$g\\tan\\theta$"
+      ],
+      "type": "choice"
+    },
+    "difficulty": 1,
+    "id": "html-md-choice",
+    "solution": "The component of gravity along the incline is $g\\sin\\theta$.\n",
+    "subject": "physics",
+    "tags": [
+      "conformance",
+      "html"
+    ],
+    "title": "HTML coverage — choice answer, lists and inline code",
+    "topic": "meta/conformance"
+  },
+  "mtph": "0.2"
+}

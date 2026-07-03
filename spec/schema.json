@@ -1,0 +1,381 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mtph.dev/schema/0.2/mtph.schema.json",
+  "title": "mtph document",
+  "description": "Canonical DOM for an .mtph math/physics problem (format version 0.2; 0.x accepted).",
+  "type": "object",
+  "required": [
+    "mtph",
+    "meta",
+    "blocks"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "mtph": {
+      "description": "Format version, MAJOR.MINOR.",
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "meta": {
+      "$ref": "#/$defs/meta"
+    },
+    "blocks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/block"
+      }
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "required": [
+        "title",
+        "subject"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject": {
+          "type": "string",
+          "enum": [
+            "physics",
+            "math"
+          ]
+        },
+        "topic": {
+          "type": "string"
+        },
+        "difficulty": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notation": {
+          "type": "string",
+          "enum": [
+            "irodov",
+            "american",
+            "jee"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "answer": {
+          "$ref": "#/$defs/answer"
+        },
+        "answers": {
+          "description": "Per-part answers (front-matter form); body ```answer blocks are preferred.",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "solution": {
+          "type": "string"
+        },
+        "grading": {
+          "description": "Optional marking rubric: how points are awarded per criterion/part.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "part": {
+                "type": "string"
+              },
+              "points": {
+                "type": "number",
+                "minimum": 0
+              },
+              "criteria": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "points",
+              "criteria"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "symbols": {
+          "description": "Optional map from a symbol used in the answer(s) to its physical dimension — a named quantity (e.g. \"acceleration\") or a formula over named quantities or base symbols M/L/T/K/I (e.g. \"force/length\", \"M L^2 T^-2\"). Enables dimensional-analysis verification of answer expressions. A symbol may instead be an object carrying its `dim` and/or a numeric `test` value; a `test` value lets `mtph verify` numerically spot-check any answer that declares a `check`.",
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "dim": {
+                    "type": "string",
+                    "description": "Physical dimension (same grammar as the string form)."
+                  },
+                  "test": {
+                    "type": "number",
+                    "description": "A numeric test value to substitute for this symbol when spot-checking answers."
+                  }
+                },
+                "minProperties": 1,
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "params": {
+          "description": "Optional explorable parameters. Each is referenced as {{name}} in figure/plot sources; renderers substitute the default (deterministic), while an interactive viewer shows a slider that re-renders on drag.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "min": { "type": "number" },
+              "max": { "type": "number" },
+              "default": { "type": "number" },
+              "step": { "type": "number", "exclusiveMinimum": 0 },
+              "unit": { "type": "string" },
+              "label": { "type": "string" }
+            },
+            "required": ["min", "max", "default"],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "answer": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "numeric"
+            },
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string"
+            },
+            "tolerance": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "expression"
+            },
+            "value": {
+              "type": "string",
+              "description": "LaTeX expression"
+            },
+            "check": {
+              "type": "number",
+              "description": "Expected numeric value of `value` when the symbols' `test` values are substituted. `mtph verify` evaluates the expression and confirms the match (numeric spot-check)."
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "choice"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2
+            },
+            "correct": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 1
+                }
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "options",
+            "correct"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "freeform"
+            },
+            "value": {
+              "type": "string",
+              "description": "Reference proof/explanation (Markdown)"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "block": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "oneOf": [
+        {
+          "description": "Prose: Markdown text with inline $...$ math.",
+          "properties": {
+            "type": {
+              "const": "prose"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "description": "Display math: a LaTeX expression rendered as a block.",
+          "properties": {
+            "type": {
+              "const": "math"
+            },
+            "latex": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "latex"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "description": "Figure: diagram DSL source, compiled to SVG.",
+          "properties": {
+            "type": {
+              "const": "figure"
+            },
+            "source": {
+              "type": "string"
+            },
+            "caption": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "source"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "description": "Plot: function-plot spec, compiled to SVG.",
+          "properties": {
+            "type": {
+              "const": "plot"
+            },
+            "source": {
+              "type": "string"
+            },
+            "caption": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "source"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "description": "Answer (body block): the answer to the problem, or to one part.",
+          "properties": {
+            "type": {
+              "const": "answer"
+            },
+            "value": {
+              "type": "string"
+            },
+            "answer_type": {
+              "type": "string"
+            },
+            "part": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "description": "Solution (body block): worked solution; may contain nested blocks.",
+          "properties": {
+            "type": {
+              "const": "solution"
+            },
+            "blocks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/block"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "blocks"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

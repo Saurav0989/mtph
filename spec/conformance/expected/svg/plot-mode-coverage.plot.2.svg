@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 380" width="560" height="380" fill="currentColor" font-family="Georgia, 'Times New Roman', serif">
+<line x1="44.00" y1="18.00" x2="44.00" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="126.33" y1="18.00" x2="126.33" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="208.67" y1="18.00" x2="208.67" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="291.00" y1="18.00" x2="291.00" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="373.33" y1="18.00" x2="373.33" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="455.67" y1="18.00" x2="455.67" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="538.00" y1="18.00" x2="538.00" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="322.22" x2="538.00" y2="322.22" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="251.61" x2="538.00" y2="251.61" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="181.00" x2="538.00" y2="181.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="110.39" x2="538.00" y2="110.39" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="39.78" x2="538.00" y2="39.78" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="181.00" x2="538.00" y2="181.00" stroke="currentColor" stroke-width="1.4"/>
+<line x1="291.00" y1="18.00" x2="291.00" y2="344.00" stroke="currentColor" stroke-width="1.4"/>
+<line x1="44.00" y1="178.00" x2="44.00" y2="184.00" stroke="currentColor" stroke-width="1.2"/>
+<text x="44.00" y="194.00" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">-3</tspan></text>
+<line x1="126.33" y1="178.00" x2="126.33" y2="184.00" stroke="currentColor" stroke-width="1.2"/>
+<text x="126.33" y="194.00" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">-2</tspan></text>
+<line x1="208.67" y1="178.00" x2="208.67" y2="184.00" stroke="currentColor" stroke-width="1.2"/>
+<text x="208.67" y="194.00" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">-1</tspan></text>
+<line x1="373.33" y1="178.00" x2="373.33" y2="184.00" stroke="currentColor" stroke-width="1.2"/>
+<text x="373.33" y="194.00" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">1</tspan></text>
+<line x1="455.67" y1="178.00" x2="455.67" y2="184.00" stroke="currentColor" stroke-width="1.2"/>
+<text x="455.67" y="194.00" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">2</tspan></text>
+<line x1="538.00" y1="178.00" x2="538.00" y2="184.00" stroke="currentColor" stroke-width="1.2"/>
+<text x="538.00" y="194.00" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">3</tspan></text>
+<line x1="288.00" y1="322.22" x2="294.00" y2="322.22" stroke="currentColor" stroke-width="1.2"/>
+<text x="283.00" y="322.22" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">-1</tspan></text>
+<line x1="288.00" y1="251.61" x2="294.00" y2="251.61" stroke="currentColor" stroke-width="1.2"/>
+<text x="283.00" y="251.61" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">-0.5</tspan></text>
+<line x1="288.00" y1="110.39" x2="294.00" y2="110.39" stroke="currentColor" stroke-width="1.2"/>
+<text x="283.00" y="110.39" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">0.5</tspan></text>
+<line x1="288.00" y1="39.78" x2="294.00" y2="39.78" stroke="currentColor" stroke-width="1.2"/>
+<text x="283.00" y="39.78" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">1</tspan></text>
+<line x1="291.00" y1="18.00" x2="291.00" y2="344.00" stroke="#888" stroke-width="1" stroke-dasharray="5 4"/>
+<line x1="44.00" y1="39.78" x2="538.00" y2="39.78" stroke="#888" stroke-width="1" stroke-dasharray="5 4"/>
+<line x1="44.00" y1="322.22" x2="538.00" y2="322.22" stroke="#888" stroke-width="1" stroke-dasharray="5 4"/>
+<polyline points="44.00,321.52 48.12,321.44 52.23,321.36 56.35,321.27 60.47,321.18 64.58,321.07 68.70,320.95 72.82,320.81 76.93,320.67 81.05,320.50 85.17,320.33 89.28,320.13 93.40,319.91 97.52,319.67 101.63,319.40 105.75,319.11 109.87,318.79 113.98,318.43 118.10,318.04 122.22,317.61 126.33,317.14 130.45,316.61 134.57,316.04 138.68,315.40 142.80,314.70 146.92,313.94 151.03,313.09 155.15,312.17 159.27,311.15 163.38,310.04 167.50,308.82 171.62,307.49 175.73,306.03 179.85,304.43 183.97,302.69 188.08,300.79 192.20,298.73 196.32,296.48 200.43,294.04 204.55,291.40 208.67,288.55 212.78,285.47 216.90,282.15 221.02,278.59 225.13,274.77 229.25,270.69 233.37,266.35 237.48,261.73 241.60,256.84 245.72,251.68 249.83,246.26 253.95,240.58 258.07,234.65 262.18,228.50 266.30,222.14 270.42,215.59 274.53,208.87 278.65,202.02 282.77,195.07 286.88,188.05 291.00,181.00 295.12,173.95 299.23,166.93 303.35,159.98 307.47,153.13 311.58,146.41 315.70,139.86 319.82,133.50 323.93,127.35 328.05,121.42 332.17,115.74 336.28,110.32 340.40,105.16 344.52,100.27 348.63,95.65 352.75,91.31 356.87,87.23 360.98,83.41 365.10,79.85 369.22,76.53 373.33,73.45 377.45,70.60 381.57,67.96 385.68,65.52 389.80,63.27 393.92,61.21 398.03,59.31 402.15,57.57 406.27,55.97 410.38,54.51 414.50,53.18 418.62,51.96 422.73,50.85 426.85,49.83 430.97,48.91 435.08,48.06 439.20,47.30 443.32,46.60 447.43,45.96 451.55,45.39 455.67,44.86 459.78,44.39 463.90,43.96 468.02,43.57 472.13,43.21 476.25,42.89 480.37,42.60 484.48,42.33 488.60,42.09 492.72,41.87 496.83,41.67 500.95,41.50 505.07,41.33 509.18,41.19 513.30,41.05 517.42,40.93 521.53,40.82 525.65,40.73 529.77,40.64 533.88,40.56 538.00,40.48" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="373.33" cy="73.45" r="3.4" fill="#c0392b"/>
+<text x="381.33" y="65.45" text-anchor="start" dominant-baseline="central" font-size="14" font-style="italic"><tspan dy="0.00">P</tspan></text>
+<text x="538.00" y="171.00" text-anchor="end" dominant-baseline="central" font-size="15" font-style="italic"><tspan dy="0.00">u</tspan></text>
+<text x="303.00" y="20.00" text-anchor="start" dominant-baseline="central" font-size="15" font-style="italic"><tspan dy="0.00">\tanh u</tspan></text>
+</svg>

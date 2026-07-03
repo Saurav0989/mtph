@@ -1,0 +1,29 @@
+---
+mtph: "0.2"
+id: html-md-choice
+title: HTML coverage — choice answer, lists and inline code
+subject: physics
+topic: meta/conformance
+difficulty: 1
+tags: [conformance, html]
+answer:
+  type: choice
+  options:
+    - "$g\\sin\\theta$"
+    - "$g\\cos\\theta$"
+    - "$g\\tan\\theta$"
+  correct: 0
+solution: |
+  The component of gravity along the incline is $g\sin\theta$.
+---
+
+A synthetic fixture covering HTML render paths the curated bank misses: a multiple-choice
+answer, an unordered list, and inline `code`.
+
+Consider the forces on a block:
+
+- gravity $mg$ acting downward
+- the normal force $N$ from the surface
+- friction, here taken as `mu = 0`
+
+Which expression gives its acceleration down a frictionless incline of angle $\theta$?

@@ -1,0 +1,47 @@
+---
+mtph: "0.2"
+id: cyclotron-velocity-selector
+title: A Charge in a Magnetic Field
+subject: physics
+topic: electromagnetism/magnetic-force
+difficulty: 3
+notation: irodov
+tags: [magnetism, lorentz, circular-motion, velocity-selector]
+answer:
+  type: expression
+  value: 'r = \dfrac{mv}{qB}'
+solution: |
+  **(a) No work, then the radius.** The magnetic force $\vec F = q\,\vec v \times \vec B$ is
+  always perpendicular to $\vec v$, so $\vec F\cdot\vec v = 0$ and the speed is constant. The
+  force supplies the centripetal acceleration:
+  $$qvB = \frac{mv^2}{r} \;\Rightarrow\; \boxed{r = \frac{mv}{qB}}, \qquad
+    T = \frac{2\pi r}{v} = \frac{2\pi m}{qB}.$$
+  The period $T$ is **independent of $v$** — the cyclotron's key property.
+
+  **(b) Velocity selector.** Add a uniform electric field $\vec E$ in the plane, perpendicular
+  to $\vec v$. The particle travels straight only when the electric and magnetic forces cancel,
+  $qE = qvB$, i.e. for the single speed
+  $$v = \frac{E}{B},$$
+  independent of both $q$ and $m$ — so the device selects a velocity, not a particle.
+---
+
+A particle of mass $m$ and charge $+q$ enters a region of uniform magnetic field $\vec B$
+directed **into the page**, moving in the plane of the page with speed $v$.
+
+1. Show that the magnetic force does no work, and find the radius $r$ and period $T$ of the
+   resulting motion. What is surprising about $T$?
+2. A uniform electric field $\vec E$ is now added so that the particle can pass through
+   **undeflected**. For what speed $v$ does this happen, and why is this useful?
+
+```figure caption="Circular motion of $+q$ in a field $\vec B$ into the page."
+bfield at=(0,0) width=5 height=4 dir=in n=5
+point C at=(2.5,2.2)
+circle at=(2.5,2.2) r=1.5 style=dashed
+charge at=(2.5,0.7) sign=+
+label text="+q" at=(2.5,0.7) anchor=end dx=-0.4
+vector from=(2.5,0.7) to=(3.9,0.7) label="v"
+vector from=(2.5,0.7) to=(2.5,1.7) label="F"
+line from=(2.5,2.2) to=(3.65,1.24)
+label text="r" at=(3.25,1.95) anchor=center
+label text="B" at=(0.5,4.35) anchor=center
+```

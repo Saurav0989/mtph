@@ -1,0 +1,33 @@
+{
+  "blocks": [
+    {
+      "text": "A small block of mass $m$ is pressed against a spring of force constant $k$, compressing it by\na distance $d$ on a **smooth** horizontal floor. When released, the block crosses a **rough**\nstrip of length $L$ (kinetic friction coefficient $\\mu$) and then enters a **smooth** vertical\ncircular loop of radius $R$ that is tangent to the floor.\n\n1. Find the minimum compression $d_{\\min}$ for which the block *just* completes the loop.\n2. For $d = d_{\\min}$, find the normal reaction $N$ on the block at the lowest point of the loop.\n3. If the block enters the loop too slowly to complete it, it leaves the track where $N = 0$.\n   Find the angle $\\theta$ (measured at the centre from the upward vertical) of that point in\n   terms of the entry speed $v_{\\text{bot}}$.",
+      "type": "prose"
+    },
+    {
+      "caption": "Spring launch across a rough strip $L$ into a smooth vertical loop of radius $R$.",
+      "source": "ground at=(-0.3,0) width=12.3\nwall at=(0,0) height=1.5 side=left\nspring from=(0,0.55) to=(1.55,0.55) coils=7 label=\"k\"\nmass blk at=(2.0,0.55) size=0.78 label=\"m\"\nrect at=(5.0,0.08) w=2.6 h=0.16 fill=lightgray\nlabel text=\"\\mu\" at=(5.0,0.16) anchor=above\ndim from=(3.7,0) to=(6.3,0) off=-0.7 label=\"L\"\ncircle at=(9.0,2.0) r=2.0\npoint O at=(9.0,2.0)\nline from=(9.0,2.0) to=(11.0,2.0)\nlabel text=\"R\" at=(10.0,2.0) anchor=above\nvector from=(9.0,4.0) to=(9.0,3.4)\nlabel text=\"mg\" at=(9.0,3.6) anchor=right\nvector from=(9.0,4.0) to=(8.1,4.0) label=\"v_{top}\"\nvector from=(9.0,0.07) to=(9.0,1.05) label=\"N\"\nvector from=(7.9,0) to=(8.8,0) label=\"v_{bot}\"\npoint P at=(10.231,3.576)\nline from=(9.0,2.0) to=(10.231,3.576) style=dashed\nangle at=(9.0,2.0) from=52 to=90 value=\"\\theta\" r=0.8\nvector from=(10.231,3.576) to=(9.55,4.1) label=\"v\"",
+      "type": "figure"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "type": "expression",
+      "value": "d_{\\min} = \\sqrt{\\dfrac{mg}{k}\\,(2\\mu L + 5R)}"
+    },
+    "difficulty": 5,
+    "id": "spring-friction-loop",
+    "solution": "**(a) Minimum compression.** Let the loop (radius $R$) be smooth. To *just* complete the\nloop, gravity alone supplies the centripetal force at the top:\n$$mg = \\frac{m v_{\\text{top}}^2}{R} \\;\\Rightarrow\\; v_{\\text{top}}^2 = gR.$$\nEnergy from release to the top (height $2R$), losing $\\mu m g L$ to friction on the rough\npatch:\n$$\\tfrac{1}{2}k d_{\\min}^2 = \\mu m g L + \\tfrac{1}{2}m v_{\\text{top}}^2 + mg(2R)\n   = \\mu m g L + \\tfrac{5}{2}mgR.$$\n$$\\boxed{\\,d_{\\min} = \\sqrt{\\tfrac{mg}{k}\\,(2\\mu L + 5R)}\\,}.$$\n\n**(b) Normal force at the lowest point.** For $d = d_{\\min}$, energy from release to the\nbottom of the loop gives $\\tfrac{1}{2}m v_{\\text{bot}}^2 = \\tfrac{1}{2}k d_{\\min}^2 - \\mu mgL\n= \\tfrac{5}{2}mgR$, so $v_{\\text{bot}}^2 = 5gR$. At the bottom,\n$$N - mg = \\frac{m v_{\\text{bot}}^2}{R} = 5mg \\;\\Rightarrow\\; \\boxed{N = 6mg}.$$\n\n**(c) Leaving the track.** If the block enters the loop with a smaller speed $v_{\\text{bot}}$\n(where $2gR \\le v_{\\text{bot}}^2 < 5gR$) it leaves the track on the way up, where $N = 0$.\nAt an angle $\\theta$ from the top, $mg\\cos\\theta = \\dfrac{mv^2}{R}$ and energy conservation\non the smooth loop give\n$$\\boxed{\\cos\\theta = \\frac{v_{\\text{bot}}^2 - 2gR}{3gR}},\\qquad\n  v_{\\text{bot}}^2 = \\frac{k d^2}{m} - 2\\mu g L.$$\n",
+    "subject": "physics",
+    "tags": [
+      "energy",
+      "friction",
+      "circular-motion",
+      "hooke",
+      "jee-advanced"
+    ],
+    "title": "Spring, Friction Patch, and a Vertical Loop",
+    "topic": "mechanics/energy-circular-motion"
+  },
+  "mtph": "0.2"
+}

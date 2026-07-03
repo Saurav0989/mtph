@@ -1,0 +1,22 @@
+---
+mtph: "0.2"
+id: definite-integral-x2
+title: A Definite Integral
+subject: math
+topic: calculus/integration
+difficulty: 1
+tags: [integral, polynomial, ftc]
+answer:
+  type: expression
+  value: '\frac{1}{3}'
+solution: |
+  By the power rule $\int x^2\,dx = \dfrac{x^3}{3}$. Evaluating between the limits,
+  $$\left.\frac{x^3}{3}\right|_{0}^{1} = \frac{1}{3} - 0 = \frac{1}{3}.$$
+---
+
+Evaluate the definite integral
+
+$$\int_0^1 x^2 \, dx.$$
+
+Give your answer as an exact fraction. Recall the Fundamental Theorem of Calculus: if
+$F'(x) = f(x)$, then $\displaystyle\int_a^b f(x)\,dx = F(b) - F(a)$.

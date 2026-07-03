@@ -1,0 +1,74 @@
+---
+mtph: "0.2"
+id: dsl-command-coverage
+title: DSL command coverage (conformance fixture)
+subject: physics
+topic: meta/conformance
+difficulty: 1
+tags: [conformance, dsl, coverage]
+answer:
+  type: expression
+  value: 'n/a'
+solution: |
+  This file is not a real problem. It exists so the conformance corpus exercises every figure
+  command (and every alias) that the curated examples happen not to use, giving the JS port a
+  byte-identical SVG parity target for the whole DSL rather than just the common subset.
+---
+
+A synthetic fixture whose only purpose is coverage: each figure below stresses a family of
+commands that the example bank does not otherwise reach.
+
+## Fields, charges and flux
+
+```figure
+charge q1 at=(-1,0) sign=+ label="q_1"
+charge q2 at=(1,0) sign=- label="q_2"
+dipole at=(0,-2.4) sep=1 angle=30 moment=true label="\vec{p}"
+fieldline from=(-1,0) to=(1,0) bend=0.5
+streamline from=(-1,0) to=(1,0) bend=-0.5
+vectorfield at=(-3.5,0.8) width=2 height=2 n=3 dir=out
+equipotential at=(0,0) r=1.6
+gaussian at=(0,0) r=2.1 label="S"
+```
+
+## Mechanics: pivots, rods, pulleys and coils
+
+```figure
+pivot at=(0,3) label="O"
+hinge at=(3,3)
+rod from=(0,3) to=(2,1.5) label="\ell"
+pulley at=(-2,3) r=0.4
+pendulum P at=(3,3) length=2 angle=25 value="\theta" label="m"
+spring from=(-3.4,0) to=(-3.4,2) coils=5 label="k"
+coil at=(0,-2) turns=2 dr=0.2
+helix at=(2,-2) turns=2 dr=0.2
+block M at=(-1,-1) size=0.7 label="M"
+rope from=(-2,3) to=(-2,0.2)
+string from=(2,0) to=(2,2)
+```
+
+## Optics and waves
+
+```figure
+lens at=(0,0) height=2.4 type=convex
+lens at=(3.2,0) height=2.4 type=concave
+ray from=(-3,0.5) to=(0,0.3)
+ray from=(0,0.3) to=(3.2,-0.2) arrow=false
+wavefront at=(-3,0) n=3 r0=0.4 dr=0.4
+wavefront at=(3.2,0) n=2 r0=0.3 dr=0.3 from=200 to=340
+arc at=(0,-2.2) r=1 from=0 to=135
+spiral at=(0,2.2) turns=3 dr=0.25 a0=90 label="\phi"
+```
+
+## Geometry, 3D, thermo and misc
+
+```figure
+axes3d at=(-2.4,-1) size=2.2
+sphere at=(2.2,0) r=1 label="R"
+flame at=(-2.4,-2.6) size=0.6
+zigzag from=(-1,2.4) to=(2,2.4) amplitude=0.2 periods=5 label="cut"
+current from=(-2.4,3) to=(1,3)
+segment from=(-2.4,-3.4) to=(2.2,-3.4)
+arrow from=(0,-3.4) to=(0,-1.4) label="\vec{v}"
+text at=(0,1) text="note"
+```

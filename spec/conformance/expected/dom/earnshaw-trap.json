@@ -1,0 +1,95 @@
+{
+  "blocks": [
+    {
+      "text": "Two equal point charges $+q$ sit on the $x$-axis at $x=\\pm a$. A small test charge $+Q$ is placed at\nthe origin — the one point where, by symmetry, the electric field vanishes.\n\n**(a)** Confirm the field is zero at the origin. **(b)** A tempting claim: *\"the test charge is\nhemmed in by two like charges, so the origin is a stable trap.\"* Is it? Analyse small displacements\nalong $x$ and along $y$ separately. **(c)** Show your result is forced by a single fact about the\npotential in charge-free space — so no arrangement of fixed charges could ever trap $+Q$\n(\\ref{eq:earnshaw}).",
+      "type": "prose"
+    },
+    {
+      "source": "charge at=(-2.4,0) sign=+ label=\"+q\"\ncharge at=(2.4,0) sign=+ label=\"+q\"\ncircle at=(0,0) r=0.16 fill=black\nlabel text=\"Q\" at=(0,-0.55) anchor=center\nvector from=(0.3,0) to=(1.5,0) dash=dashed\nvector from=(0,0.3) to=(0,1.4) dash=dashed\nlabel text=\"unstable\" at=(1.55,-0.4) anchor=start\nlabel text=\"stable\" at=(0.25,1.35) anchor=start",
+      "type": "figure"
+    },
+    {
+      "text": "The field of the two source charges (the origin is the central null):",
+      "type": "prose"
+    },
+    {
+      "source": "mode: vectorfield\nx: -2.6..2.6\ny: -2..2\nu(x,y) = (x-1.4)/((x-1.4)^2+y^2)^1.5 + (x+1.4)/((x+1.4)^2+y^2)^1.5\nv(x,y) = y/((x-1.4)^2+y^2)^1.5 + y/((x+1.4)^2+y^2)^1.5",
+      "type": "plot"
+    },
+    {
+      "text": "An equipotential of the pair (the \"peanut\" enclosing both charges):",
+      "type": "prose"
+    },
+    {
+      "source": "mode: implicit\nx: -3..3\ny: -2.2..2.2\nF(x,y) = 1/((x-1.4)^2+y^2)^0.5 + 1/((x+1.4)^2+y^2)^0.5 - 1.15",
+      "type": "plot"
+    },
+    {
+      "text": "Laplace's equation forbids the trap:",
+      "type": "prose"
+    },
+    {
+      "latex": "\\nabla^2\\phi = 0 \\quad\\text{in charge-free space} \\label{eq:earnshaw}",
+      "type": "math"
+    },
+    {
+      "part": "a",
+      "type": "answer",
+      "value": "\\vec E(0,0) = 0 \\quad\\text{(the two fields are equal and opposite along } x)."
+    },
+    {
+      "answer_type": "freeform",
+      "part": "b",
+      "type": "answer",
+      "value": "Not stable. Displace along $x$: the nearer charge dominates and pushes $+Q$ further out — the origin\nis a **maximum** of potential along $x$ (unstable). Displace along $y$: both charges push it back —\na **minimum** along $y$ (stable). Equal-and-opposite curvatures ⇒ a **saddle**, not a trap."
+    },
+    {
+      "part": "c",
+      "type": "answer",
+      "value": "\\partial_{xx}\\phi + \\partial_{yy}\\phi + \\partial_{zz}\\phi = 0 \\;\\Rightarrow\\; \\text{no local minimum of } \\phi."
+    },
+    {
+      "blocks": [
+        {
+          "text": "**Necessary insight.** Stability is about the *curvature* of the potential, and in charge-free\nspace the curvatures can't all have the same sign — \\ref{eq:earnshaw} ties them together. That one\nfact decides the whole problem before any force is computed.\n\n**(a)** By symmetry the $x$-components of the two fields cancel and the $y$-components are zero on the\naxis, so $\\vec E(0,0)=0$.\n\n**(b)** Write $\\phi$ near the origin as $\\phi_0 + \\tfrac12(\\phi_{xx}x^2 + \\phi_{yy}y^2 + \\phi_{zz}z^2)$.\nDirect expansion (or the field plot above) shows $\\phi_{xx}<0$: a push *outward* along the axis, so\nthe origin is a hilltop along $x$. Transverse to the axis $\\phi_{yy}>0$ and $\\phi_{zz}>0$: restoring.\nSo the null is a saddle — stable transversely, unstable along the axis.\n\n**(c)** The false attractor is \"surrounded ⇒ trapped.\" But $\\nabla^2\\phi = \\phi_{xx}+\\phi_{yy}+\\phi_{zz}=0$\nbetween the charges, so the three curvatures sum to zero and cannot all be positive: $\\phi$ has **no\nlocal minimum** anywhere in free space. This is **Earnshaw's theorem** — no static arrangement of\ncharges can stably trap another charge by electrostatics alone. (It is why ion traps must use\noscillating or magnetic fields.)",
+          "type": "prose"
+        }
+      ],
+      "type": "solution"
+    }
+  ],
+  "meta": {
+    "difficulty": 5,
+    "grading": [
+      {
+        "criteria": "Field null located at the midpoint by symmetry.",
+        "part": "a",
+        "points": 2
+      },
+      {
+        "criteria": "Stability analysed in both directions; the saddle identified (not just \"unstable\").",
+        "part": "b",
+        "points": 5
+      },
+      {
+        "criteria": "Connected to $\\nabla^2\\phi = 0$ (Earnshaw), not argued case-by-case only.",
+        "part": "c",
+        "points": 3
+      }
+    ],
+    "id": "earnshaw-trap",
+    "notation": "american",
+    "subject": "physics",
+    "tags": [
+      "electrostatics",
+      "earnshaw",
+      "saddle",
+      "stability",
+      "false-attractor",
+      "domain-collision"
+    ],
+    "title": "The Electrostatic Trap That Can't Hold",
+    "topic": "electromagnetism/electrostatics"
+  },
+  "mtph": "0.2"
+}

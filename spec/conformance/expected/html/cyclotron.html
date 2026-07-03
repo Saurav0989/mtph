@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>A Charge in a Magnetic Field</title>
+<style>
+:root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f7f7f8;
+  --chip-bg:#eef0f3; --chip-ink:#445; --code-bg:#f0f0f2; --summary:#334; --ok:#2a7; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+    --chip-bg:#2a2c33; --chip-ink:#c3cbe0; --code-bg:#26282e; --summary:#c3cbe0; --ok:#4cd6a0; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,serif; }
+main { max-width:760px; margin:40px auto; background:var(--paper); padding:40px 48px;
+  border:1px solid var(--line); border-radius:10px; line-height:1.6; }
+h1 { font-size:1.6rem; margin:0 0 .4rem; }
+.meta { margin-bottom:1.6rem; }
+.chip { display:inline-block; font-size:.74rem; background:var(--chip-bg); color:var(--chip-ink);
+  padding:2px 9px; border-radius:20px; margin-right:6px; }
+.tag { font-size:.74rem; color:var(--muted); margin-right:6px; }
+.mtph-prose { margin:1rem 0; }
+.mtph-math { margin:1.3rem 0; text-align:center; overflow-x:auto; }
+.mtph-math.numbered { position:relative; padding-right:2.5rem; }
+.mtph-math.numbered .eqno { position:absolute; right:0; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-variant-numeric:tabular-nums; }
+.eqref { text-decoration:none; color:inherit; border-bottom:1px dotted var(--muted); }
+.mtph-figure { margin:1.6rem 0; text-align:center; }
+/* Diagrams/plots draw their default ink with currentColor, so they follow the page theme;
+   the white knock-out fills and label halos are re-themed to the paper colour here. */
+.mtph-figure svg { max-width:100%; height:auto; color:var(--ink); }
+.mtph-figure svg .mtph-pp { fill:var(--paper); }
+.mtph-figure svg .mtph-lbl { fill:var(--paper); stroke:var(--paper); }
+figcaption { font-size:.85rem; color:var(--muted); margin-top:.4rem; }
+.mtph-aside { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-aside summary { cursor:pointer; font-weight:600; color:var(--summary); }
+.answer, .solution { margin-top:1rem; }
+.answer h3, .solution h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.6rem 0 .3rem; }
+.choices li.correct { font-weight:700; }
+.choices li.correct::after { content:" ✓"; color:var(--ok); }
+.grading .rubric { list-style:none; padding-left:0; }
+.grading .rubric li { margin:.25rem 0; }
+.grading .pts { display:inline-block; min-width:3.6em; font-variant-numeric:tabular-nums;
+  font-weight:600; color:var(--muted); }
+.grading .total { font-weight:600; margin-top:.4rem; }
+code { background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.92em; }
+.mtph-quiz { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-quiz h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.4rem 0 .7rem; }
+.mtph-quiz .q { margin:.55rem 0; }
+.mtph-quiz .q-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mtph-quiz .q-in { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:6px;
+  background:var(--paper); color:var(--ink); width:8em; }
+.mtph-quiz .q-unit { color:var(--muted); }
+.mtph-quiz button { font:inherit; font-size:.85rem; padding:4px 12px; border:1px solid var(--line);
+  border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; }
+.mtph-quiz button:hover { border-color:var(--summary); }
+.mtph-quiz .q-choices { list-style:none; padding-left:0; display:flex; flex-direction:column;
+  gap:6px; margin:.3rem 0; }
+.mtph-quiz .q-opt { text-align:left; width:100%; }
+.mtph-quiz .q-opt.sel { border-color:var(--summary); font-weight:600; }
+.mtph-quiz .q-fb { font-weight:600; }
+.mtph-quiz .q-fb.ok { color:var(--ok); }
+.mtph-quiz .q-fb.no { color:#cc4b37; }
+.mtph-quiz .q-reveal { margin-top:1rem; border-top:1px solid var(--line); padding-top:.8rem; }
+.mtph-quiz .q-reveal summary { cursor:pointer; font-weight:600; color:var(--summary); }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false,errorColor:"#cc0000"});});</script>
+</head>
+<body>
+<main><h1>A Charge in a Magnetic Field</h1>
+<div class="meta"><span class="chip">physics</span><span class="chip">electromagnetism/magnetic-force</span><span class="chip">difficulty 3/5</span><span class="tag">#magnetism</span><span class="tag">#lorentz</span><span class="tag">#circular-motion</span><span class="tag">#velocity-selector</span></div>
+<div class="mtph-prose"><p>A particle of mass $m$ and charge $+q$ enters a region of uniform magnetic field $\vec B$<br>
+directed <strong>into the page</strong>, moving in the plane of the page with speed $v$.</p>
+<p>1. Show that the magnetic force does no work, and find the radius $r$ and period $T$ of the<br>
+   resulting motion. What is surprising about $T$?<br>
+2. A uniform electric field $\vec E$ is now added so that the particle can pass through<br>
+   <strong>undeflected</strong>. For what speed $v$ does this happen, and why is this useful?</p></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 311.0 320.2" width="311" height="320" font-family="Georgia, 'Times New Roman', serif">
+<circle cx="31.76" cy="288.90" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="28.04" y1="292.62" x2="35.48" y2="285.18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="28.04" y1="285.18" x2="35.48" y2="292.62" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="31.76" cy="239.30" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="28.04" y1="243.02" x2="35.48" y2="235.58" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="28.04" y1="235.58" x2="35.48" y2="243.02" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="31.76" cy="189.70" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="28.04" y1="193.42" x2="35.48" y2="185.98" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="28.04" y1="185.98" x2="35.48" y2="193.42" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="31.76" cy="140.10" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="28.04" y1="143.82" x2="35.48" y2="136.38" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="28.04" y1="136.38" x2="35.48" y2="143.82" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="31.76" cy="90.50" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="28.04" y1="94.22" x2="35.48" y2="86.78" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="28.04" y1="86.78" x2="35.48" y2="94.22" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="93.76" cy="288.90" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="90.04" y1="292.62" x2="97.48" y2="285.18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="90.04" y1="285.18" x2="97.48" y2="292.62" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="93.76" cy="239.30" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="90.04" y1="243.02" x2="97.48" y2="235.58" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="90.04" y1="235.58" x2="97.48" y2="243.02" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="93.76" cy="189.70" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="90.04" y1="193.42" x2="97.48" y2="185.98" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="90.04" y1="185.98" x2="97.48" y2="193.42" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="93.76" cy="140.10" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="90.04" y1="143.82" x2="97.48" y2="136.38" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="90.04" y1="136.38" x2="97.48" y2="143.82" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="93.76" cy="90.50" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="90.04" y1="94.22" x2="97.48" y2="86.78" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="90.04" y1="86.78" x2="97.48" y2="94.22" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="155.76" cy="288.90" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="152.04" y1="292.62" x2="159.48" y2="285.18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="152.04" y1="285.18" x2="159.48" y2="292.62" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="155.76" cy="239.30" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="152.04" y1="243.02" x2="159.48" y2="235.58" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="152.04" y1="235.58" x2="159.48" y2="243.02" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="155.76" cy="189.70" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="152.04" y1="193.42" x2="159.48" y2="185.98" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="152.04" y1="185.98" x2="159.48" y2="193.42" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="155.76" cy="140.10" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="152.04" y1="143.82" x2="159.48" y2="136.38" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="152.04" y1="136.38" x2="159.48" y2="143.82" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="155.76" cy="90.50" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="152.04" y1="94.22" x2="159.48" y2="86.78" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="152.04" y1="86.78" x2="159.48" y2="94.22" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="217.76" cy="288.90" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="214.04" y1="292.62" x2="221.48" y2="285.18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="214.04" y1="285.18" x2="221.48" y2="292.62" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="217.76" cy="239.30" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="214.04" y1="243.02" x2="221.48" y2="235.58" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="214.04" y1="235.58" x2="221.48" y2="243.02" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="217.76" cy="189.70" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="214.04" y1="193.42" x2="221.48" y2="185.98" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="214.04" y1="185.98" x2="221.48" y2="193.42" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="217.76" cy="140.10" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="214.04" y1="143.82" x2="221.48" y2="136.38" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="214.04" y1="136.38" x2="221.48" y2="143.82" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="217.76" cy="90.50" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="214.04" y1="94.22" x2="221.48" y2="86.78" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="214.04" y1="86.78" x2="221.48" y2="94.22" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="279.76" cy="288.90" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="276.04" y1="292.62" x2="283.48" y2="285.18" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="276.04" y1="285.18" x2="283.48" y2="292.62" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="279.76" cy="239.30" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="276.04" y1="243.02" x2="283.48" y2="235.58" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="276.04" y1="235.58" x2="283.48" y2="243.02" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="279.76" cy="189.70" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="276.04" y1="193.42" x2="283.48" y2="185.98" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="276.04" y1="185.98" x2="283.48" y2="193.42" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="279.76" cy="140.10" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="276.04" y1="143.82" x2="283.48" y2="136.38" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="276.04" y1="136.38" x2="283.48" y2="143.82" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="279.76" cy="90.50" r="5.27" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<line x1="276.04" y1="94.22" x2="283.48" y2="86.78" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="276.04" y1="86.78" x2="283.48" y2="94.22" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="155.76" cy="177.30" r="3.41" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+<circle cx="155.76" cy="177.30" r="93.00" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="7 5"/>
+<circle cx="155.76" cy="270.30" r="16.12" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2"/>
+<text class="mtph-lbl" x="155.76" y="270.30" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">+</tspan></text><text x="155.76" y="270.30" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="currentColor"><tspan dy="0.00">+</tspan></text>
+<text class="mtph-lbl" x="130.96" y="270.30" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">+q</tspan></text><text x="130.96" y="270.30" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">+q</tspan></text>
+<line x1="155.76" y1="270.30" x2="242.56" y2="270.30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="242.56,270.30 232.56,274.50 232.56,266.10" fill="currentColor"/>
+<text class="mtph-lbl" x="258.56" y="270.30" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">v</tspan></text><text x="258.56" y="270.30" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">v</tspan></text>
+<line x1="155.76" y1="270.30" x2="155.76" y2="208.30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="155.76,208.30 159.96,218.30 151.56,218.30" fill="currentColor"/>
+<text class="mtph-lbl" x="155.76" y="192.30" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">F</tspan></text><text x="155.76" y="192.30" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">F</tspan></text>
+<line x1="155.76" y1="177.30" x2="227.06" y2="236.82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<text class="mtph-lbl" x="202.26" y="192.80" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">r</tspan></text><text x="202.26" y="192.80" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">r</tspan></text>
+<text class="mtph-lbl" x="31.76" y="44.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">B</tspan></text><text x="31.76" y="44.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">B</tspan></text>
+</svg><figcaption>Circular motion of $+q$ in a field $\vec B$ into the page.</figcaption></figure>
+<details class="mtph-aside"><summary>Answer &amp; solution</summary><div class="answer"><h3>Answer</h3><p>$ r = \dfrac{mv}{qB} $</p></div>
+<div class="solution"><h3>Solution</h3><p><strong>(a) No work, then the radius.</strong> The magnetic force $\vec F = q\,\vec v \times \vec B$ is<br>
+always perpendicular to $\vec v$, so $\vec F\cdot\vec v = 0$ and the speed is constant. The<br>
+force supplies the centripetal acceleration:<br>
+$$qvB = \frac{mv^2}{r} \;\Rightarrow\; \boxed{r = \frac{mv}{qB}}, \qquad
+  T = \frac{2\pi r}{v} = \frac{2\pi m}{qB}.$$<br>
+The period $T$ is <strong>independent of $v$</strong> — the cyclotron&#x27;s key property.</p>
+<p><strong>(b) Velocity selector.</strong> Add a uniform electric field $\vec E$ in the plane, perpendicular<br>
+to $\vec v$. The particle travels straight only when the electric and magnetic forces cancel,<br>
+$qE = qvB$, i.e. for the single speed<br>
+$$v = \frac{E}{B},$$<br>
+independent of both $q$ and $m$ — so the device selects a velocity, not a particle.</p></div></details></main>
+</body>
+</html>

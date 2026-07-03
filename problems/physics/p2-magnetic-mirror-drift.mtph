@@ -1,0 +1,271 @@
+---
+mtph: "0.2"
+id: p2-magnetic-mirror-drift
+title: "The Magnetic Mirror Drift"
+subject: physics
+topic: electromagnetism/plasma-physics/mechanics
+difficulty: 5
+tags: [magnetic-mirror, adiabatic-invariant, exb-drift, pitch-angle, trapping, loss-cone, false-attractor, limiting-case-trap, domain-collision, progressive-dependency]
+---
+
+A particle of mass $m$ and charge $q$ moves in the magnetic field
+$\mathbf{B} = B_0(1 + z^2/L^2)\hat{\mathbf{z}}$ and a weak uniform electric
+field $\mathbf{E} = E_0\hat{\mathbf{z}}$, in a cylindrical geometry where the
+magnetic field is approximately axisymmetric. At $t = 0$, the particle is at
+$z = 0$ with speed $v_0$ and pitch angle $\alpha_0$ (the angle between
+$\mathbf{v}$ and $\mathbf{B}$). The electric field is weak enough that the
+$\mathbf{E}\times\mathbf{B}$ drift speed is much smaller than the thermal
+speed: $v_E = E_0/B_0 \ll v_0$.
+
+**(a)** Identify the three distinct timescales in this problem: the gyration
+period $\tau_g$, the bounce period $\tau_b$, and the drift timescale $\tau_d$.
+Express each in terms of the physical parameters. For a representative
+electron with $B_0 = 1\;\text{T}$, $L = 1\;\text{m}$, $E_0 = 10\;\text{V/m}$,
+and $v_0 = 10^6\;\text{m/s}$, compute numerical estimates for each.
+
+**(b)** Derive the guiding-center equations of motion correct to first order in
+the small parameter $\varepsilon = r_g/L$, where $r_g = mv_\perp/(|q|B)$ is the
+gyroradius. Show that the parallel velocity evolves as
+$$m\frac{dv_\parallel}{dt} = -\mu\nabla_\parallel B + qE_\parallel,$$
+where $\mu = mv_\perp^2/(2B)$ is the magnetic moment. Identify the physical
+origin of each term.
+
+**(c)** The magnetic moment $\mu$ is an adiabatic invariant at order
+$\varepsilon^0$: $d\mu/dt = 0$ on the fast gyration timescale. However, the
+slow $\mathbf{E}\times\mathbf{B}$ drift can cause $\mu$ to change over many
+bounce periods. Derive the $\mathcal{O}(\varepsilon)$ correction to $d\mu/dt$,
+showing that
+$$\frac{d\mu}{dt} = \frac{q}{B}(\mathbf{v}_E\cdot\nabla B)\frac{v_\parallel}{v_\perp}\mu,$$
+where $\mathbf{v}_E = \mathbf{E}\times\mathbf{B}/B^2$ is the
+$\mathbf{E}\times\mathbf{B}$ drift velocity. Interpret this result: when is
+$\mu$ exactly conserved even at order $\varepsilon$?
+
+**(d)** A particle is magnetically "trapped" if it reflects (i.e., $v_\parallel
+\to 0$) before reaching $z = z_{\max}$, the end of the magnetic bottle. For
+the given field profile, find the condition on the initial pitch angle
+$\alpha_0$ for trapping. Show that this critical angle (the loss-cone boundary)
+satisfies $\sin^2\alpha_0^* = B_0/B_{\max} = 1/(1 + z_{\max}^2/L^2)$.
+Now, using the result from part (c), estimate the timescale $\tau_{\text{loss}}$
+on which a marginally trapped particle (with $\alpha_0$ just above $\alpha_0^*$)
+becomes untrapped due to the slow evolution of $\mu$.
+
+**(e)** In a real magnetic mirror fusion device, the electric field is not
+externally imposed but arises self-consistently from charge separation — the
+ambipolar field. In an axisymmetric mirror, electrons have smaller gyroradii
+than ions and tend to escape faster, building up a positive plasma potential
+that creates an ambipolar $\mathbf{E}$ field pointing outward. Argue
+qualitatively how this modifies the loss-cone evolution found in (d). Does
+the ambipolar field enhance or suppress particle loss? Consider both electrons
+and ions and determine which species controls the overall confinement time.
+
+```figure caption="Magnetic mirror geometry. Field lines converge, creating a magnetic bottle. The particle gyrates along field lines and reflects where B is strong."
+# Axis
+axis origin=(0,0) xlen=0 ylen=8
+label text="z" at=(0.3,7.5)
+
+# Magnetic field lines converging
+path d="M(-3,0) Q(-1.5,4)(-0.5,8)" style=solid width=1
+path d="M(3,0) Q(1.5,4)(0.5,8)" style=solid width=1
+path d="M(-2,0) Q(-1,4)(-0.3,8)" style=solid width=1
+path d="M(2,0) Q(1,4)(0.3,8)" style=solid width=1
+
+# B-field coils (mirror coils)
+rect at=(-4,0.3) w=8 h=0.3 fill=gray
+rect at=(-4,7.4) w=8 h=0.3 fill=gray
+
+# Particle helical trajectory (gyrating)
+path d="M(0.5,1) C(0.3,1.5)(-0.1,1.5)(0.1,2) C(0.3,2.5)(-0.2,2.5)(0,3) C(0.2,3.5)(-0.1,3.5)(0.1,4) C(0.3,4.5)(-0.2,4.5)(0.05,5) C(0.2,5.5)(-0.1,5.5)(0.1,6) C(0.2,6.5)(-0.05,6.5)(0.1,7)" style=solid width=1.2
+
+# Velocity vector at a point
+vector from=(0.2,4.5) to=(0.6,5.19) label="\mathbf{v}"
+vector from=(0.2,4.5) to=(0.67,4.33) label="v_\perp"
+
+# B-field label
+bfield at=(1.5,3) size=0.4
+
+# Magnetic mirror points
+label text="z=0" at=(0.5,-0.4)
+label text="z_{\max}" at=(0.5,7.8)
+
+# Pitch angle annotation
+angle at=(0,1.5) from=58 to=90 value="\alpha_0" r=1.0
+```
+
+```answer type=expression part=a
+\tau_g \sim \frac{2\pi m}{|q|B_0} \approx 3.6\times 10^{-11}\,\text{s},\qquad
+\tau_b \sim \frac{L}{v_0} \approx 10^{-6}\,\text{s},\qquad
+\tau_d \sim \frac{B_0 L}{E_0} \approx 10^{-1}\,\text{s}
+```
+
+```answer type=expression part=b
+m\frac{dv_\parallel}{dt} = -\mu\frac{\partial B}{\partial z} + qE_0,
+\quad \mu = \frac{mv_\perp^2}{2B}
+```
+
+```answer type=expression part=c
+\frac{d\mu}{dt} = -\frac{q}{B}(\mathbf{v}_E\cdot\nabla B)\frac{v_\parallel}{v_\perp}\,\mu
+```
+
+```answer type=expression part=d
+\sin^2\alpha_0^* = \frac{1}{1 + z_{\max}^2/L^2},\qquad
+\tau_{\text{loss}} \sim \tau_d\left(\frac{v_0}{v_E}\right)
+```
+
+```answer type=expression part=e
+\text{Ambipolar field reduces electron loss, enhances ion confinement.}
+```
+
+`````solution
+## Necessary Insight
+
+The magnetic moment $\mu = mv_\perp^2/(2B)$ is an adiabatic invariant only
+when the guiding-center motion carries the particle along a path where
+$\mathbf{E}\times\mathbf{B}$ drift is purely perpendicular to $\nabla B$.
+When the E×B drift has a component along $\nabla B$ (as it does with
+$\mathbf{E} \parallel \hat{\mathbf{z}}$ and $\nabla B \parallel
+\hat{\mathbf{z}}$), $\mu$ slowly changes at $\mathcal{O}(\varepsilon)$ —
+moving the particle's pitch angle and eventually emptying the loss cone. The
+False Attractor is invoking unconditional $\mu$-conservation, which
+incorrectly predicts permanent trapping.
+
+### (a) Three timescales
+
+**Gyration period:** The cyclotron frequency is $\omega_c = |q|B/m$, so
+$$\tau_g = \frac{2\pi}{\omega_c} = \frac{2\pi m}{|q|B}.$$
+For an electron ($m_e = 9.11\times 10^{-31}$ kg, $|q| = 1.60\times 10^{-19}$ C)
+with $B_0 = 1$ T: $\tau_g \approx 3.6\times 10^{-11}$ s.
+
+**Bounce period:** The particle travels along field lines from $z=0$ to the
+mirror point and back. The parallel distance scale is $L$, so
+$$\tau_b \sim \frac{L}{v_\parallel} \sim \frac{L}{v_0} \approx 10^{-6}\;\text{s}.$$
+
+**Drift timescale:** The E×B drift speed is $v_E = E_0/B_0 = 10$ m/s.
+The time to drift across the system length $L$ is
+$$\tau_d \sim \frac{L}{v_E} = \frac{B_0 L}{E_0} \approx 0.1\;\text{s}.$$
+
+We have $\tau_g \ll \tau_b \ll \tau_d$, validating the adiabatic hierarchy.
+
+### (b) Guiding-center equations
+
+The guiding-center Lagrangian (at order $\varepsilon^0$) is:
+$$L_{\text{gc}} = \frac{m}{2}v_\parallel^2 + \mu B - q\phi + \frac{m}{q}\mu\dot\theta,$$
+where $\theta$ is the gyrophase. The parallel equation of motion follows from
+$d(\partial L_{\text{gc}}/\partial v_\parallel)/dt = \partial
+L_{\text{gc}}/\partial z$:
+$$\frac{d}{dt}(m v_\parallel) = -\mu\frac{\partial B}{\partial z} - q\frac{\partial\phi}{\partial z}.$$
+
+With $\mathbf{E} = -\nabla\phi$, we have $E_\parallel = -\partial\phi/\partial z$, so:
+$$m\frac{dv_\parallel}{dt} = -\mu\nabla_\parallel B + qE_\parallel.$$
+
+The first term is the mirror force: a magnetic moment in a spatially varying
+field experiences a force $-\mu\nabla B$. The second term is the electrostatic
+acceleration. These two forces compete: the mirror force pushes particles
+toward weaker $B$ (away from the mirror throat), while a properly directed
+$\mathbf{E}$ field can push particles into the mirror.
+
+### (c) Slow evolution of $\mu$
+
+The exact conservation law for a charged particle is the constancy of the
+action $J = \oint p_\parallel dz$. At order $\varepsilon$, the slow E×B drift
+causes the bounce orbit to sample different field strengths, changing $J$.
+
+The energy of the particle is $E = \frac{1}{2}m(v_\parallel^2 + v_\perp^2) +
+q\phi$. Differentiating:
+$$\frac{dE}{dt} = q\frac{\partial\phi}{\partial t} = 0\quad\text{(static fields)},$$
+so the total kinetic-plus-potential energy is conserved.
+
+The magnetic moment evolves as:
+$$\frac{d\mu}{dt} = \frac{d}{dt}\left(\frac{mv_\perp^2}{2B}\right) =
+\frac{mv_\perp}{B}\frac{dv_\perp}{dt} - \frac{\mu}{B}\frac{dB}{dt}.$$
+
+From energy conservation and the parallel equation, one finds:
+$$\frac{d\mu}{dt} = \frac{q}{B}(\mathbf{v}_E\cdot\nabla B)
+\frac{v_\parallel}{v_\perp}\mu.$$
+
+Here, $\mathbf{v}_E = \mathbf{E}\times\mathbf{B}/B^2$. Since $\mathbf{E} =
+E_0\hat{\mathbf{z}}$ and $\mathbf{B} = B(z)\hat{\mathbf{z}}$, we have
+$\mathbf{v}_E = 0$ at this order! In an axisymmetric mirror, $\mathbf{B}$ is
+purely in the $\hat{\mathbf{z}}$ direction, so $\mathbf{E}\times\mathbf{B} =
+0$. **$\mu$ is conserved at order $\varepsilon$ for an exactly parallel
+$\mathbf{E}$ and $\mathbf{B}$.**
+
+However, in a real mirror with finite radial gradients of $B$, the field
+lines are curved and $\mathbf{B}$ has a radial component $B_r \approx
+-(r/2)\partial B_z/\partial z$. Then $\mathbf{v}_E = (E_0 B_r/B^2)
+\hat{\boldsymbol{\phi}}$ and $\mathbf{v}_E\cdot\nabla B = 0$ because $\nabla
+B$ is also in the $r$-$z$ plane, perpendicular to $\hat{\boldsymbol{\phi}}$.
+
+The correction enters at $\mathcal{O}(\varepsilon^2)$ through the
+$\nabla B$ drift itself. For a more general geometry:
+$$\frac{d\mu}{dt} \approx -\frac{\mu}{B}(\mathbf{v}_d\cdot\nabla B),$$
+where $\mathbf{v}_d = \mathbf{v}_E + \mathbf{v}_{\nabla B} + \mathbf{v}_c$ is
+the total guiding-center drift. The $\nabla B$ drift is
+$\mathbf{v}_{\nabla B} = (\mu/qB^2)\mathbf{B}\times\nabla B$.
+
+For a particle with non-zero $v_\parallel$, the curvature drift also matters:
+$$\mathbf{v}_c = \frac{mv_\parallel^2}{qB^4}\mathbf{B}\times(\mathbf{B}\cdot\nabla)\mathbf{B}.$$
+
+The exact $\mu$ conservation occurs only when all drifts are perpendicular to
+$\nabla B$, i.e., when the drift motion is along equipotential contours of $B$.
+
+### (d) Trapping condition and loss-cone evolution
+
+**Trapping condition:** A particle reflects when $v_\parallel = 0$. At the
+reflection point $z_r$, all energy is in perpendicular motion. From
+conservation of energy and $\mu$ (at leading order):
+$$\frac{1}{2}mv_0^2 = \frac{1}{2}mv_{\perp r}^2 = \mu B(z_r) =
+\frac{mv_0^2\sin^2\alpha_0}{2B_0}B(z_r).$$
+
+Canceling $mv_0^2/2$:
+$$1 = \frac{\sin^2\alpha_0}{B_0}B(z_r) \quad\Longrightarrow\quad
+B(z_r) = \frac{B_0}{\sin^2\alpha_0}.$$
+
+The particle is trapped if this $B(z_r) \leq B_{\max} = B_0(1 +
+z_{\max}^2/L^2)$. Thus:
+$$\sin^2\alpha_0 \geq \frac{B_0}{B_{\max}} = \frac{1}{1 + z_{\max}^2/L^2}.$$
+
+The loss cone is defined by $\sin\alpha_0 < \sin\alpha_0^* = 1/\sqrt{1 +
+z_{\max}^2/L^2}$. Particles with pitch angles inside this cone escape.
+
+**Loss timescale:** Due to the slow $d\mu/dt$, a marginally trapped
+particle's $\mu$ changes by $\Delta\mu \sim \mu \cdot (\tau_b/\tau_d)$ per
+bounce. The loss cone boundary shifts by $\Delta(\sin^2\alpha) \sim
+\Delta\mu/\mu$. The number of bounces to cross the boundary is $N \sim
+\tau_d/\tau_b$, giving:
+$$\tau_{\text{loss}} \sim N\tau_b \sim \tau_d \sim 0.1\;\text{s}.$$
+
+More precisely, $\tau_{\text{loss}} \sim \tau_d \cdot
+(v_0/v_E) \cdot (L/r_g)^2 \gg \tau_d$ when the full $\mathcal{O}(\varepsilon^2)$
+effects are accounted for.
+
+### (e) Ambipolar field effects
+
+In a mirror machine, electrons have much smaller gyroradii and higher thermal
+speeds than ions, so they escape along field lines more rapidly. This charge
+separation creates a positive plasma potential $\phi(z)$ that peaks at the
+midplane and drops toward the mirror throats. The resulting ambipolar electric
+field $\mathbf{E} = -\nabla\phi$ points outward (from midplane to mirrors).
+
+**Effect on electrons:** The ambipolar field opposes electron escape
+($E_\parallel$ points away from the mirrors, so the electrostatic force
+$qE_\parallel$ with $q = -e$ points toward the mirrors, confining electrons).
+Electrons are better confined.
+
+**Effect on ions:** Ions feel an outward force ($qE_\parallel$ with $q=+e$
+points away from mirrors), which partially counteracts the mirror force.
+Ion confinement is degraded.
+
+**Overall confinement:** Since electrons would otherwise escape much faster,
+the ambipolar field ties electron and ion loss rates together (ambipolar
+diffusion). The ion loss rate determines the overall confinement time because
+ions are heavier and slower to escape once the electron loss is suppressed.
+The net effect is that the ambipolar field **reduces** electron loss
+dramatically while modestly increasing ion loss, such that the overall
+particle confinement time is set by ion dynamics and is longer than either
+species' free-streaming loss time.
+
+The loss-cone evolution is modified: the E×B drift now has a radial component
+(because $\phi$ varies with $r$ as well as $z$), contributing to $\mu$
+non-conservation through the mechanism of part (c). This can either fill or
+empty the loss cone depending on the sign of the radial electric field.
+`````

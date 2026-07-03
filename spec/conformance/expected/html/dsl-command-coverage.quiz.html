@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>DSL command coverage (conformance fixture)</title>
+<style>
+:root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f7f7f8;
+  --chip-bg:#eef0f3; --chip-ink:#445; --code-bg:#f0f0f2; --summary:#334; --ok:#2a7; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+    --chip-bg:#2a2c33; --chip-ink:#c3cbe0; --code-bg:#26282e; --summary:#c3cbe0; --ok:#4cd6a0; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,serif; }
+main { max-width:760px; margin:40px auto; background:var(--paper); padding:40px 48px;
+  border:1px solid var(--line); border-radius:10px; line-height:1.6; }
+h1 { font-size:1.6rem; margin:0 0 .4rem; }
+.meta { margin-bottom:1.6rem; }
+.chip { display:inline-block; font-size:.74rem; background:var(--chip-bg); color:var(--chip-ink);
+  padding:2px 9px; border-radius:20px; margin-right:6px; }
+.tag { font-size:.74rem; color:var(--muted); margin-right:6px; }
+.mtph-prose { margin:1rem 0; }
+.mtph-math { margin:1.3rem 0; text-align:center; overflow-x:auto; }
+.mtph-math.numbered { position:relative; padding-right:2.5rem; }
+.mtph-math.numbered .eqno { position:absolute; right:0; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-variant-numeric:tabular-nums; }
+.eqref { text-decoration:none; color:inherit; border-bottom:1px dotted var(--muted); }
+.mtph-figure { margin:1.6rem 0; text-align:center; }
+/* Diagrams/plots draw their default ink with currentColor, so they follow the page theme;
+   the white knock-out fills and label halos are re-themed to the paper colour here. */
+.mtph-figure svg { max-width:100%; height:auto; color:var(--ink); }
+.mtph-figure svg .mtph-pp { fill:var(--paper); }
+.mtph-figure svg .mtph-lbl { fill:var(--paper); stroke:var(--paper); }
+figcaption { font-size:.85rem; color:var(--muted); margin-top:.4rem; }
+.mtph-aside { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-aside summary { cursor:pointer; font-weight:600; color:var(--summary); }
+.answer, .solution { margin-top:1rem; }
+.answer h3, .solution h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.6rem 0 .3rem; }
+.choices li.correct { font-weight:700; }
+.choices li.correct::after { content:" ✓"; color:var(--ok); }
+.grading .rubric { list-style:none; padding-left:0; }
+.grading .rubric li { margin:.25rem 0; }
+.grading .pts { display:inline-block; min-width:3.6em; font-variant-numeric:tabular-nums;
+  font-weight:600; color:var(--muted); }
+.grading .total { font-weight:600; margin-top:.4rem; }
+code { background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.92em; }
+.mtph-quiz { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-quiz h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.4rem 0 .7rem; }
+.mtph-quiz .q { margin:.55rem 0; }
+.mtph-quiz .q-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mtph-quiz .q-in { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:6px;
+  background:var(--paper); color:var(--ink); width:8em; }
+.mtph-quiz .q-unit { color:var(--muted); }
+.mtph-quiz button { font:inherit; font-size:.85rem; padding:4px 12px; border:1px solid var(--line);
+  border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; }
+.mtph-quiz button:hover { border-color:var(--summary); }
+.mtph-quiz .q-choices { list-style:none; padding-left:0; display:flex; flex-direction:column;
+  gap:6px; margin:.3rem 0; }
+.mtph-quiz .q-opt { text-align:left; width:100%; }
+.mtph-quiz .q-opt.sel { border-color:var(--summary); font-weight:600; }
+.mtph-quiz .q-fb { font-weight:600; }
+.mtph-quiz .q-fb.ok { color:var(--ok); }
+.mtph-quiz .q-fb.no { color:#cc4b37; }
+.mtph-quiz .q-reveal { margin-top:1rem; border-top:1px solid var(--line); padding-top:.8rem; }
+.mtph-quiz .q-reveal summary { cursor:pointer; font-weight:600; color:var(--summary); }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false,errorColor:"#cc0000"});});</script>
+</head>
+<body>
+<main><h1>DSL command coverage (conformance fixture)</h1>
+<div class="meta"><span class="chip">physics</span><span class="chip">meta/conformance</span><span class="chip">difficulty 1/5</span><span class="tag">#conformance</span><span class="tag">#dsl</span><span class="tag">#coverage</span></div>
+<div class="mtph-prose"><p>A synthetic fixture whose only purpose is coverage: each figure below stresses a family of<br>
+commands that the example bank does not otherwise reach.</p>
+<h2>Fields, charges and flux</h2></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 404.2 415.9" width="404" height="416" font-family="Georgia, 'Times New Roman', serif">
+<circle cx="185.96" cy="204.56" r="16.12" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2"/>
+<text class="mtph-lbl" x="185.96" y="204.56" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">+</tspan></text><text x="185.96" y="204.56" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="currentColor"><tspan dy="0.00">+</tspan></text>
+<text class="mtph-lbl" x="185.96" y="162.44" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">q</tspan><tspan dy="5.40" font-size="13.0">1</tspan></text><text x="185.96" y="162.44" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">q</tspan><tspan dy="5.40" font-size="13.0">1</tspan></text>
+<circle cx="309.96" cy="204.56" r="16.12" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2"/>
+<text class="mtph-lbl" x="309.96" y="204.56" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">−</tspan></text><text x="309.96" y="204.56" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="currentColor"><tspan dy="0.00">−</tspan></text>
+<text class="mtph-lbl" x="309.96" y="162.44" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">q</tspan><tspan dy="5.40" font-size="13.0">2</tspan></text><text x="309.96" y="162.44" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">q</tspan><tspan dy="5.40" font-size="13.0">2</tspan></text>
+<line x1="221.11" y1="368.86" x2="274.81" y2="337.86" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="274.81,337.86 268.25,346.50 264.05,339.22" fill="currentColor"/>
+<circle cx="221.11" cy="368.86" r="14.88" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2"/>
+<text class="mtph-lbl" x="221.11" y="368.86" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">−</tspan></text><text x="221.11" y="368.86" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="currentColor"><tspan dy="0.00">−</tspan></text>
+<circle cx="274.81" cy="337.86" r="14.88" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2"/>
+<text class="mtph-lbl" x="274.81" y="337.86" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">+</tspan></text><text x="274.81" y="337.86" text-anchor="middle" dominant-baseline="central" font-size="21" font-style="italic" fill="currentColor"><tspan dy="0.00">+</tspan></text>
+<text class="mtph-lbl" x="247.96" y="306.36" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">p</tspan></text><text x="247.96" y="306.36" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">p</tspan></text>
+<path d="M 185.96 204.56 Q 247.96 142.56 309.96 204.56" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><polygon points="309.96,204.56 299.92,200.46 305.86,194.52" fill="currentColor"/>
+<path d="M 185.96 204.56 Q 247.96 266.56 309.96 204.56" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><polygon points="309.96,204.56 305.86,214.60 299.92,208.66" fill="currentColor"/>
+<line x1="51.63" y1="134.29" x2="33.51" y2="152.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="33.51,152.41 37.61,142.37 43.55,148.31" fill="currentColor"/>
+<line x1="51.63" y1="92.96" x2="26.00" y2="92.96" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="26.00,92.96 36.00,88.76 36.00,97.16" fill="currentColor"/>
+<line x1="51.63" y1="51.63" x2="33.51" y2="33.51" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="33.51,33.51 43.55,37.61 37.61,43.55" fill="currentColor"/>
+<line x1="92.96" y1="134.29" x2="92.96" y2="159.92" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="92.96,159.92 88.76,149.92 97.16,149.92" fill="currentColor"/>
+<line x1="92.96" y1="51.63" x2="92.96" y2="26.00" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="92.96,26.00 97.16,36.00 88.76,36.00" fill="currentColor"/>
+<line x1="134.29" y1="134.29" x2="152.41" y2="152.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="152.41,152.41 142.37,148.31 148.31,142.37" fill="currentColor"/>
+<line x1="134.29" y1="92.96" x2="159.92" y2="92.96" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="159.92,92.96 149.92,97.16 149.92,88.76" fill="currentColor"/>
+<line x1="134.29" y1="51.63" x2="152.41" y2="33.51" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="152.41,33.51 148.31,43.55 142.37,37.61" fill="currentColor"/>
+<circle cx="247.96" cy="204.56" r="99.20" fill="none" stroke="#888888" stroke-width="1.3" stroke-dasharray="7 5"/>
+<circle cx="247.96" cy="204.56" r="130.20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="7 5"/>
+<text class="mtph-lbl" x="247.96" y="64.36" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">S</tspan></text><text x="247.96" y="64.36" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">S</tspan></text>
+</svg></figure>
+<div class="mtph-prose"><h2>Mechanics: pivots, rods, pulleys and coils</h2></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 527.9 408.6" width="528" height="409" font-family="Georgia, 'Times New Roman', serif">
+<polygon points="226.26,69.40 244.86,50.80 263.46,69.40" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<line x1="216.96" y1="69.40" x2="272.76" y2="69.40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="216.96" y1="69.40" x2="203.32" y2="83.04" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="236.80" y1="69.40" x2="223.16" y2="83.04" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="256.64" y1="69.40" x2="243.00" y2="83.04" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="244.86" cy="50.80" r="3.10" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+<text class="mtph-lbl" x="254.86" y="50.80" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">O</tspan></text><text x="254.86" y="50.80" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">O</tspan></text>
+<polygon points="412.26,69.40 430.86,50.80 449.46,69.40" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<line x1="402.96" y1="69.40" x2="458.76" y2="69.40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="402.96" y1="69.40" x2="389.32" y2="83.04" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="422.80" y1="69.40" x2="409.16" y2="83.04" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="442.64" y1="69.40" x2="429.00" y2="83.04" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="430.86" cy="50.80" r="3.10" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+<line x1="244.86" y1="50.80" x2="368.86" y2="143.80" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<text class="mtph-lbl" x="306.86" y="85.30" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">ℓ</tspan></text><text x="306.86" y="85.30" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">ℓ</tspan></text>
+<circle cx="120.86" cy="50.80" r="24.80" fill="none" stroke="currentColor" stroke-width="2"/>
+<circle cx="120.86" cy="50.80" r="2.48" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+<line x1="430.86" y1="50.80" x2="430.86" y2="174.80" stroke="#888888" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="7 5"/>
+<line x1="430.86" y1="50.80" x2="483.26" y2="163.18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<circle cx="430.86" cy="50.80" r="3.10" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+<circle cx="483.26" cy="163.18" r="18.60" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2"/>
+<polyline points="430.86,90.48 433.02,90.42 435.18,90.24 437.32,89.95 439.45,89.54 441.55,89.01 443.61,88.37 445.64,87.62 447.63,86.76" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="442.80" y="104.67" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">θ</tspan></text><text x="442.80" y="104.67" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">θ</tspan></text>
+<text class="mtph-lbl" x="483.26" y="163.18" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">m</tspan></text><text x="483.26" y="163.18" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">m</tspan></text>
+<polyline points="34.06,236.80 34.06,216.96 26.00,208.53 42.12,200.10 26.00,191.66 42.12,183.23 26.00,174.80 42.12,166.37 26.00,157.94 42.12,149.50 26.00,141.07 34.06,132.64 34.06,112.80" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="34.06" y="160.80" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">k</tspan></text><text x="34.06" y="160.80" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">k</tspan></text>
+<polyline points="244.86,360.80 245.12,360.77 245.36,360.67 245.58,360.50 245.75,360.28 245.88,360.01 245.96,359.70 245.96,359.37 245.89,359.01 245.75,358.65 245.53,358.30 245.23,357.98 244.86,357.70 244.42,357.47 243.92,357.31 243.38,357.22 242.79,357.22 242.19,357.32 241.57,357.51 240.97,357.81 240.39,358.22 239.85,358.72 239.37,359.33 238.97,360.02 238.66,360.80 238.46,361.64 238.37,362.54 238.42,363.47 238.60,364.42 238.92,365.36 239.38,366.28 239.98,367.15 240.73,367.96 241.60,368.68 242.59,369.28 243.68,369.76 244.86,370.10 246.11,370.28 247.40,370.28 248.72,370.11 250.03,369.75 251.31,369.20 252.53,368.47 253.67,367.56 254.70,366.48 255.60,365.25 256.34,363.88 256.90,362.38 257.26,360.80 257.41,359.15 257.34,357.46 257.03,355.76 256.49,354.08 255.72,352.47 254.72,350.94 253.51,349.53 252.09,348.27 250.50,347.20 248.74,346.33 246.85,345.69 244.86,345.30 242.80,345.18 240.71,345.33 238.63,345.76 236.59,346.48 234.64,347.48 232.80,348.74 231.13,350.26 229.65,352.02 228.39,353.98 227.39,356.12 226.68,358.41 226.26,360.80 226.16,363.26 226.39,365.75 226.96,368.21 227.86,370.62 229.08,372.91 230.61,375.05 232.44,376.99 234.53,378.70 236.85,380.13 239.38,381.26 242.06,382.06 244.86,382.50 247.73,382.57 250.61,382.26 253.46,381.56 256.23,380.49 258.86,379.04 261.30,377.24 263.51,375.11 265.44,372.68 267.06,369.99 268.32,367.08 269.19,364.00 269.66,360.80" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="368.86,360.80 369.12,360.77 369.36,360.67 369.58,360.50 369.75,360.28 369.88,360.01 369.96,359.70 369.96,359.37 369.89,359.01 369.75,358.65 369.53,358.30 369.23,357.98 368.86,357.70 368.42,357.47 367.92,357.31 367.38,357.22 366.79,357.22 366.19,357.32 365.57,357.51 364.97,357.81 364.39,358.22 363.85,358.72 363.37,359.33 362.97,360.02 362.66,360.80 362.46,361.64 362.37,362.54 362.42,363.47 362.60,364.42 362.92,365.36 363.38,366.28 363.98,367.15 364.73,367.96 365.60,368.68 366.59,369.28 367.68,369.76 368.86,370.10 370.11,370.28 371.40,370.28 372.72,370.11 374.03,369.75 375.31,369.20 376.53,368.47 377.67,367.56 378.70,366.48 379.60,365.25 380.34,363.88 380.90,362.38 381.26,360.80 381.41,359.15 381.34,357.46 381.03,355.76 380.49,354.08 379.72,352.47 378.72,350.94 377.51,349.53 376.09,348.27 374.50,347.20 372.74,346.33 370.85,345.69 368.86,345.30 366.80,345.18 364.71,345.33 362.63,345.76 360.59,346.48 358.64,347.48 356.80,348.74 355.13,350.26 353.65,352.02 352.39,353.98 351.39,356.12 350.68,358.41 350.26,360.80 350.16,363.26 350.39,365.75 350.96,368.21 351.86,370.62 353.08,372.91 354.61,375.05 356.44,376.99 358.53,378.70 360.85,380.13 363.38,381.26 366.06,382.06 368.86,382.50 371.73,382.57 374.61,382.26 377.46,381.56 380.23,380.49 382.86,379.04 385.30,377.24 387.51,375.11 389.44,372.68 391.06,369.99 392.32,367.08 393.19,364.00 393.66,360.80" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="161.16,277.10 204.56,277.10 204.56,320.50 161.16,320.50" fill="#ffffff" class="mtph-pp" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+<text class="mtph-lbl" x="196.86" y="298.80" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">M</tspan></text><text x="196.86" y="298.80" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">M</tspan></text>
+<line x1="120.86" y1="50.80" x2="120.86" y2="224.40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="368.86" y1="236.80" x2="368.86" y2="112.80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg></figure>
+<div class="mtph-prose"><h2>Optics and waves</h2></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 545.8 389.3" width="546" height="389" font-family="Georgia, 'Times New Roman', serif">
+<line x1="286.40" y1="152.50" x2="286.40" y2="301.30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="286.40" y1="163.66" x2="286.40" y2="141.34" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="286.40,141.34 290.60,151.34 282.20,151.34" fill="currentColor"/>
+<line x1="286.40" y1="290.14" x2="286.40" y2="312.46" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="286.40,312.46 282.20,302.46 290.60,302.46" fill="currentColor"/>
+<line x1="484.80" y1="152.50" x2="484.80" y2="301.30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="484.80" y1="141.34" x2="484.80" y2="163.66" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="484.80,163.66 480.60,153.66 489.00,153.66" fill="currentColor"/>
+<line x1="484.80" y1="312.46" x2="484.80" y2="290.14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="484.80,290.14 489.00,300.14 480.60,300.14" fill="currentColor"/>
+<line x1="100.40" y1="195.90" x2="286.40" y2="208.30" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="286.40,208.30 276.14,211.83 276.70,203.44" fill="currentColor"/>
+<line x1="286.40" y1="208.30" x2="484.80" y2="239.30" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="100.40" cy="226.90" r="24.80" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<circle cx="100.40" cy="226.90" r="49.60" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<circle cx="100.40" cy="226.90" r="74.40" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<circle cx="100.40" cy="226.90" r="3.10" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+<polyline points="467.32,233.26 468.09,235.08 469.06,236.80 470.20,238.42 471.50,239.90 472.95,241.24 474.54,242.41 476.24,243.41 478.04,244.23 479.92,244.85 481.85,245.26 483.81,245.47 485.79,245.47 487.75,245.26 489.68,244.85 491.56,244.23 493.36,243.41 495.06,242.41 496.65,241.24 498.10,239.90 499.40,238.42 500.54,236.80 501.51,235.08 502.28,233.26" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="449.84,239.62 451.39,243.26 453.31,246.71 455.59,249.94 458.20,252.90 461.11,255.58 464.28,257.93 467.69,259.93 471.28,261.56 475.04,262.80 478.90,263.63 482.82,264.05 486.78,264.05 490.70,263.63 494.56,262.80 498.32,261.56 501.91,259.93 505.32,257.93 508.49,255.58 511.40,252.90 514.01,249.94 516.29,246.71 518.21,243.26 519.76,239.62" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="484.80" cy="226.90" r="3.10" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+<polyline points="348.40,363.30 348.04,356.67 346.98,350.12 345.23,343.72 342.80,337.54 339.72,331.66 336.03,326.14 331.78,321.05 327.00,316.44 321.76,312.37 316.11,308.88 310.13,306.02 303.87,303.81 297.41,302.29 290.82,301.46 284.19,301.34 277.58,301.93 271.07,303.23 264.73,305.21 258.65,307.86 252.88,311.14 247.50,315.02 242.56,319.46" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="286.40,90.50 286.36,90.18 286.23,89.88 286.03,89.60 285.75,89.38 285.42,89.22 285.03,89.13 284.61,89.12 284.16,89.21 283.71,89.39 283.28,89.66 282.88,90.04 282.53,90.50 282.24,91.05 282.03,91.67 281.92,92.35 281.93,93.08 282.04,93.84 282.29,94.61 282.66,95.37 283.17,96.09 283.80,96.77 284.56,97.36 285.43,97.86 286.40,98.25 287.45,98.50 288.57,98.61 289.74,98.56 290.92,98.33 292.10,97.93 293.25,97.35 294.34,96.59 295.35,95.67 296.25,94.58 297.01,93.34 297.61,91.98 298.03,90.50 298.25,88.94 298.25,87.32 298.04,85.68 297.59,84.04 296.90,82.44 295.99,80.91 294.85,79.48 293.50,78.20 291.96,77.07 290.24,76.15 288.38,75.45 286.40,75.00 284.33,74.81 282.22,74.90 280.10,75.28 278.00,75.96 275.98,76.92 274.07,78.17 272.31,79.69 270.74,81.46 269.39,83.46 268.31,85.65 267.51,88.01 267.02,90.50 266.87,93.07 267.06,95.68 267.60,98.29 268.50,100.83 269.75,103.28 271.33,105.57 273.23,107.66 275.42,109.52 277.87,111.09 280.55,112.33 283.41,113.23 286.40,113.75 289.48,113.87 292.58,113.58 295.67,112.88 298.67,111.75 301.54,110.23 304.21,108.31 306.64,106.03 308.77,103.42 310.57,100.51 311.98,97.35 312.97,94.00 313.53,90.50 313.61,86.92 313.22,83.31 312.36,79.75 311.01,76.29 309.20,73.00 306.95,69.95 304.29,67.19 301.25,64.77 297.89,62.75 294.26,61.18 290.40,60.09 286.40,59.50 282.31,59.45 278.21,59.93 274.17,60.96 270.25,62.53 266.55,64.63 263.11,67.21 260.01,70.25 257.32,73.71 255.07,77.52 253.34,81.64 252.14,85.99 251.53,90.50 251.50,95.09 252.09,99.69 253.28,104.22 255.08,108.58 257.45,112.71 260.37,116.53 263.79,119.96 267.67,122.94 271.94,125.41 276.54,127.31 281.38,128.60 286.40,129.25 291.50,129.24 296.60,128.55 301.60,127.20 306.42,125.18 310.97,122.52 315.17,119.27 318.94,115.47 322.20,111.17 324.89,106.44 326.95,101.37 328.34,96.02 329.03,90.50 328.98,84.89 328.20,79.30 326.68,73.82 324.43,68.54 321.50,63.57 317.91,58.99 313.72,54.89 309.00,51.35 303.82,48.43 298.27,46.21 292.43,44.72 286.40,44.00" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="294.40" y="44.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">φ</tspan></text><text x="294.40" y="44.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">φ</tspan></text>
+</svg></figure>
+<div class="mtph-prose"><h2>Geometry, 3D, thermo and misc</h2></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 502.0 466.8" width="502" height="467" font-family="Georgia, 'Times New Roman', serif">
+<line x1="128.76" y1="292.00" x2="265.16" y2="292.00" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="265.16,292.00 255.16,296.20 255.16,287.80" fill="currentColor"/>
+<line x1="128.76" y1="292.00" x2="128.76" y2="155.60" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="128.76,155.60 132.96,165.60 124.56,165.60" fill="currentColor"/>
+<line x1="128.76" y1="292.00" x2="45.52" y2="351.46" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><polygon points="45.52,351.46 51.22,342.23 56.10,349.07" fill="currentColor"/>
+<text class="mtph-lbl" x="273.16" y="302.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">x</tspan></text><text x="273.16" y="302.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">x</tspan></text>
+<text class="mtph-lbl" x="136.76" y="149.60" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">y</tspan></text><text x="136.76" y="149.60" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">y</tspan></text>
+<text class="mtph-lbl" x="37.52" y="357.46" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">z</tspan></text><text x="37.52" y="357.46" text-anchor="end" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">z</tspan></text>
+<circle cx="413.96" cy="230.00" r="62.00" fill="none" stroke="currentColor" stroke-width="2"/>
+<ellipse cx="413.96" cy="230.00" rx="62.00" ry="19.84" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<text class="mtph-lbl" x="413.96" y="158.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">R</tspan></text><text x="413.96" y="158.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">R</tspan></text>
+<path d="M 128.76 327.96 C 156.66 357.72 149.22 391.20 128.76 391.20 C 108.30 391.20 100.86 357.72 128.76 327.96 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="215.56,81.20 245.32,81.20 257.97,68.80 270.62,93.60 283.27,68.80 295.92,93.60 308.56,68.80 321.21,93.60 333.86,68.80 346.51,93.60 359.16,68.80 371.80,81.20 401.56,81.20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="308.56" y="67.20" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">cut</tspan></text><text x="308.56" y="67.20" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">cut</tspan></text>
+<line x1="128.76" y1="44.00" x2="339.56" y2="44.00" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="339.56,44.00 329.56,48.20 329.56,39.80" fill="currentColor"/>
+<text class="mtph-lbl" x="355.56" y="44.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">I</tspan></text><text x="355.56" y="44.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">I</tspan></text>
+<line x1="128.76" y1="440.80" x2="413.96" y2="440.80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="277.56" y1="440.80" x2="277.56" y2="316.80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polygon points="277.56,316.80 281.76,326.80 273.36,326.80" fill="currentColor"/>
+<text class="mtph-lbl" x="277.56" y="300.80" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">v</tspan></text><text x="277.56" y="300.80" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">v</tspan></text>
+<text class="mtph-lbl" x="277.56" y="168.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">note</tspan></text><text x="277.56" y="168.00" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">note</tspan></text>
+</svg></figure>
+<div class="mtph-quiz"><h3>Check your answer</h3><details class="q-reveal"><summary>Show answer &amp; solution</summary><div class="answer"><h3>Answer</h3><p>$ n/a $</p></div>
+<div class="solution"><h3>Solution</h3><p>This file is not a real problem. It exists so the conformance corpus exercises every figure<br>
+command (and every alias) that the curated examples happen not to use, giving the JS port a<br>
+byte-identical SVG parity target for the whole DSL rather than just the common subset.</p></div></details></div></main>
+<script>(function(){document.querySelectorAll('.mtph-quiz .q').forEach(function(q){var t=q.getAttribute('data-type');var fb=q.querySelector('.q-fb');if(t==='numeric'){var c=parseFloat(q.getAttribute('data-correct'));var tol=parseFloat(q.getAttribute('data-tol'))||0.01;var inp=q.querySelector('.q-in');var go=function(){var v=parseFloat((inp.value||'').replace(',','.'));if(isNaN(v)){fb.textContent='enter a number';fb.className='q-fb';return;}var ok=Math.abs(v-c)<=tol*Math.max(Math.abs(c),1e-12);fb.textContent=ok?'\u2713 correct':'\u2717 try again';fb.className='q-fb '+(ok?'ok':'no');};q.querySelector('.q-check').addEventListener('click',go);inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});}else if(t==='choice'){var ci=parseInt(q.getAttribute('data-correct'),10);q.querySelectorAll('.q-opt').forEach(function(b){b.addEventListener('click',function(){q.querySelectorAll('.q-opt').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');var ok=parseInt(b.getAttribute('data-i'),10)===ci;fb.textContent=ok?'\u2713 correct':'\u2717 not that one';fb.className='q-fb '+(ok?'ok':'no');});});}});})();</script>
+</body>
+</html>

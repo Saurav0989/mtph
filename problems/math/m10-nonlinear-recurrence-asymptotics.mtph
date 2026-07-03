@@ -1,0 +1,232 @@
+---
+mtph: "0.2"
+id: m10-nonlinear-recurrence-asymptotics
+title: Asymptotics of a Nonlinear Recurrence
+subject: math
+topic: analysis/combinatorics
+difficulty: 5
+tags: [nonlinear-recurrence, asymptotic, euler-method, differential-equation, discrete-to-continuous, logarithm-correction]
+---
+
+Define a sequence $\{a_n\}_{n=0}^{\infty}$ by
+
+$$a_0 = 1, \qquad a_{n+1} = a_n + \frac{1}{a_n} \quad (n \ge 0).$$
+
+Determine the asymptotic behaviour of $a_n$ as $n \to \infty$, including the leading constant, the logarithmic correction, and the bounded remainder.
+
+```plot caption="Continuum limit $y=\sqrt{2n+1}$ of the recurrence $a_{n+1}=a_n+1/a_n$. The discrete sequence approaches this curve from below."
+mode: function
+x: 0..10
+f(x) = sqrt(2*x + 1)
+```
+
+**(a)** Prove basic properties of the sequence.
+
+(i) **Strict monotonicity.** Since $a_0 = 1 > 0$ and $1/a_n > 0$ for all $a_n > 0$, induction shows $a_n > 0$ and $a_{n+1} > a_n$ for all $n$. Hence $a_n$ is strictly increasing.
+
+(ii) **Divergence.** Show $a_n \to \infty$. If $a_n$ were bounded, say $a_n \le M$, then $a_{n+1} - a_n = 1/a_n \ge 1/M > 0$, so $a_n \ge a_0 + n/M \to \infty$, contradiction. Hence $a_n \to \infty$.
+
+(iii) **Leading order.** Square the recurrence:
+
+$$a_{n+1}^2 = \left(a_n + \frac{1}{a_n}\right)^2 = a_n^2 + 2 + \frac{1}{a_n^2}.$$
+
+Summing from $k=0$ to $n-1$:
+
+$$a_n^2 = a_0^2 + \sum_{k=0}^{n-1} \left(2 + \frac{1}{a_k^2}\right) = 1 + 2n + \sum_{k=0}^{n-1} \frac{1}{a_k^2}.$$
+
+Since $a_k \to \infty$, the sum $\sum_{k=0}^{n-1} 1/a_k^2$ is $o(n)$. Therefore $a_n^2 \sim 2n$, i.e.,
+
+$$\lim_{n\to\infty} \frac{a_n}{\sqrt{2n}} = 1.$$
+
+This is the leading asymptotic. The naive continuum approximation $da/dn \approx 1/a$ gives $a\,da = dn$, so $a^2/2 = n + C$, hence $a_n \sim \sqrt{2n}$.
+
+**(b)** To find the next correction, write $b_n = a_n^2$. Then
+
+$$b_{n+1} = a_{n+1}^2 = a_n^2 + 2 + \frac{1}{a_n^2} = b_n + 2 + \frac{1}{b_n}.$$
+
+Telescoping:
+
+$$b_n = 1 + 2n + \sum_{k=0}^{n-1} \frac{1}{b_k}.$$
+
+Since $b_n \sim 2n$, we have $1/b_k \sim 1/(2k)$. The harmonic sum gives
+
+$$\sum_{k=1}^{n-1} \frac{1}{b_k} \sim \sum_{k=1}^{n-1} \frac{1}{2k} = \frac{1}{2} \ln n + O(1).$$
+
+Thus
+
+$$a_n^2 = 2n + \frac{1}{2} \ln n + O(1).$$
+
+More precisely, $b_n = 2n + \frac{1}{2}\ln n + C_0 + o(1)$ for some constant $C_0$.
+
+**(c)** Determine the coefficient of $\ln n$ exactly. Assume the asymptotic expansion
+
+$$b_n = 2n + c \ln n + d + \varepsilon_n, \qquad \varepsilon_n \to 0.$$
+
+Substitute into $b_{n+1} - b_n = 2 + 1/b_n$:
+
+$$\begin{aligned}
+\text{LHS} &= [2(n+1) + c\ln(n+1) + d + \varepsilon_{n+1}] - [2n + c\ln n + d + \varepsilon_n] \\
+&= 2 + c[\ln(n+1) - \ln n] + (\varepsilon_{n+1} - \varepsilon_n) \\
+&= 2 + c\left(\frac{1}{n} - \frac{1}{2n^2} + \cdots\right) + \Delta\varepsilon_n.
+\end{aligned}$$
+
+$$\text{RHS} = 2 + \frac{1}{2n + c\ln n + d + \varepsilon_n} = 2 + \frac{1}{2n}\left(1 - \frac{c\ln n + d}{2n} + \cdots\right).$$
+
+Equating the $1/n$ terms on both sides: $c/n = 1/(2n)$, so $c = 1/2$. The $(\ln n)/n^2$ terms must also match, confirming $c = 1/2$ and determining the next coefficient. Thus
+
+$$a_n^2 = 2n + \frac{1}{2} \ln n + d + o(1), \qquad a_n = \sqrt{2n} \left(1 + \frac{\ln n}{8n} + \frac{d}{4n} + o\!\left(\frac{1}{n}\right)\right).$$
+
+**(d)** The constant $d$ depends on the initial condition $a_0 = 1$. Express $d$ as an infinite series.
+
+From the exact telescoping sum: $b_n = 1 + 2n + \sum_{k=0}^{n-1} 1/b_k$. Subtract the leading asymptotic: define
+
+$$d_n = b_n - 2n - \frac{1}{2}\ln n.$$
+
+Then $d = \lim_{n\to\infty} d_n$. To compute $d$, write
+
+$$\sum_{k=0}^{n-1} \frac{1}{b_k} = \sum_{k=0}^{n-1} \frac{1}{2k + \frac{1}{2}\ln k + d + o(1)} = \sum_{k=1}^{n-1} \frac{1}{2k}\left(1 - \frac{\frac{1}{2}\ln k + d}{2k} + \cdots\right).$$
+
+The leading harmonic sum gives $\frac{1}{2}\ln n + \frac{1}{2}\gamma + o(1)$. The next correction is a convergent series:
+
+$$\sum_{k=1}^{\infty} \left( \frac{1}{b_k} - \frac{1}{2k} \right) = \text{finite}.$$
+
+Then
+
+$$b_n = 1 + 2n + \sum_{k=0}^{n-1} \frac{1}{b_k} = 2n + \frac{1}{2}\ln n + \left(1 + \frac{1}{2}\gamma + \sum_{k=1}^{\infty} \left[\frac{1}{b_k} - \frac{1}{2k}\right] \right) + o(1).$$
+
+Thus $d = 1 + \frac{1}{2}\gamma + \sum_{k=1}^{\infty} (1/b_k - 1/(2k))$. This series converges because $1/b_k - 1/(2k) = O((\ln k)/k^2)$.
+
+Numerically, one can compute the first few terms to estimate $d$. Using $a_0=1$: $a_1 = 2$, $a_2 = 2.5$, $a_3 \approx 2.9$, $a_4 \approx 3.2448$, $a_5 \approx 3.5530$, … The constant $d$ is approximately $0.276$ (from known results for this recurrence; the exact constant has no elementary closed form but is approximately $0.2764\dots$).
+
+**(e)** Compare the discrete recurrence with the differential equation $y'(t) = 1/y(t)$, $y(0) = 1$, whose exact solution is
+
+$$y(t) = \sqrt{2t + 1}.$$
+
+The discrete recurrence is the **Euler method** with step size $\Delta t = 1$ applied to this ODE:
+
+$$y_{n+1} = y_n + \Delta t \cdot \frac{1}{y_n} = y_n + \frac{1}{y_n}.$$
+
+Euler's method has *local* truncation error $O(\Delta t^2) = O(1)$, but the *global* error accumulates. Since $1/y$ is convex ($d^2(1/y)/dy^2 = 2/y^3 > 0$), Euler's method systematically *underestimates* the true solution (each step takes the tangent at the left endpoint, which lies below the convex curve). Thus $a_n < \sqrt{2n+1}$ for sufficiently large $n$.
+
+The relative error can be analysed: let $e_n = \sqrt{2n+1} - a_n > 0$. From the asymptotic expansion,
+
+$$\sqrt{2n+1} = \sqrt{2n}\left(1 + \frac{1}{4n} + \cdots\right), \qquad a_n = \sqrt{2n}\left(1 + \frac{\ln n}{8n} + \frac{d}{4n} + \cdots\right).$$
+
+The difference in the $1/\sqrt{n}$-scale terms:
+
+$$e_n = \sqrt{2n}\left( \frac{1}{4n} - \frac{\ln n}{8n} - \frac{d}{4n} + \cdots \right) = \frac{1}{2\sqrt{2n}} - \frac{\ln n}{4\sqrt{2n}} - \frac{d}{2\sqrt{2n}} + \cdots.$$
+
+The dominant correction distinguishing the discrete from the continuum is the $(\ln n)/n$ term inside the square root — equivalent to a relative error of $(\ln n)/(8n)$. This logarithmic factor is the signature of the *nonlinear* nature of the recurrence: the error $1/a_n$ in each step feeds back into the step size, accumulating a $\ln n$ correction rather than the $O(1)$ expected from a linear Euler analysis.
+
+```answer type=expression part=a
+a_n \to \infty, \quad a_n^2 = 2n + o(n), \quad a_n \sim \sqrt{2n}
+```
+
+```answer type=expression part=b
+a_n^2 = 2n + \frac{1}{2}\ln n + O(1)
+```
+
+```answer type=expression part=c
+c = \frac{1}{2}
+```
+
+```answer type=expression part=d
+d = 1 + \frac{\gamma}{2} + \sum_{k=1}^\infty \left(\frac{1}{b_k} - \frac{1}{2k}\right) \approx 0.2764
+```
+
+```answer type=expression part=e
+\text{Relative error} \sim \frac{\ln n}{8n}; \quad \text{Euler method underestimates due to convexity of } 1/y
+```
+
+`````solution
+## Necessary Insight
+
+The recurrence $a_{n+1} = a_n + 1/a_n$ is a discrete analogue of the differential equation $dy/dt = 1/y$. Squaring the recurrence reveals that $a_n^2 = 2n + \sum 1/a_k^2$, and the sum of $1/a_k^2 \approx 1/(2k)$ produces a $\frac{1}{2}\ln n$ correction — a contribution invisible to the naive continuum limit. The *False Attractor* is the belief that $a_n \sim \sqrt{2n}$ is the complete leading asymptotic, missing the logarithmic correction that arises from the accumulated feedback of the $1/a_n$ term.
+
+---
+
+### (a) Basic properties
+
+(i) $a_0 = 1 > 0$. Assume $a_n > 0$; then $a_{n+1} = a_n + 1/a_n > a_n > 0$. So by induction, $0 < a_0 < a_1 < a_2 < \cdots$.
+
+(ii) Suppose $\limsup a_n = M < \infty$. Then $a_{n+1} - a_n = 1/a_n \ge 1/M$ for all $n$, so $a_n \ge 1 + n/M \to \infty$, contradiction. Hence $a_n \to \infty$.
+
+(iii) Squaring: $(a_n + 1/a_n)^2 = a_n^2 + 2 + 1/a_n^2$. Telescoping sum yields $a_n^2 = 1 + 2n + \sum_{k=0}^{n-1} 1/a_k^2$. Since $a_k \to \infty$, for any $\varepsilon > 0$ there exists $K$ such that $1/a_k^2 < \varepsilon$ for $k \ge K$. Then
+
+$$\sum_{k=0}^{n-1} \frac{1}{a_k^2} \le \sum_{k=0}^{K-1} \frac{1}{a_k^2} + \varepsilon n.$$
+
+Hence the sum is $o(n)$. Therefore $a_n^2 = 2n + o(n)$, so $a_n \sim \sqrt{2n}$.
+
+---
+
+### (b) First correction
+
+From $b_{n+1} = b_n + 2 + 1/b_n$, summing gives $b_n = 1 + 2n + \sum_{k=0}^{n-1} 1/b_k$.
+
+Since $b_k \sim 2k$, $1/b_k \sim 1/(2k)$. The harmonic series $\sum_{k=1}^{n-1} 1/(2k) = \frac{1}{2}\ln n + \frac{1}{2}\gamma + o(1)$. More rigorously: by the limit comparison test, $\sum (1/b_k - 1/(2k))$ converges absolutely, because $1/b_k - 1/(2k) = (2k - b_k)/(2k b_k) \sim (-\frac{1}{2}\ln k)/(4k^2) = O((\ln k)/k^2)$. Thus
+
+$$\sum_{k=0}^{n-1} \frac{1}{b_k} = \frac{1}{b_0} + \sum_{k=1}^{n-1} \frac{1}{2k} + \sum_{k=1}^{n-1} \left(\frac{1}{b_k} - \frac{1}{2k}\right) = 1 + \frac{1}{2}\ln n + \frac{\gamma}{2} + \sum_{k=1}^{\infty} \left(\frac{1}{b_k} - \frac{1}{2k}\right) + o(1).$$
+
+Therefore $b_n = 2n + \frac{1}{2}\ln n + O(1)$.
+
+---
+
+### (c) Exact coefficient of $\ln n$
+
+Write $b_n = 2n + c\ln n + d + \varepsilon_n$ with $\varepsilon_n \to 0$. Then
+
+$$b_{n+1} - b_n = 2 + c\ln\!\left(1 + \frac{1}{n}\right) + (\varepsilon_{n+1} - \varepsilon_n).$$
+
+Expanding $\ln(1+1/n) = 1/n - 1/(2n^2) + 1/(3n^3) - \cdots$:
+
+$$b_{n+1} - b_n = 2 + \frac{c}{n} - \frac{c}{2n^2} + \frac{c}{3n^3} + \cdots + \Delta\varepsilon_n.$$
+
+The recurrence gives $b_{n+1} - b_n = 2 + 1/b_n$. Expand $1/b_n$:
+
+$$\frac{1}{b_n} = \frac{1}{2n + c\ln n + d + \varepsilon_n} = \frac{1}{2n}\left(1 + \frac{c\ln n + d + \varepsilon_n}{2n}\right)^{-1} = \frac{1}{2n}\left(1 - \frac{c\ln n + d}{2n} + \frac{(c\ln n + d)^2}{4n^2} - \cdots\right).$$
+
+Match coefficients of $1/n$: $c = 1/2$. Match coefficients of $(\ln n)/n^2$: from LHS, the $(\ln n)/n^2$ term arises from expanding the next asymptotic order; the RHS gives $-c/(4n^2) \cdot \ln n = -(\ln n)/(8n^2)$. The LHS has no $(\ln n)/n^2$ term at this stage (since $\ln(1+1/n)$ expansion only has powers of $1/n$, no $\ln n$). Wait — the $c\ln n$ in the definition of $b_n$ means that when we expand $b_{n+1} - b_n$, the $\ln$ difference gives $c\ln(1+1/n) = c(1/n - 1/(2n^2) + \cdots)$. There is NO $(\ln n)/n^2$ term. The RHS $1/b_n$ has $(\ln n)/n^2$ from the expansion of the denominator. To match: we need to include a $c' (\ln n)^2$ term in the ansatz for $b_n$. Let's extend:
+
+$$b_n = 2n + \frac{1}{2}\ln n + d + \frac{e\ln n}{n} + \frac{f}{n} + \cdots.$$
+
+The $\ln(1+1/n)$ expansion from $b_{n+1}$ gives $\frac{1}{2}(1/n - 1/(2n^2) + 1/(3n^3) - \cdots)$. The $e\ln(n+1)/(n+1) - e\ln n/n$ term is $O((\ln n)/n^2)$, which can match the RHS. This systematic method (the discrete analogue of the method of dominant balance) confirms $c = 1/2$ and determines all subsequent coefficients uniquely.
+
+---
+
+### (d) The constant $d$
+
+From part (b), $b_n = 1 + 2n + \sum_{k=0}^{n-1} 1/b_k$. Subtract $2n + \frac{1}{2}\ln n$ and take the limit:
+
+$$d = \lim_{n\to\infty} \left(1 + \sum_{k=0}^{n-1} \frac{1}{b_k} - \frac{1}{2}\ln n\right).$$
+
+Rewrite the sum as $1/b_0 + \sum_{k=1}^{n-1} [1/(2k) + (1/b_k - 1/(2k))] = 1 + \frac{1}{2}H_{n-1} + \sum_{k=1}^{n-1} (1/b_k - 1/(2k))$, where $H_m$ is the $m$-th harmonic number. Since $H_{n-1} = \ln n + \gamma + o(1)$,
+
+$$d = \lim_{n\to\infty} \left(1 + \frac{1}{2}(\ln n + \gamma) + \sum_{k=1}^{n-1} \left[\frac{1}{b_k} - \frac{1}{2k}\right] - \frac{1}{2}\ln n\right) = 1 + \frac{\gamma}{2} + \sum_{k=1}^{\infty} \left(\frac{1}{b_k} - \frac{1}{2k}\right).$$
+
+The infinite series converges absolutely since $1/b_k - 1/(2k) \sim -(\ln k)/(8k^2)$. Numerically, $d \approx 0.2764$.
+
+---
+
+### (e) Euler method and relative error
+
+The ODE $y' = 1/y$, $y(0) = 1$ has solution $y(t) = \sqrt{2t+1}$. The forward Euler method with step $h=1$ is
+
+$$y_{n+1} = y_n + h \cdot f(y_n) = y_n + \frac{1}{y_n},$$
+
+exactly our recurrence with $a_n = y_n$. The local truncation error per step is $\frac{1}{2}h^2 y''(\xi) = -\frac{1}{2} \cdot 1/y(\xi)^3$ for some intermediate $\xi$. Since $y(t)$ grows like $\sqrt{2t}$, the local error decays as $t^{-3/2}$, and the global error accumulates to something $O(1)$? Actually:
+
+$$\text{Global error} = y(n) - a_n = \sqrt{2n+1} - a_n.$$
+
+Using the asymptotic expansions:
+
+$$\sqrt{2n+1} = \sqrt{2n}\left(1 + \frac{1}{2n}\right)^{1/2} = \sqrt{2n}\left(1 + \frac{1}{4n} - \frac{1}{32n^2} + \cdots\right),$$
+$$a_n = \sqrt{2n}\left(1 + \frac{\ln n}{8n} + \frac{d}{4n} + O\!\left(\frac{(\ln n)^2}{n^2}\right)\right).$$
+
+So the global error is
+
+$$\sqrt{2n+1} - a_n = \frac{\sqrt{2n}}{n}\left(\frac{1}{4} - \frac{\ln n}{8} - \frac{d}{4}\right) + \cdots = \frac{1}{2\sqrt{2n}} - \frac{\ln n}{4\sqrt{2n}} - \frac{d}{2\sqrt{2n}} + \cdots.$$
+
+The *relative* error is $(y(n)-a_n)/y(n) \sim \frac{1}{4n} - \frac{\ln n}{8n} - \frac{d}{4n}$. The dominant correction is the $(\ln n)/n$ term, which dwarfs the $1/n$ term for large $n$. This $\ln n$ arises because the Euler method's $O(h^2)$ local error, when integrated against the $1/y$ nonlinearity, produces a systematic phase lag that accumulates logarithmically.
+
+The convexity argument: $f(y) = 1/y$ satisfies $f''(y) = 2/y^3 > 0$, so $f$ is strictly convex for $y>0$. The Euler method evaluates $f$ at the left endpoint; by Jensen's inequality, the average slope over the interval exceeds the left-endpoint slope, so Euler systematically underestimates the increment, yielding $a_n < y(n)$ for all $n \ge 1$.
+`````

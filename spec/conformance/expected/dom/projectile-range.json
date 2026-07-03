@@ -1,0 +1,55 @@
+{
+  "blocks": [
+    {
+      "text": "A projectile is launched from level ground at speed $v_0$ and angle $\\theta$ above the\nhorizontal. Find its range $R$ (neglect air resistance).\n\nDrag the sliders to see how the launch angle and speed reshape the launch vector and the\ntrajectory.",
+      "type": "prose"
+    },
+    {
+      "source": "ground at=(-0.5,0) width=5\nforce from=(0,0) dir={{theta}} mag=2.4 label=\"v_0\"\nangle at=(0,0) from=0 to={{theta}} value=\"\\theta\"",
+      "type": "figure"
+    },
+    {
+      "source": "x: 0..70\nf(x) = x*tan({{theta}}*pi/180) - 9.8*x^2/(2*{{v0}}^2*cos({{theta}}*pi/180)^2)\nxlabel: \"x (m)\"\nylabel: \"y (m)\"\ngrid: true",
+      "type": "plot"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "type": "expression",
+      "value": "R = \\frac{v_0^2 \\sin(2\\theta)}{g}"
+    },
+    "difficulty": 2,
+    "id": "projectile-range",
+    "params": {
+      "theta": {
+        "default": 40,
+        "max": 75,
+        "min": 15,
+        "unit": "deg"
+      },
+      "v0": {
+        "default": 20,
+        "max": 25,
+        "min": 8,
+        "unit": "m/s"
+      }
+    },
+    "solution": "The time of flight is $T = \\tfrac{2 v_0 \\sin\\theta}{g}$, and the horizontal range is\n$$R = v_0\\cos\\theta \\cdot T = \\frac{v_0^2 \\sin 2\\theta}{g},$$\nwhich is largest at $\\theta = 45^\\circ$.\n",
+    "subject": "physics",
+    "symbols": {
+      "R": "length",
+      "g": "acceleration",
+      "theta": "angle",
+      "v_0": "velocity"
+    },
+    "tags": [
+      "projectile",
+      "kinematics",
+      "range",
+      "explorable"
+    ],
+    "title": "Projectile Range on Level Ground",
+    "topic": "mechanics/kinematics"
+  },
+  "mtph": "0.2"
+}

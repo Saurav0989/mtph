@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>&lt;mtph-doc&gt; — embed a live physics problem anywhere</title>
+<meta name="description" content="A one-tag web component that renders a .mtph math/physics problem live — figures, LaTeX, quizzes and explorable sliders — on any web page, no build step.">
+<style>
+  :root {
+    --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f4f5f7;
+    --accent:#3a6ea5; --code-bg:#f0f0f2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+      --accent:#79a9d6; --code-bg:#26282e;
+    }
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--bg); color:var(--ink); line-height:1.6;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  main { max-width:760px; margin:0 auto; padding:48px 24px 96px; }
+  h1 { font-size:1.9rem; margin:0 0 .3rem; letter-spacing:-.01em; }
+  h1 code { font-size:1.5rem; }
+  .lede { color:var(--muted); font-size:1.05rem; margin:0 0 1.4rem; }
+  h2 { font-size:1.15rem; margin:2.6rem 0 .4rem; }
+  h2 .n { color:var(--muted); font-weight:400; }
+  p.cap { color:var(--muted); font-size:.92rem; margin:.2rem 0 .8rem; }
+  a { color:var(--accent); }
+  code { background:var(--code-bg); padding:1px 6px; border-radius:5px; font-size:.9em;
+    font-family:'SF Mono',ui-monospace,Menlo,Consolas,monospace; }
+  pre { background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; overflow-x:auto; font-size:.82rem; line-height:1.5;
+    font-family:'SF Mono',ui-monospace,Menlo,Consolas,monospace; }
+  pre code { background:none; padding:0; }
+  .foot { margin-top:4rem; padding-top:1.2rem; border-top:1px solid var(--line);
+    color:var(--muted); font-size:.9rem; }
+</style>
+<!-- One script tag registers the <mtph-doc> element. Build it with `npm run build:webcomponent`
+     (Node/esbuild) — it bundles the whole JS renderer, so the page needs no other dependency. -->
+<script src="mtph-doc.js"></script>
+</head>
+<body>
+<main>
+  <h1>The <code>&lt;mtph-doc&gt;</code> web component</h1>
+  <p class="lede">Drop one <code>&lt;script&gt;</code> tag on any page, and a
+    <code>.mtph</code> problem renders live — real LaTeX, compiled figures, self-check quizzes,
+    even sliders — with nothing to install and no build step for the page.</p>
+
+  <pre><code>&lt;script src="mtph-doc.js"&gt;&lt;/script&gt;
+
+&lt;mtph-doc&gt;
+  &lt;script type="text/plain"&gt;
+  ---
+  mtph: "0.2"
+  title: My problem
+  ---
+  A block of mass $m$ on an incline of angle $\theta$ ...
+  &lt;/script&gt;
+&lt;/mtph-doc&gt;</code></pre>
+
+  <p class="cap">The problem renders inside a sandboxed iframe fed the exact self-contained page
+    the CLI produces, so its styling and KaTeX never leak into (or out of) your page. The frame
+    reports its height back, so it grows to fit — no inner scrollbar.</p>
+
+  <h2><span class="n">1.</span> A problem, rendered</h2>
+  <p class="cap">Inline source via a <code>&lt;script type="text/plain"&gt;</code> child. The
+    answer &amp; solution sit in a collapsed reveal.</p>
+  <mtph-doc>
+    <script type="text/plain">
+---
+mtph: "0.2"
+id: incline-frictionless
+title: Block on a Frictionless Incline
+subject: physics
+topic: mechanics/dynamics
+difficulty: 2
+tags: [newton, incline, free-body]
+symbols:
+  a: acceleration
+  g: acceleration
+  theta: angle
+  m: mass
+answer:
+  type: expression
+  value: 'a = g\sin\theta'
+solution: |
+  Resolve forces along and perpendicular to the surface. Perpendicular to the incline the
+  block is in equilibrium, so $N = mg\cos\theta$. Along the incline only gravity contributes,
+  giving
+  $$mg\sin\theta = ma \implies a = g\sin\theta.$$
+---
+
+A block of mass $m$ rests on a **frictionless** incline that makes an angle $\theta$ with the
+horizontal. Find the magnitude of its acceleration down the slope.
+
+```figure caption="Free-body diagram: weight $mg$ and normal force $N$."
+incline angle=30 length=6
+mass m at=incline.mid size=0.9 label="m"
+force from=m dir=down label="mg"
+force from=m dir=perp-out label="N"
+angle at=incline.base from=0 to=30 value="\theta"
+```
+    </script>
+  </mtph-doc>
+
+  <h2><span class="n">2.</span> Quiz mode <code>quiz</code></h2>
+  <p class="cap">Add the <code>quiz</code> attribute and a numeric answer becomes an input graded
+    against its tolerance; a multiple-choice answer becomes clickable buttons.</p>
+  <mtph-doc quiz>
+    <script type="text/plain">
+---
+mtph: "0.2"
+id: free-fall
+title: Free Fall — Impact Speed
+subject: physics
+topic: mechanics/kinematics
+difficulty: 1
+tags: [kinematics, free-fall, energy]
+answer:
+  type: numeric
+  value: 19.8
+  unit: "m/s"
+  tolerance: 0.02
+solution: |
+  Energy conservation gives $\tfrac{1}{2}v^2 = gh$, so $v = \sqrt{2gh}$. With $g = 9.8\,$m/s²
+  and $h = 20\,$m, $v = \sqrt{2\cdot 9.8\cdot 20} \approx 19.8\,$m/s.
+---
+
+A ball is released from rest and falls $h = 20\ \text{m}$ to the ground. Taking
+$g = 9.8\ \text{m/s}^2$ and neglecting air resistance, find its speed $v$ at impact.
+
+$$v = \sqrt{2gh}$$
+    </script>
+  </mtph-doc>
+
+  <h2><span class="n">3.</span> Explorable — sliders from <code>params:</code></h2>
+  <p class="cap">Declare <code>params:</code> and reference them as <code>{{name}}</code> in a
+    figure or plot. Sliders appear above the problem and it re-renders live as you drag. (The
+    stored default stays authoritative, so static/PNG output is still deterministic.)</p>
+  <mtph-doc>
+    <script type="text/plain">
+---
+mtph: "0.2"
+id: sine-explore
+title: A tunable standing wave
+subject: physics
+topic: waves
+difficulty: 1
+tags: [waves, explorable]
+params:
+  A: { min: 0.2, max: 3, default: 1.5, step: 0.1, unit: "m", label: "amplitude A" }
+  k: { min: 0.5, max: 4, default: 2, step: 0.5, label: "wavenumber k" }
+---
+
+Drag the sliders. The curve is $y(x) = A\sin(kx)$: amplitude $A$ scales the height, and the
+wavenumber $k$ squeezes the wavelength $\lambda = 2\pi/k$.
+
+```plot
+x: 0..6.283
+f(x) = {{A}}*sin({{k}}*x)
+```
+    </script>
+  </mtph-doc>
+
+  <h2><span class="n">4.</span> Statement only <code>hide-answers</code></h2>
+  <p class="cap">Add <code>hide-answers</code> to drop the answer and solution entirely — handy
+    for embedding a problem set students shouldn't see the key for.</p>
+  <mtph-doc hide-answers>
+    <script type="text/plain">
+---
+mtph: "0.2"
+id: triangle-area-sas
+title: Area of a Triangle (SAS)
+subject: math
+topic: geometry/trigonometry
+difficulty: 2
+tags: [triangle, area, trigonometry]
+answer:
+  type: expression
+  value: '\tfrac{1}{2}\,a\,b\,\sin C'
+---
+
+In triangle $ABC$, side $a = BC$ and side $b = CA$ meet at vertex $C$, where the included
+angle is $C$. Write the area of the triangle in terms of $a$, $b$ and $C$.
+
+```figure caption="Triangle $ABC$ with included angle $C$ between sides $a$ and $b$."
+point A at=(0,0) label="A"
+point B at=(4.5,0) label="B"
+point C at=(1.3,2.7) label="C"
+polygon points=(0,0);(4.5,0);(1.3,2.7)
+label text="a" at=(2.9,1.35) anchor=right
+label text="b" at=(0.65,1.35) anchor=left
+angle between=A,C,B value="C" r=0.75
+```
+    </script>
+  </mtph-doc>
+
+  <h2><span class="n">5.</span> From a file <code>src="…"</code></h2>
+  <p class="cap">Point it at a <code>.mtph</code> URL instead of inlining. (This one loads a
+    sibling file, so it needs the page served over HTTP — locally, run any static server in
+    <code>playground/</code>.)</p>
+  <mtph-doc src="../spec/examples/projectile.mtph"></mtph-doc>
+
+  <div class="foot">
+    Part of <a href="https://github.com/Saurav0989/mtph">mtph</a> — an AI-native file format for
+    math &amp; physics problems. The same renderer powers the
+    <a href="./index.html">playground</a> and Claude Artifacts.
+  </div>
+</main>
+</body>
+</html>

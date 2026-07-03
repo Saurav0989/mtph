@@ -1,0 +1,31 @@
+{
+  "blocks": [
+    {
+      "text": "A battery of EMF $V$ drives a current through two resistors $R_1$ and $R_2$ connected in\n**series**. Find the equivalent resistance $R_{eq}$ of the pair.",
+      "type": "prose"
+    },
+    {
+      "caption": "Two resistors in series across a battery of EMF $V$.",
+      "source": "point a at=(0,0)\npoint b at=(4,0)\npoint c at=(4,2.4)\npoint d at=(0,2.4)\nbattery from=a to=d label=\"V\"\nresistor from=d to=c label=\"R_1\"\nresistor from=c to=b label=\"R_2\"\nwire from=b to=a",
+      "type": "figure"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "type": "expression",
+      "value": "R_{eq} = R_1 + R_2"
+    },
+    "difficulty": 1,
+    "id": "series-resistors",
+    "solution": "The same current $I$ flows through both resistors, and the potential drops add:\n$V = IR_1 + IR_2 = I(R_1 + R_2)$. Comparing with $V = I R_{eq}$ gives\n$$R_{eq} = R_1 + R_2.$$\n",
+    "subject": "physics",
+    "tags": [
+      "ohm",
+      "series",
+      "resistance"
+    ],
+    "title": "Resistors in Series",
+    "topic": "electromagnetism/circuits"
+  },
+  "mtph": "0.2"
+}

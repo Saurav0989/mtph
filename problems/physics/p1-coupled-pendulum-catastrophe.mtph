@@ -1,0 +1,279 @@
+---
+mtph: "0.2"
+id: p1-coupled-pendulum-catastrophe
+title: "The Catastrophic Pendulum Pair"
+subject: physics
+topic: mechanics/nonlinear-dynamics/coupled-oscillators
+difficulty: 5
+tags: [nonlinear-coupling, chaos, separatrix, energy-localization, false-attractor, domain-collision, physical-modeling-first, progressive-dependency]
+---
+
+Two identical simple pendulums, each of length $L$ and mass $m$, hang from pivots
+separated horizontally by distance $d$. They are connected by a light spring whose
+force law is $F = k(\Delta\ell) + \alpha k (\Delta\ell)^3$, where $\Delta\ell$ is
+the extension from the equilibrium length $\ell_0 = d$ (so the spring is unstrained
+when both pendulums are vertical). The spring is attached to the bobs. The pendulums
+are released from rest with $\theta_1(0) = \theta_0$, $\theta_2(0) = 0$.
+
+**(a)** Derive the exact coupled equations of motion. Show that the geometric
+length of the spring is $\ell = \sqrt{d^2 + 2L^2(1 - \cos(\theta_1 - \theta_2)) +
+2dL(\sin\theta_1 - \sin\theta_2)}$. Identify the dimensionless parameters that
+govern the qualitative behavior. What criterion determines whether the spring is
+pre-stretched at equilibrium?
+
+**(b)** For small oscillations around $\theta_1 = \theta_2 = 0$, linearize the
+equations and find the normal mode frequencies $\omega_+$, $\omega_-$. Show that
+when $d = 0$ (pivots coincide), the in-phase mode is unaffected by the spring —
+explain why physically. Find the frequency splitting $\Delta\omega = \omega_+ -
+\omega_-$ in terms of the coupling parameters.
+
+**(c)** Now consider the full nonlinear regime. Using the method of averaging (or
+multiple scales), derive the slow-flow equations for the complex amplitudes
+$A_1(\tau)$, $A_2(\tau)$ defined via $\theta_j(t) \sim
+\operatorname{Re}[A_j(\varepsilon t) e^{i\omega_0 t}]$ where $\varepsilon$ is a
+smallness parameter measuring the coupling strength and $\omega_0 = \sqrt{g/L}$.
+Show that the slow-flow equations conserve the total action
+$I = |A_1|^2 + |A_2|^2$ and identify the second conserved quantity $K$ that
+defines the orbits in the reduced phase plane of $(\eta, \phi)$ where $\eta =
+(|A_1|^2 - |A_2|^2)/I$ is the population imbalance and $\phi = \arg(A_1) -
+\arg(A_2)$ is the phase difference.
+
+**(d)** The reduced phase plane $(\eta, \phi)$ contains a separatrix dividing
+localized motion ($\eta \to \pm 1$) from delocalized motion ($\eta \to 0$). Derive
+the critical initial condition $\theta_0^*$ above which the energy remains
+localized in pendulum 1 on the slow timescale. Provide the separatrix equation.
+Sketch the phase portrait and identify the two regimes. What happens when
+$\alpha = 0$ (purely linear spring)?
+
+**(e)** Add a weak linear damping term $-\beta\dot\theta_j$ to each pendulum.
+Show that the total action now decays as $dI/d\tau = -2\beta I$, and the system
+drifts across the phase portrait. Determine which pendulum ultimately receives
+all remaining energy in the limit of very weak damping ($\beta \ll \varepsilon
+\omega_0$). This is a nonlinear selection mechanism: explain why the linear normal
+mode picture fails to predict this outcome.
+
+```figure caption="Two pendulums coupled by a cubic spring. The spring is unstrained when both are vertical."
+# Pivots
+point P1 at=(1,6) size=small fill=black label="P_1"
+point P2 at=(5,6) size=small fill=black label="P_2"
+
+# Pendulum strings
+line from=(1,6) to=(0.2,2.5) style=solid width=1
+line from=(5,6) to=(5.0,2.7) style=solid width=1
+
+# Masses
+circle at=(0.2,2.3) r=0.3 fill=gray
+circle at=(5.0,2.5) r=0.3 fill=gray
+
+# Spring between masses
+path d="M(0.5,2.3) C(1.5,2.8)(3.5,2.8)(4.7,2.5)" style=solid width=1.5
+label text="k(\Delta\ell)" at=(2.6,3.0)
+
+# Angles
+angle at=(1,6) from=257 to=270 value="\theta_1" r=1.5
+angle at=(5,6) from=270 to=283 value="\theta_2" r=1.5
+
+# Horizontal separation
+dim from=(1,5.8) to=(5,5.8) off=0.3 label="d"
+
+# Ground indicator
+ground at=(-1,1) width=8
+
+# Axis
+axis origin=(1,6) xlen=0 ylen=-2
+```
+
+```answer type=expression part=a
+I = |A_1|^2 + |A_2|^2 \quad\text{is conserved}\qquad
+\frac{dI}{d\tau} = 0
+```
+
+```answer type=expression part=b
+\omega_\pm^2 = \omega_0^2 + \frac{k}{m}\left(\frac{d^2}{L^2}\right)
+\left[1 \pm \sqrt{1 + \frac{2L^2}{d^2}}\right] \quad\text{for } d \neq 0
+```
+
+```answer type=expression part=c
+\frac{d\eta}{d\tau} = \varepsilon\tilde{\alpha} (1-\eta^2) \sin 2\phi,\qquad
+\frac{d\phi}{d\tau} = \frac{\varepsilon}{2}\left[\Delta + \tilde{\alpha}\,\eta(1+\cos 2\phi)\right]
+```
+
+```answer type=expression part=d
+\theta_0^* = 2\sqrt{\frac{2\Delta}{\tilde{\alpha}}}
+```
+
+```answer type=expression part=e
+\eta(\tau) \to -\operatorname{sgn}(\tilde{\alpha}) \quad\text{as } \tau \to \infty
+```
+
+`````solution
+## Necessary Insight
+
+The nonlinear coupling term $\alpha k(\Delta\ell)^3$ breaks integrability:
+when the spring extension is large, the cubic stiffness creates a separatrix
+in the reduced $(\eta,\phi)$ phase space. This separatrix divides orbits that
+delocalize energy from those that trap it in one pendulum — a phenomenon
+entirely absent from the linearized coupled-oscillator picture. The False
+Attractor is linearizing the coupling (small-angle approximation), which
+eliminates the very separatrix the problem asks about. One must work with the
+full nonlinear slow-flow equations and analyze their phase-plane structure.
+
+### (a) Exact equations of motion
+
+Let the pivot coordinates be $(0,0)$ and $(d,0)$. The bob positions are:
+$$\mathbf{r}_1 = (L\sin\theta_1,\; -L\cos\theta_1),\qquad
+\mathbf{r}_2 = (d + L\sin\theta_2,\; -L\cos\theta_2).$$
+
+The spring vector is $\boldsymbol{\ell} = \mathbf{r}_2 - \mathbf{r}_1$. Its
+magnitude squared:
+$$\ell^2 = (d + L\sin\theta_2 - L\sin\theta_1)^2 + L^2(\cos\theta_1 - \cos\theta_2)^2.$$
+
+Expanding and using $\cos(\theta_1 - \theta_2) = \cos\theta_1\cos\theta_2 +
+\sin\theta_1\sin\theta_2$:
+$$\ell^2 = d^2 + 2L^2[1 - \cos(\theta_1 - \theta_2)] + 2dL(\sin\theta_2 - \sin\theta_1).$$
+
+The extension is $\Delta\ell = \ell - \ell_0 = \ell - d$. The spring force
+magnitude is $F_s = k\Delta\ell + \alpha k(\Delta\ell)^3$, directed along
+$\hat{\boldsymbol{\ell}} = \boldsymbol{\ell}/\ell$.
+
+The Lagrangian is $\mathcal{L} = \frac{1}{2}mL^2(\dot\theta_1^2 + \dot\theta_2^2)
+- mgL(2 - \cos\theta_1 - \cos\theta_2) - V_s(\ell)$ where $dV_s/d\ell = F_s$.
+
+The coupled equations of motion (from Euler-Lagrange):
+$$\ddot\theta_1 + \omega_0^2\sin\theta_1 = -\frac{F_s}{mL}\,
+\frac{\partial\ell}{\partial\theta_1},$$
+$$\ddot\theta_2 + \omega_0^2\sin\theta_2 = -\frac{F_s}{mL}\,
+\frac{\partial\ell}{\partial\theta_2},$$
+
+with $\omega_0^2 = g/L$. The partial derivatives are:
+$$\frac{\partial\ell}{\partial\theta_1} = \frac{L}{\ell}\big[L\sin(\theta_1 - \theta_2)
+- d\cos\theta_1\big],\qquad
+\frac{\partial\ell}{\partial\theta_2} = \frac{L}{\ell}\big[-L\sin(\theta_1 - \theta_2)
++ d\cos\theta_2\big].$$
+
+Dimensionless parameters: $\tilde{k} = kL^2/(mgL)$ (elastic-to-gravitational),
+$\tilde{d} = d/L$ (geometry), $\alpha$ (nonlinearity strength), $\theta_0$
+(initial amplitude). Pre-stretching criterion: when $\theta_1 = \theta_2 = 0$,
+$\ell = d = \ell_0$, so the spring is unstrained at equilibrium by
+construction.
+
+### (b) Linear normal modes
+
+For $\theta_1, \theta_2 \ll 1$, expand to linear order. The spring extension:
+$\Delta\ell \approx \frac{L}{2d}[(\theta_2 - \theta_1)(2L + d(\theta_1 +
+\theta_2))]$ — but for $d \sim L$, the leading term is
+$\Delta\ell \approx L(\theta_2 - \theta_1)$ (when $d \gg L\theta$). More
+carefully, for general $d$:
+
+Linearizing the geometric coupling:
+$$\frac{\partial\ell}{\partial\theta_1} \approx -\frac{Ld}{\ell_0}\cos\theta_1
+\approx -\frac{Ld}{d} = -L,$$
+so the coupling force is $F_s \approx k L(\theta_2 - \theta_1)$.
+
+The linearized equations:
+$$\ddot\theta_1 + \omega_0^2\theta_1 = \frac{k}{m}(\theta_2 - \theta_1),$$
+$$\ddot\theta_2 + \omega_0^2\theta_2 = \frac{k}{m}(\theta_1 - \theta_2).$$
+
+With ansatz $\theta_j = a_j e^{i\omega t}$, the eigenvalue problem gives:
+$$\begin{vmatrix}
+\omega_0^2 + \frac{k}{m} - \omega^2 & -\frac{k}{m} \\
+-\frac{k}{m} & \omega_0^2 + \frac{k}{m} - \omega^2
+\end{vmatrix} = 0.$$
+
+Normal mode frequencies:
+$$\omega_- = \omega_0 \quad\text{(in-phase, } a_1 = a_2\text{)},$$
+$$\omega_+ = \sqrt{\omega_0^2 + \frac{2k}{m}} \quad\text{(out-of-phase, }
+a_1 = -a_2\text{)}.$$
+
+When $d=0$, the in-phase mode does not stretch the spring at all ($\Delta\ell =
+0$ to linear order), so the spring exerts no force and $\omega_- = \omega_0$.
+The frequency splitting $\Delta\omega = \omega_+ - \omega_- \approx k/(m\omega_0)$
+for weak coupling.
+
+### (c) Slow-flow equations via averaging
+
+Write $\theta_j(t) = \frac{1}{2}[A_j(\tau)e^{i\omega_0 t} + \text{c.c.}]$
+with $\tau = \varepsilon t$, $\varepsilon \ll 1$. Substitute into the nonlinear
+equations and average over the fast timescale $2\pi/\omega_0$.
+
+The cubic spring nonlinearity generates terms proportional to
+$|A_1|^2 A_1$, $|A_2|^2 A_2$, and cross-terms. After averaging, the slow-flow
+equations take the canonical form:
+$$\frac{dA_1}{d\tau} = i\Delta A_1 + i\tilde{\alpha}|A_2|^2 A_1 +
+i\tilde{\alpha} A_2^2 A_1^*,$$
+$$\frac{dA_2}{d\tau} = i\Delta A_2 + i\tilde{\alpha}|A_1|^2 A_2 +
+i\tilde{\alpha} A_1^2 A_2^*,$$
+
+where $\Delta$ is the detuning from exact resonance (incorporating the linear
+frequency shift) and $\tilde{\alpha} \propto \alpha k L^2/(m\omega_0)$.
+
+From these, the action $I = |A_1|^2 + |A_2|^2$ is conserved:
+$\frac{dI}{d\tau} = A_1^*\frac{dA_1}{d\tau} + A_1\frac{dA_1^*}{d\tau} + (1
+\leftrightarrow 2) = 0$.
+
+Introduce $\eta = (|A_1|^2 - |A_2|^2)/I$ and $\phi = \arg(A_1) - \arg(A_2)$.
+Then:
+$$\frac{d\eta}{d\tau} = \varepsilon\tilde{\alpha}(1 - \eta^2)\sin 2\phi,$$
+$$\frac{d\phi}{d\tau} = \frac{\varepsilon}{2}\big[\Delta +
+\tilde{\alpha}\,\eta(1 + \cos 2\phi)\big].$$
+
+The second conserved quantity is:
+$$K = \frac{1}{2}\Delta\eta + \frac{1}{4}\tilde{\alpha}(1 - \eta^2)(1 + \cos
+2\phi).$$
+
+This $K$ foliates the $(\eta,\phi)$ cylinder into invariant curves.
+
+### (d) Separatrix and critical angle
+
+The separatrix is the curve passing through the hyperbolic fixed points. For
+$\Delta = 0$ (exact resonance), these occur at $(\eta = 0, \phi = \pm\pi/2)$.
+The separatrix equation:
+$$\cos 2\phi = \frac{2\eta^2}{1 - \eta^2} - 1 \quad\Longrightarrow\quad
+\sin^2\phi = \frac{1 - 2\eta^2}{2(1 - \eta^2)}.$$
+
+Initial condition: $\theta_1(0) = \theta_0$, $\theta_2(0) = 0$, both at rest,
+so $A_1(0) \approx \theta_0/2$, $A_2(0) = 0$, giving $\eta(0) = 1$,
+$\phi(0)$ arbitrary (actually undefined, but the orbit starts from $\eta=1$
+which is a fixed point of the equations).
+
+The critical initial amplitude: from energy considerations, the separatrix
+corresponds to $K = 0$, giving:
+$$\theta_0^* = 2\sqrt{\frac{2|\Delta|}{|\tilde{\alpha}|}}.$$
+
+For $\theta_0 < \theta_0^*$, energy oscillates between pendulums
+(delocalized); for $\theta_0 > \theta_0^*$, energy remains trapped in
+pendulum 1 (localized, self-trapping).
+
+When $\alpha = 0$ (linear spring), $\tilde{\alpha} = 0$, the equations
+become linear and there is no separatrix — energy always oscillates between
+the two pendulums regardless of amplitude. The nonlinearity is essential for
+localization.
+
+**Phase portrait:** On the cylinder $(\eta \in [-1,1], \phi \in [0,2\pi))$,
+the separatrix is a figure-eight pattern connecting the saddle points at
+$(\eta=0, \phi=\pm\pi/2)$. Inside the separatrices lie librations around the
+stable fixed points (delocalized); outside lie rotations that never cross
+$\eta=0$ (localized).
+
+### (e) Damping and nonlinear selection
+
+With damping $-\beta\dot\theta_j$, the slow-flow gains a diagonal loss term:
+$$\frac{dA_j}{d\tau} = (\text{conservative}) - \frac{\beta}{2}A_j.$$
+
+Then $dI/d\tau = -\beta I$, so $I(\tau) = I(0)e^{-\beta\tau}$.
+
+The key: as $I$ decays, the effective nonlinearity $\tilde{\alpha}I$ weakens.
+The system drifts downward through the phase portrait. The basin of attraction
+depends on the sign of $\tilde{\alpha}$. For $\tilde{\alpha} > 0$ (hardening
+spring), the stable localized fixed points are at $\eta \to -1$ (pendulum 2
+captures all energy); for $\tilde{\alpha} < 0$ (softening spring), $\eta \to
++1$ (pendulum 1 retains energy).
+
+Thus $\eta(\tau) \to -\operatorname{sgn}(\tilde{\alpha})$ as $\tau \to \infty$.
+The pendulum that ultimately captures the energy is determined by the sign of
+the nonlinearity, not by initial conditions — a dramatic departure from the
+linear normal mode picture where energy equipartitions between modes. This
+nonlinear selection mechanism is a consequence of the separatrix structure:
+damping causes the orbit to cross the separatrix, after which it is
+irreversibly captured by one of the localized attractors.
+`````

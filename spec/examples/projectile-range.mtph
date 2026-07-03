@@ -1,0 +1,44 @@
+---
+mtph: "0.2"
+id: projectile-range
+title: Projectile Range on Level Ground
+subject: physics
+topic: mechanics/kinematics
+difficulty: 2
+tags: [projectile, kinematics, range, explorable]
+params:
+  theta: { min: 15, max: 75, default: 40, unit: "deg" }
+  v0: { min: 8, max: 25, default: 20, unit: "m/s" }
+symbols:
+  R: length
+  v_0: velocity
+  g: acceleration
+  theta: angle
+answer:
+  type: expression
+  value: 'R = \frac{v_0^2 \sin(2\theta)}{g}'
+solution: |
+  The time of flight is $T = \tfrac{2 v_0 \sin\theta}{g}$, and the horizontal range is
+  $$R = v_0\cos\theta \cdot T = \frac{v_0^2 \sin 2\theta}{g},$$
+  which is largest at $\theta = 45^\circ$.
+---
+
+A projectile is launched from level ground at speed $v_0$ and angle $\theta$ above the
+horizontal. Find its range $R$ (neglect air resistance).
+
+Drag the sliders to see how the launch angle and speed reshape the launch vector and the
+trajectory.
+
+```figure
+ground at=(-0.5,0) width=5
+force from=(0,0) dir={{theta}} mag=2.4 label="v_0"
+angle at=(0,0) from=0 to={{theta}} value="\theta"
+```
+
+```plot
+x: 0..70
+f(x) = x*tan({{theta}}*pi/180) - 9.8*x^2/(2*{{v0}}^2*cos({{theta}}*pi/180)^2)
+xlabel: "x (m)"
+ylabel: "y (m)"
+grid: true
+```

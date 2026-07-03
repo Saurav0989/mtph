@@ -1,0 +1,17 @@
+---
+mtph: "0.2"
+id: html-freeform
+title: HTML coverage — freeform answer
+subject: math
+topic: meta/conformance
+difficulty: 1
+tags: [conformance, html]
+answer:
+  type: freeform
+  value: |
+    Prove by induction. **Base case:** $n=1$ gives $1 = 1$. **Step:** assume the identity
+    holds for $n=k$; adding $k+1$ to both sides establishes it for $n=k+1$.
+---
+
+State and prove the summation formula $\sum_{i=1}^{n} i = \tfrac{n(n+1)}{2}$. This fixture
+exercises the Markdown-rendered freeform answer path.

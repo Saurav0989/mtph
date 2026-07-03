@@ -1,0 +1,153 @@
+---
+mtph: "0.2"
+id: p11-electroosmotic-ratchet
+title: The Electroosmotic Ratchet That Averages to Zero
+subject: physics
+topic: soft-matter/electrohydrodynamics/lubrication
+difficulty: 5
+tags: [electroosmosis, lubrication, soft-matter, stokes-flow, symmetry-camouflage, false-attractor, domain-collision]
+---
+
+A very wide periodic slit contains a symmetric electrolyte. Its lower and upper walls have the same slowly varying separation $h(x)=h_0[1+\epsilon\cos(kx)]$, with $\epsilon\ll1$ and $kh_0\ll1$. Both walls carry the same patterned zeta potential $\zeta(x)=\zeta_0\cos(kx+\phi)$. A uniform electric field $\vec E_0$ is applied parallel to the mean plates; the Debye length is much smaller than $h_0$, surface conduction is negligible, and inertia is absent. There is no imposed pressure drop unless explicitly stated.
+
+Find the mean volumetric flux per unit span. In particular: **(a)** state the reduced physical model and the wall slip law; **(b)** derive the exact lubrication identity for the longitudinal flux through any periodic channel with arbitrary slip $u_b(x),u_t(x)$; **(c)** evaluate the leading non-zero flux when $\vec E_0=E_0\hat x$, and find the pressure gradient that stalls it; **(d)** if the field is instead at angle $\alpha$ to the pattern wavevector, determine the full mean flux vector; **(e)** decide what happens in the apparently delicate case $\phi=\pi/2$, and explain why the answer is not obtained by keeping more algebraic terms.
+
+```figure caption="The false attractor is visible: the wall slip has zero ordinary average, but it is phase-shifted relative to the hydraulic resistance of the corrugated slit."
+layout row
+# Longitudinal section
+path d="M(0,0) C(1,0.25)(2,0.25)(3,0) C(4,-0.25)(5,-0.25)(6,0) C(7,0.25)(8,0.25)(9,0)" width=1.4
+path d="M(0,2) C(1,2.25)(2,2.25)(3,2) C(4,1.75)(5,1.75)(6,2) C(7,2.25)(8,2.25)(9,2)" width=1.4
+vector from=(0.7,2.45) to=(2.1,2.45) label="$u_s(x)$"
+vector from=(3.8,2.35) to=(2.8,2.35)
+vector from=(6.7,2.45) to=(8.1,2.45)
+vector from=(0.8,-0.45) to=(2.2,-0.45) label="$u_s(x)$"
+vector from=(3.8,-0.35) to=(2.8,-0.35)
+vector from=(6.8,-0.45) to=(8.2,-0.45)
+dim from=(0,0) to=(3,0) off=-0.95 label="$2\pi/k$"
+dim from=(1.5,0.12) to=(1.5,2.12) off=0.45 label="$h(x)$"
+label text="$\zeta(x)=\zeta_0\cos(kx+\phi)$" at=(5.3,3.05) anchor=center
+vector from=(7.0,1.0) to=(8.4,1.0) label="$\bar q_x$"
+---
+# Top view
+axis x=-0.5..5.0 y=-0.6..3.0 origin=(0,0) labels=false
+vector from=(0.3,0.4) to=(2.5,0.4) label="$\hat k$"
+vector from=(0.3,0.4) to=(2.0,1.7) label="$\vec E_0$"
+angle at=(0.3,0.4) from=0 to=37 value="$\alpha$" r=0.32
+path d="M(0,2.2) C(0.55,2.55)(1.1,2.55)(1.65,2.2) C(2.2,1.85)(2.75,1.85)(3.3,2.2) C(3.85,2.55)(4.4,2.55)(4.95,2.2)" width=1.2
+label text="constant phase lines" at=(3.0,2.85) anchor=center
+vector from=(4.2,0.45) to=(3.3,0.45)
+label text="$\bar q_\parallel$" at=(4.35,0.12) anchor=center
+vector from=(3.2,0.6) to=(3.2,1.35) label="$\bar q_\perp$"
+```
+
+```answer type=expression part=a
+\vec u_s(x)=-\frac{\varepsilon_m\zeta(x)}{\eta}\,\vec E_t,\qquad
+0=-\nabla p+\eta\nabla^2\vec u,\qquad \nabla\cdot\vec u=0,
+```
+
+```answer type=expression part=b
+q=\frac{\left\langle S(x)h(x)^{-2}\right\rangle-\bar p_x/(12\eta)}
+{\left\langle h(x)^{-3}\right\rangle},\qquad
+S(x)=\frac{u_b(x)+u_t(x)}{2}.
+```
+
+```answer type=expression part=c
+\bar q_x=-\epsilon h_0 U_E\cos\phi+O(\epsilon^3),\qquad
+U_E=-\frac{\varepsilon_m\zeta_0E_0}{\eta},
+\qquad
+\bar p_{x,\mathrm{stall}}=12\eta\left\langle S h^{-2}\right\rangle
+=-\frac{12\eta\epsilon U_E\cos\phi}{h_0^2}+O(\epsilon^3).
+```
+
+```answer type=expression part=d
+\vec{\bar q}=\epsilon h_0 U_E\cos\phi
+\left[-\cos\alpha\,\hat k+\frac{1}{2}\sin\alpha\,\hat e_\perp\right]
++O(\epsilon^2),
+\qquad U_E=-\frac{\varepsilon_m\zeta_0E_0}{\eta}.
+```
+
+```answer type=freeform part=e
+For the single sinusoidal geometry and single sinusoidal charge pattern, $\phi=\pi/2$ gives exactly zero mean pumping by mirror-antisymmetry, not merely a smaller next-order pump. A nonzero result then requires breaking that symmetry, e.g. a second harmonic, unequal wall patterns, finite-Debye-layer corrections, or surface conduction.
+```
+
+`````solution
+**Necessary Insight.** The mean slip is the wrong average. Longitudinal pumping is set by a resistance-weighted average because a periodic pressure field must build itself to keep the flux independent of $x$. The hidden invariant is not energy or momentum; it is the constant Stokes flux plus periodicity of pressure.
+
+**False Attractor.** Since $\langle \zeta(x)\rangle=0$, the Helmholtz-Smoluchowski slip has zero ordinary average. Concluding $\bar q=0$ is tempting and wrong whenever the charge pattern is not symmetry-locked to the hydraulic resistance.
+
+**(a)** With $\lambda_D\ll h_0$, $kh_0\ll1$, $\epsilon\ll1$, and negligible Dukhin number, the electric double layer is replaced by a tangential slip at each wall,
+$$
+\vec u_s(x)=-\frac{\varepsilon_m\zeta(x)}{\eta}\vec E_t .
+\label{eq:slip}
+$$
+The bulk electrolyte is locally electroneutral and obeys Stokes flow. To leading lubrication order, longitudinal pressure varies only with $x$ while the gapwise velocity profile is parabolic plus the two wall slips.
+
+**(b)** For the longitudinal component,
+$$
+\eta\frac{\partial^2 u}{\partial z^2}=\bar p_x+\tilde p_x(x),
+\qquad u(0)=u_b(x),\quad u(h)=u_t(x).
+$$
+Integrating across the gap gives the local flux
+$$
+q=-\frac{h^3p_x}{12\eta}+\frac{h}{2}\,[u_b+u_t].
+\label{eq:localflux}
+$$
+Incompressibility makes $q$ independent of $x$. Let $S=(u_b+u_t)/2$ and average the rearranged form
+$p_x=12\eta(hS-q)/h^3$. Periodicity with imposed mean gradient $\bar p_x=\langle p_x\rangle$ gives
+$$
+q=\frac{\left\langle S h^{-2}\right\rangle-\bar p_x/(12\eta)}
+{\left\langle h^{-3}\right\rangle}.
+\label{eq:weighted}
+$$
+
+**(c)** For $\vec E_0=E_0\hat x$,
+$$
+S(x)=U_E\cos(kx+\phi),\qquad U_E=-\frac{\varepsilon_m\zeta_0E_0}{\eta}.
+$$
+Using $h^{-2}=h_0^{-2}[1-2\epsilon\cos(kx)+O(\epsilon^2)]$ and
+$\langle h^{-3}\rangle=h_0^{-3}[1+O(\epsilon^2)]$,
+$$
+\left\langle S h^{-2}\right\rangle
+=-\frac{\epsilon U_E\cos\phi}{h_0^2}+O(\epsilon^3),
+$$
+so
+$$
+\boxed{\bar q_x=-\epsilon h_0U_E\cos\phi+O(\epsilon^3).}
+$$
+The pump is stalled by choosing $q=0$ in \ref{eq:weighted}:
+$$
+\boxed{\bar p_{x,\mathrm{stall}}=12\eta\left\langle Sh^{-2}\right\rangle
+=-\frac{12\eta\epsilon U_E\cos\phi}{h_0^2}+O(\epsilon^3).}
+$$
+
+**(d)** Rotate coordinates so $\hat k$ is the direction of pattern variation and
+$\hat e_\perp$ is the in-plane perpendicular direction. The slip vector is
+$$
+\vec S=U_E\cos(kX+\phi)(\cos\alpha\,\hat k+\sin\alpha\,\hat e_\perp).
+$$
+The longitudinal part is pressure-constrained and therefore uses the weighted average from
+\ref{eq:weighted}. The transverse part has no transverse pressure gradient in a very wide channel;
+its local flux is just $hS_\perp$. Hence
+$$
+\bar q_\parallel=-\epsilon h_0U_E\cos\phi\cos\alpha+O(\epsilon^2),
+\qquad
+\bar q_\perp=\left\langle hS_\perp\right\rangle
+=\frac{1}{2}\epsilon h_0U_E\cos\phi\sin\alpha+O(\epsilon^2).
+$$
+Thus
+$$
+\boxed{\vec{\bar q}=\epsilon h_0U_E\cos\phi
+\left[-\cos\alpha\,\hat k+\frac{1}{2}\sin\alpha\,\hat e_\perp\right]+O(\epsilon^2).}
+$$
+The vector answer is the self-check: rotating the electric field does not simply rotate the pump.
+
+**(e)** At $\phi=\pi/2$, $S\propto-\sin(kx)$ while $h$ and every resistance factor generated by
+the single sinusoidal channel are even functions of $\cos(kx)$. Therefore
+$$
+\left\langle \sin(kx)F(\cos kx)\right\rangle=0
+$$
+for any single-valued periodic function $F$. The pump is exactly zero within this model; it is not an
+$O(\epsilon^2)$ effect waiting to be found. A nonzero flux requires a symmetry-breaking ingredient
+outside the stated leading model: a second harmonic in $h$ or $\zeta$, different upper and lower
+patterns, finite-Debye-layer fields, surface conduction, or inertia.
+`````

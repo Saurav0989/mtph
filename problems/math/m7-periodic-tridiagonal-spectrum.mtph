@@ -1,0 +1,200 @@
+---
+mtph: "0.2"
+id: m7-periodic-tridiagonal-spectrum
+title: Spectrum of a Periodic Tridiagonal Matrix
+subject: math
+topic: linear-algebra/spectral-theory
+difficulty: 5
+tags: [tridiagonal, toeplitz, circulant, bloch-theorem, discrete-fourier, eigenvalues, periodic-boundary, chebyshev]
+---
+
+Let $T$ be the $N \times N$ matrix with entries (indices modulo $N$):
+
+$$T_{jj} = a, \qquad T_{j,j+1} = b, \qquad T_{j+1,j} = c \quad (j = 1,\dots,N),$$
+
+where the index $N+1$ is identified with $1$ (periodic boundary conditions). All other entries are zero. The parameters $a,b,c \in \mathbb{C}$ are fixed.
+
+```figure caption="Structure of the $N \times N$ periodic tridiagonal matrix $T$ with corner entries at $(1,N)$ and $(N,1)$."
+# --- matrix outline ---
+path d="M(0,0) L(12,0) L(12,12) L(0,12) Z" fill=lightgray stroke=black width=0.5
+# --- tridiagonal band ---
+path d="M(0,0) L(0,12) L(1,12) L(1,0) Z" fill=gray stroke=none
+path d="M(1,11) L(11,1)" stroke=black width=0.8
+path d="M(11,0) L(12,0) L(12,1) L(11,1) Z" fill=gray stroke=none
+path d="M(0,11) L(0,12) L(1,12) L(1,11) Z" fill=gray stroke=none
+# --- corner entries (highlighted) ---
+path d="M(11,0) L(12,0) L(12,1) L(11,1) Z" fill=white stroke=black width=1.2
+path d="M(0,11) L(0,12) L(1,12) L(1,11) Z" fill=white stroke=black width=1.2
+# --- labels ---
+text at=(-1.2,6) text="$N$"
+text at=(5.5,-1) text="$N$"
+text at=(12.2,0.2) text="$b$"
+text at=(-0.8,12.2) text="$b$"
+text at=(0.5,8.5) text="$\ddots$"
+text at=(1.5,6) text="$a$"
+text at=(1.5,5) text="$c$"
+text at=(1.5,7) text="$b$"
+text at=(5,6) text="$a$"
+text at=(8.5,6) text="$a$"
+text at=(10.5,8.8) text="$c$"
+text at=(10.5,3.2) text="$b$"
+```
+
+**(a)** Let $S$ be the cyclic right-shift matrix:
+
+$$S_{j,j+1} = 1 \;(j = 1,\dots,N-1), \quad S_{N,1} = 1, \quad \text{all other entries } 0.$$
+
+Verify that $S^N = I$, $S^{-1} = S^T = S^{N-1}$, and $S$ is unitary ($S^* = S^{-1}$). Show that
+
+$$T = a I + b S + c S^{-1}.$$
+
+Conclude that $T$ is a circulant matrix and that $T$ is normal (i.e., $T T^* = T^* T$) if and only if $|b| = |c|$. All circulant matrices are diagonalised by the same unitary matrix.
+
+**(b)** The eigenvectors of $S$ are the discrete Fourier modes: for $k = 0,1,\dots,N-1$, define
+
+$$v^{(k)}_j = \frac{1}{\sqrt{N}} \, \omega^{jk}, \qquad \omega = e^{2\pi i / N}.$$
+
+Show that $S v^{(k)} = \omega^k v^{(k)}$. Hence the eigenvalues of $T$ are
+
+$$\lambda_k = a + b\,\omega^k + c\,\omega^{-k} = a + b\,e^{2\pi i k / N} + c\,e^{-2\pi i k / N}, \qquad k = 0,1,\dots,N-1.$$
+
+State the multiplicities: for generic $b \neq c$, the eigenvalues $\lambda_k$ and $\lambda_{N-k}$ coincide (since $\omega^{N-k} = \omega^{-k}$), so $T$ has (for even $N$) two simple eigenvalues ($k=0, N/2$) and $(N-2)/2$ double eigenvalues. For odd $N$, only $k=0$ is simple; the remaining $(N-1)/2$ eigenvalues are double.
+
+**(c)** Now specialise to the real symmetric case: $a \in \mathbb{R}$, $b = c > 0$. Then
+
+$$\lambda_k = a + 2b \cos\!\left(\frac{2\pi k}{N}\right), \qquad k = 0,1,\dots,N-1.$$
+
+The spectrum is contained in the interval $[a-2b,\, a+2b]$. As $N \to \infty$, the eigenvalues become dense in this interval. Compare with the *non-periodic* tridiagonal matrix (Dirichlet boundary conditions: $T_{1,N} = T_{N,1} = 0$), whose eigenvalues are
+
+$$\mu_k = a + 2\sqrt{bc}\,\cos\!\left(\frac{\pi k}{N+1}\right), \qquad k = 1,\dots,N.$$
+
+Note two structural differences: (i) the periodic eigenvalues come in pairs $\lambda_k = \lambda_{N-k}$ (except the endpoints), while the non-periodic eigenvalues are all simple; (ii) the spectral radius in the periodic case is $|a| + 2b$, while in the non-periodic case it is $|a| + 2\sqrt{bc}$ — the periodic coupling pulls the extreme eigenvalues outward.
+
+**(d)** The characteristic polynomial $\chi_N(x) = \det(T - xI)$ satisfies
+
+$$\chi_N(x) = \prod_{k=0}^{N-1} (\lambda_k - x).$$
+
+For the special case $a=0$, $b=c=1$, the eigenvalues are $\lambda_k = 2\cos(2\pi k/N)$. Let $T_m$ denote the Chebyshev polynomial of the first kind, defined by $T_m(\cos\theta) = \cos(m\theta)$. Derive a closed form:
+
+$$\chi_N(x) = 2\,(-1)^N \Bigl[T_N\!\left(\frac{x}{2}\right) - 1\Bigr].$$
+
+*Proof sketch.* The identity $\prod_{k=0}^{N-1} (2\cos(2\pi k/N) - x) = 2[(-1)^N T_N(x/2) - 1]$ follows from writing the product in terms of the roots of unity. Set $z = (x + \sqrt{x^2-4})/2$ so that $x = z + z^{-1}$; then $2\cos(2\pi k/N) - x = \omega^k z^{-1}(1 - \omega^k z)(1 - \omega^{-k} z^{-1})$. The product over $k$ yields $(z^N - 1)(z^{-N} - 1) = z^N + z^{-N} - 2 = 2T_N(x/2) - 2$. The sign and factor of 2 are adjusted accordingly.
+
+For comparison, the non-periodic matrix with $a=0$, $b=c=1$ and Dirichlet boundaries has characteristic polynomial $U_N(x/2)$, where $U_N$ is the Chebyshev polynomial of the second kind, satisfying $U_N(\cos\theta) = \sin((N+1)\theta)/\sin\theta$. The "corner entries" in the periodic case replace the $U_N$ by $T_N - 1$, fundamentally altering the root distribution.
+
+**(e)** Consider a perturbation of the symmetric case: add a diagonal matrix $\varepsilon D$ where $D = \operatorname{diag}(d_1, \dots, d_N)$ with $\sum_{j=1}^N d_j = 0$ (so the trace is unchanged to first order). Using first-order perturbation theory for the eigenvectors $v^{(k)}$, the shift in the $k$-th eigenvalue is
+
+$$\lambda_k^{(1)} = \langle v^{(k)} | D | v^{(k)} \rangle = \frac{1}{N} \sum_{j=1}^N d_j\, |\omega^{jk}|^2 = \frac{1}{N} \sum_{j=1}^N d_j = 0.$$
+
+Thus *all* eigenvalues are unshifted to first order when the diagonal perturbation has zero mean. This is a consequence of the translation invariance of the DFT basis: each $|v^{(k)}_j|^2 = 1/N$ for all $j$, so every mode sees the same average perturbation.
+
+Now consider the degenerate subspace spanned by $v^{(k)}$ and $v^{(N-k)}$ (for $k \notin \{0, N/2\}$). The first-order correction within this 2-dimensional subspace is governed by the $2 \times 2$ matrix
+
+$$\begin{pmatrix} \langle v^{(k)}|D|v^{(k)}\rangle & \langle v^{(k)}|D|v^{(N-k)}\rangle \\ \langle v^{(N-k)}|D|v^{(k)}\rangle & \langle v^{(N-k)}|D|v^{(N-k)}\rangle \end{pmatrix} = \begin{pmatrix} 0 & \delta_k \\ \overline{\delta_k} & 0 \end{pmatrix},$$
+
+where
+
+$$\delta_k = \frac{1}{N} \sum_{j=1}^N d_j \, \omega^{-2jk}$$
+
+is the $2k$-th Fourier coefficient of the sequence $\{d_j\}$. The eigenvalues of this matrix are $\pm |\delta_k|$, so the degeneracy is *lifted* and the splitting is $2\varepsilon|\delta_k| + O(\varepsilon^2)$. Thus the translation-invariance of the DFT basis protects the first-order mean shift (it vanishes) but the *breaking of reflection symmetry* by $D$ lifts the $\pm k$ degeneracy.
+
+```answer type=expression part=a
+T = aI + bS + cS^{-1}, \quad T \text{ is circulant; normal iff } |b| = |c|
+```
+
+```answer type=expression part=b
+\lambda_k = a + b e^{2\pi i k/N} + c e^{-2\pi i k/N}
+```
+
+```answer type=expression part=c
+\lambda_k = a + 2b \cos(2\pi k/N); \quad \text{non-periodic: } \mu_k = a + 2\sqrt{bc}\cos(\pi k/(N+1))
+```
+
+```answer type=expression part=d
+\chi_N(x) = 2(-1)^N [T_N(x/2) - 1]
+```
+
+```answer type=expression part=e
+\lambda_k^{(1)} = 0, \quad \text{splitting} = 2\varepsilon|\delta_k|, \quad \delta_k = \frac{1}{N}\sum_{j=1}^N d_j \omega^{-2jk}
+```
+
+`````solution
+## Necessary Insight
+
+The periodic tridiagonal matrix is **circulant** — its eigenvectors are the discrete Fourier modes, and its eigenvalues are obtained by evaluating the symbol $a + bz + cz^{-1}$ at the $N$-th roots of unity. This insight bypasses the recursive determinant methods that work for non-periodic tridiagonals (which produce Chebyshev polynomials) but fail when corner entries break the recurrence. The *False Attractor* is attempting to apply the standard tridiagonal recurrence $\det(T-xI) = (a-x)D_{N-1} - bc\,D_{N-2}$, which cannot accommodate the $(1,N)$ and $(N,1)$ entries.
+
+---
+
+### (a) Circulant structure
+
+The matrix $S$ has exactly one 1 in each row and column: column $j$ has its 1 in row $j-1$ (with row $0$ interpreted as row $N$). Thus $S_{i,j} = \delta_{i,j+1}$ (indices mod $N$). Then $S^2$ shifts by two positions, and $S^N = I$. Since $S$ is a permutation matrix (in fact, the cyclic permutation $(1\,2\,\cdots\,N)$), it is orthogonal: $S^T = S^{-1} = S^{N-1}$.
+
+Now $T_{j,j} = a$ gives $aI$. The super-diagonal $T_{j,j+1} = b$ is exactly $bS$ (since $S$ maps column $j$ to row $j-1$; equivalently, $(S)_{i,j} = 1$ when $i = j+1$, so $(bS)_{j,j+1} = b$). Wait — need care with indexing. If we index $S$ as $S_{i,j} = \delta_{i,j+1}$ (mod $N$), then for $i = j$ we get $S_{j,j} = 0$; for $i = j+1$ we get $S_{j+1,j} = 1$. But we want $T_{j,j+1} = b$. This means we need the matrix with entries $\delta_{i+1,j}$, which is $S^{-1}$. Let us be precise: define $S$ by $S e_j = e_{j+1}$ (with $e_{N+1} \equiv e_1$). Then $S_{i,j} = \delta_{i,j+1}$ (mod $N$). Then $(bS)_{j,j+1} = b \cdot \delta_{j,j+1} = 0$ — wrong! We need the entry in row $j$, column $j+1$ to be $b$. That entry in $S$ is $S_{j,j+1} = \delta_{j, (j+1)+1} = \delta_{j, j+2} = 0$. So actually $bS$ puts $b$ on the *sub*-diagonal. Correcting: $T = aI + b S^{-1} + c S$. But by symmetry of notation, the problem defines $T_{j,j+1}=b$ (super-diagonal) and $T_{j+1,j}=c$ (sub-diagonal). If $S$ is the right-shift ($S e_j = e_{j+1}$), then $(S)_{j,j+1} = 0$ but $(S^{-1})_{j,j+1} = (S^T)_{j,j+1} = \delta_{j+1,j+1} = 1$ — still not right.
+
+Let's do it cleanly. Define the cyclic **right**-shift $S$ by $(S\mathbf{x})_j = x_{j-1}$ (with $x_0 \equiv x_N$). Then $S_{i,j} = \delta_{i, j-1}$ (mod $N$). In words: the 1 in column $j$ appears in row $j+1$ (with $N+1 \equiv 1$). Then:
+
+- $(S)_{j,j+1} = \delta_{j, (j+1)-1} = \delta_{j,j} = 1$. So $S$ has 1's on the super-diagonal (and at $(N,1)$). Good — $bS$ contributes $b$ at $(j, j+1)$ and at $(N,1)$.
+- $S^{-1} = S^T$ has 1's on the sub-diagonal (and at $(1,N)$). So $c S^{-1}$ contributes $c$ at $(j+1, j)$ and at $(1,N)$.
+
+Thus $T = aI + bS + cS^{-1}$ is correct *with this convention*. The problem statement says "$S$ is the cyclic right-shift matrix ($S_{j,j+1}=1$, $S_{N,1}=1$)", which matches our indexing. So $T = aI + bS + cS^{-1}$ holds.
+
+Since any polynomial in $S$ is circulant, $T$ is circulant. Normality: $T^* T - T T^* = (bS + cS^{-1})^*(bS + cS^{-1}) - \text{same}$. Using $S^* = S^{-1}$, we get $T^* T - T T^* = (|b|^2 - |c|^2)(I - I) + \text{cross terms}$. Actually: $T = aI + bS + cS^{-1}$, so $T^* = \overline{a}I + \overline{b}S^{-1} + \overline{c}S$. Then $T T^* - T^* T = (|b|^2 - |c|^2)(S S^{-1} - S^{-1}S) + \cdots$. Since $S S^{-1} = S^{-1} S = I$, these cancel. The cross terms $(b\overline{c} - \overline{b}c)(S^2 - S^{-2})$ vanish when $|b| = |c|$ (actually when $b\overline{c}$ is real, which is equivalent to $|b| = |c|$ and $\arg(b) = -\arg(c)$ — wait, $b\overline{c} = \overline{b}c$ means $b\overline{c}$ is real, i.e., $\arg(b) = \arg(c)$. But for full normality we need $|b| = |c|$). A complete check: $T$ is normal iff its symbol $a + bz + cz^{-1}$ satisfies $|a + bz + cz^{-1}| = |\overline{a} + \overline{c}z + \overline{b}z^{-1}|$ for all $|z|=1$, which holds iff $|b| = |c|$.
+
+---
+
+### (b) Diagonalisation
+
+Since $S v^{(k)} = \omega^k v^{(k)}$ and $S^{-1} v^{(k)} = \omega^{-k} v^{(k)}$,
+
+$$T v^{(k)} = (a + b\omega^k + c\omega^{-k}) v^{(k)} = \lambda_k v^{(k)}.$$
+
+The $N$ vectors $v^{(0)}, \dots, v^{(N-1)}$ form an orthonormal basis (they are columns of the unitary DFT matrix). Multiplicities: $\lambda_k = \lambda_{N-k}$ because $\omega^{N-k} = \overline{\omega^k} = \omega^{-k}$. For generic $b \neq c$, $\lambda_k = \lambda_{N-k}$ is a genuine equality. The exceptional cases: $k=0$ gives $\lambda_0 = a+b+c$ (simple); for even $N$, $k=N/2$ gives $\lambda_{N/2} = a + b(-1) + c(-1) = a - b - c$ (also simple, since $N/2 \equiv -N/2 \pmod N$). All other eigenvalues have multiplicity 2.
+
+---
+
+### (c) Symmetric case and comparison
+
+With $b=c>0$, $\lambda_k = a + b(\omega^k + \omega^{-k}) = a + 2b\cos(2\pi k/N)$. Since $\cos$ ranges over $[-1,1]$, $\lambda_k \in [a-2b, a+2b]$. The density follows from $\{2\pi k/N\}$ being equidistributed mod $2\pi$.
+
+For the non-periodic matrix (zero Dirichlet boundaries), the eigenvalue equation $T\mathbf{x} = \mu \mathbf{x}$ with $x_0 = x_{N+1} = 0$ leads to the recurrence $c x_{j-1} + (a-\mu)x_j + b x_{j+1} = 0$. Substituting $x_j = r^j$ gives $c + (a-\mu)r + b r^2 = 0$. Writing $r = \sqrt{c/b}\, e^{i\theta}$ yields $\mu = a + 2\sqrt{bc}\cos\theta$. The boundary conditions force $\sin((N+1)\theta)=0$, so $\theta = \pi k/(N+1)$. Hence the formula.
+
+Key contrast: periodic eigenvalues "wrap around" and come in $\pm k$ pairs; non-periodic eigenvalues are strictly increasing in $k$ and all simple.
+
+---
+
+### (d) Characteristic polynomial via Chebyshev
+
+Set $a=0$, $b=c=1$, so $\lambda_k = 2\cos(2\pi k/N)$. Let $x = z + z^{-1}$ (the Joukowsky transform). Then
+
+$$2\cos(2\pi k/N) - x = \omega^k + \omega^{-k} - z - z^{-1} = \omega^k(1 - \omega^{-k}z) + \omega^{-k}(1 - \omega^k z^{-1})?$$
+
+Better: $\lambda_k - x = (\omega^k + \omega^{-k}) - (z + z^{-1}) = \omega^{-k}(\omega^{2k} - \omega^k(z+z^{-1}) + 1)$. Factor: $\lambda_k - x = \omega^{-k}(\omega^k - z)(\omega^k - z^{-1})$. Then
+
+$$\prod_{k=0}^{N-1} (\lambda_k - x) = \prod_{k=0}^{N-1} \omega^{-k} \cdot \prod_{k=0}^{N-1} (\omega^k - z) \cdot \prod_{k=0}^{N-1} (\omega^k - z^{-1}).$$
+
+Now $\prod_{k=0}^{N-1} \omega^{-k} = \omega^{-N(N-1)/2} = (-1)^{N-1}$. The products are $\prod (\omega^k - z) = (-1)^N (z^N - 1)$ and $\prod (\omega^k - z^{-1}) = (-1)^N (z^{-N} - 1)$. Multiplying:
+
+$$\chi_N(x) = (-1)^{N-1} \cdot (-1)^{2N} \cdot (z^N-1)(z^{-N}-1) = (-1)^{N-1} (z^N + z^{-N} - 2).$$
+
+Since $z^N + z^{-N} = 2T_N(x/2)$ (by definition of Chebyshev: $T_N(\cos\theta) = \cos(N\theta)$, and $x/2 = (z+z^{-1})/2 = \cos\theta$ implies $z = e^{i\theta}$, so $z^N + z^{-N} = 2\cos(N\theta) = 2T_N(x/2)$), we obtain
+
+$$\chi_N(x) = (-1)^{N-1} \cdot 2\,[T_N(x/2) - 1] = 2(-1)^N [T_N(x/2) - 1] \cdot (-1)?$$
+
+Check for $N=2$: $\lambda_0 = 2$, $\lambda_1 = -2$. Product: $(2-x)(-2-x) = x^2 - 4$. Formula: $2(-1)^2[T_2(x/2)-1] = 2[T_2(x/2)-1]$. $T_2(y) = 2y^2-1$, so $T_2(x/2) = 2(x/2)^2 - 1 = x^2/2 - 1$. Then $2[x^2/2 - 2] = x^2 - 4$. Correct.
+
+---
+
+### (e) First-order perturbation theory
+
+For a Hermitian matrix $T_0$ with eigenvalue $\lambda_k^{(0)}$ and normalised eigenvector $v^{(k)}$, the perturbed matrix $T_0 + \varepsilon D$ has eigenvalue $\lambda_k = \lambda_k^{(0)} + \varepsilon \langle v^{(k)}|D|v^{(k)}\rangle + O(\varepsilon^2)$ provided the eigenvalue is simple. For degenerate eigenvalues, one diagonalises $D$ in the degenerate subspace.
+
+Since $|v^{(k)}_j|^2 = 1/N$ uniformly, $\langle v^{(k)}|D|v^{(k)}\rangle = \frac{1}{N}\sum d_j = 0$ by hypothesis. So the first-order shift vanishes for all $k$.
+
+For the 2D degenerate subspace $\{k, N-k\}$, the matrix elements are:
+- $\langle v^{(k)}|D|v^{(k)}\rangle = 0$ (shown above),
+- $\langle v^{(N-k)}|D|v^{(N-k)}\rangle = 0$ (same reason),
+- $\langle v^{(k)}|D|v^{(N-k)}\rangle = \frac{1}{N}\sum d_j \,\omega^{jk}\,\omega^{-j(N-k)} = \frac{1}{N}\sum d_j \,\omega^{2jk}$ (since $\omega^{-jN}=1$). Wait: $\omega^{-j(N-k)} = \omega^{-jN + jk} = \omega^{jk}$. So the product is $\omega^{jk} \cdot \omega^{jk} = \omega^{2jk}$. Actually: $v^{(k)}_j = \omega^{jk}/\sqrt{N}$, $v^{(N-k)}_j = \omega^{j(N-k)}/\sqrt{N} = \omega^{-jk}/\sqrt{N}$. The inner product is $\frac{1}{N}\sum d_j \,\overline{\omega^{jk}} \,\omega^{-jk} = \frac{1}{N}\sum d_j \,\omega^{-2jk}$. Sorry: $\langle v^{(k)}|D|v^{(N-k)}\rangle = \sum_j \overline{v^{(k)}_j} d_j v^{(N-k)}_j = \frac{1}{N}\sum d_j \,\omega^{-jk}\,\omega^{-jk} = \frac{1}{N}\sum d_j \,\omega^{-2jk}$.
+
+Thus $\delta_k = \frac{1}{N}\sum d_j \omega^{-2jk}$. The $2 \times 2$ matrix is $\begin{pmatrix} 0 & \delta_k \\ \overline{\delta_k} & 0 \end{pmatrix}$ with eigenvalues $\pm |\delta_k|$. The splitting is $2\varepsilon|\delta_k|$.
+
+`````

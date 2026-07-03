@@ -1,0 +1,324 @@
+---
+mtph: "0.2"
+id: m5-degenerate-stationary-phase
+title: Degenerate Stationary Phase Integral
+subject: math
+topic: analysis/asymptotics
+difficulty: 5
+tags: [stationary-phase, airy-function, degenerate-critical-point, asymptotic-expansion, oscillatory-integral, gamma-function, steepest-descent, contour-rotation]
+---
+
+Consider the oscillatory integral
+
+$$I(\lambda) = \int_0^\infty \exp\!\big(i\lambda\,\phi(x)\big)\,dx, \qquad \phi(x) = x - \sin x,$$
+
+for $\lambda \to +\infty$. The phase $\phi(x)$ has a degenerate critical point at the
+integration endpoint $x = 0$, causing the standard stationary-phase method to fail.
+
+```plot caption="The phase $\phi(x) = x - \sin x$ (solid) and its leading cubic approximation $x^3/6$ (dashed)."
+f(x) = x - sin(x)
+  xmin: -0.5
+  xmax: 3
+g(x) = x^3/6
+  style: dashed
+```
+
+```figure caption="Steepest-descent contour deformation. Near $x=0$, the path departs into the complex plane at angle $\pi/6$ to convert the oscillatory cubic exponent into exponential decay."
+# Axes
+path d="M(0,-0.5) L(0,3.5)" stroke=black width=0.3
+text label="Im" at=(-0.3,3.7) fontsize=tiny
+path d="M(-0.5,0) L(5,0)" stroke=black width=0.3
+text label="Re" at=(5.3,-0.2) fontsize=tiny
+
+# Integration contour
+path d="M(0,0) L(3.5,2)" stroke=black width=0.6
+path d="M(3.5,2) C(4,1.2)(4.5,0.4)(5,0)" stroke=black width=0.6
+
+# Ray at pi/6
+path d="M(0,0) L(4,2.3)" stroke=gray style=dashed width=0.3
+text label="\pi/6" at=(4.2,2.5) fontsize=tiny
+
+# Mark critical point
+path d="M(-0.15,0.15) L(0.15,-0.15)" stroke=black width=0.5
+path d="M(-0.15,-0.15) L(0.15,0.15)" stroke=black width=0.5
+text label="degenerate" at=(0.8,-0.4) fontsize=tiny
+```
+
+**(a)** Locate all stationary points of $\phi$ on $[0, \infty)$ by solving $\phi'(x) = 0$.
+Show that $x = 0$ is the only stationary point in the closed integration range, and that
+it is **doubly degenerate**:
+
+$$\phi(0) = 0, \qquad \phi'(0) = 0, \qquad \phi''(0) = 0, \qquad \phi'''(0) = 1.$$
+
+Compute the Taylor expansion up to $O(x^9)$. Explain why all even-order derivatives of
+$\phi$ vanish at the origin ($\phi$ is an odd function).
+
+**(b)** The standard stationary-phase formula for a non-degenerate critical point
+($\phi'(c) = 0$, $\phi''(c) \neq 0$) gives
+
+$$I_{\text{SP}} \sim \sqrt{\frac{2\pi}{\lambda|\phi''(c)|}}\,
+\exp\!\left(i\lambda\phi(c) + \frac{i\pi}{4}\operatorname{sgn}\phi''(c)\right).$$
+
+Explain precisely why this formula **cannot be applied** at $x = 0$ (the prefactor
+diverges). If one attempts a "regularization" by evaluating at a nearby point
+$x = \varepsilon \ll 1$, where $\phi''(\varepsilon) \approx \varepsilon$, show that
+
+$$I_{\text{reg}} \sim \sqrt{\frac{2\pi}{\lambda\varepsilon}}\,
+\exp\!\left(i\lambda\frac{\varepsilon^3}{6}\right).$$
+
+Argue that the natural scale choice $\varepsilon \sim \lambda^{-1/3}$ (set by the cubic term
+becoming $O(1)$ in the exponent) recovers the correct $\lambda^{-1/3}$ amplitude scaling,
+but fails to give the correct constant prefactor. Explain why: the Gaussian approximation
+underlying the standard formula is invalid when $\phi''(c)$ is zero or nearly zero.
+
+**(c)** Obtain the correct leading asymptotic by direct rescaling. Change variables to
+$x = \lambda^{-1/3} t$. Using the Taylor expansion from (a), show that
+
+$$\lambda\,\phi(\lambda^{-1/3}t) = \frac{t^3}{6} - \frac{t^5}{120\,\lambda^{2/3}}
++ \frac{t^7}{5040\,\lambda^{4/3}} - O(\lambda^{-2}),$$
+
+and therefore
+
+$$I(\lambda) = \lambda^{-1/3} \int_0^\infty
+\exp\!\left(i\frac{t^3}{6}\right)
+\exp\!\left(-i\frac{t^5}{120\lambda^{2/3}} + \cdots\right) dt.$$
+
+Argue that, as $\lambda \to \infty$, the second exponential $\to 1$ pointwise, and justify
+taking the limit inside the integral (the oscillatory convergence of
+$\int_0^\infty e^{it^3/6} dt$ provides the necessary control) to obtain
+
+$$I(\lambda) \sim \lambda^{-1/3} \int_0^\infty \exp\!\left(i\,\frac{t^3}{6}\right) dt.$$
+
+**(d)** Evaluate the Airy-type integral exactly. Set $t = 6^{1/3} u$ and rotate the contour
+$u = r e^{i\pi/6}$ ($r \in [0, \infty)$) to obtain
+
+$$\int_0^\infty \exp\!\left(i\,\frac{t^3}{6}\right) dt
+= 6^{1/3} \int_0^\infty e^{i u^3} du
+= 6^{1/3} e^{i\pi/6} \int_0^\infty e^{-r^3} dr.$$
+
+Using $\int_0^\infty e^{-r^3} dr = \frac{1}{3}\Gamma(1/3)$, deduce
+
+$$I(\lambda) \sim \frac{6^{1/3}}{3}\,\Gamma\!\left(\frac{1}{3}\right) e^{i\pi/6}\;
+\lambda^{-1/3}, \qquad \lambda \to \infty.$$
+
+Compare the $\lambda^{-1/3}$ decay rate with the $\lambda^{-1/2}$ rate of ordinary
+stationary phase. At a cubic critical point, the integral decays more slowly because the
+stationary region is wider ($O(\lambda^{-1/3})$ vs. $O(\lambda^{-1/2})$).
+
+**(e)** Compute the full asymptotic expansion. Expanding the correction exponential,
+
+$$\exp\!\left(-i\frac{t^5}{120\lambda^{2/3}} + \cdots\right)
+= 1 - i\frac{t^5}{120}\lambda^{-2/3}
++ \left(i\frac{t^7}{5040} - \frac{t^{10}}{28800}\right)\lambda^{-4/3} + \cdots,$$
+
+and integrating termwise, show that the expansion proceeds in powers of $\lambda^{-2/3}$:
+
+$$I(\lambda) \sim \lambda^{-1/3}\sum_{k=0}^{\infty} C_k\,\lambda^{-2k/3}
+= \frac{C_0}{\lambda^{1/3}} + \frac{C_1}{\lambda} + \frac{C_2}{\lambda^{5/3}} + \cdots.$$
+
+Compute $C_0$ and $C_1$:
+
+$$C_0 = \frac{6^{1/3}}{3}\,\Gamma\!\left(\frac{1}{3}\right) e^{i\pi/6}, \qquad
+C_1 = \frac{i}{10}.$$
+
+Verify that $|C_1/C_0| \cdot \lambda^{-2/3} \to 0$, confirming the expansion is asymptotic.
+Explain why there is no $\lambda^{-2/3}$ term in the final expansion — the exponent of
+$\lambda$ decreases by $2/3$ at each step because every term in the Taylor expansion of
+$\phi$ beyond the cubic contributes a relative factor of at least $\lambda^{-2/3}$ after
+rescaling, and the leading $\lambda^{-1/3}$ factor shifts all exponents.
+
+```answer type=expression part=a
+\phi(0)=\phi'(0)=\phi''(0)=0,\;\phi'''(0)=1;\quad \phi(x)=\frac{x^3}{6}-\frac{x^5}{120}+\frac{x^7}{5040}-\frac{x^9}{362880}+O(x^{11})
+```
+
+```answer type=expression part=b
+\text{Standard formula: prefactor } \propto 1/\sqrt{\phi''(0)} \text{ diverges};\; \text{regularized } |I|\sim\sqrt{2\pi/(\lambda\varepsilon)}\to\lambda^{-1/3} \text{ for } \varepsilon\sim\lambda^{-1/3}
+```
+
+```answer type=expression part=c
+I(\lambda) \sim \lambda^{-1/3}\int_0^\infty \exp(i t^3/6)\,dt
+```
+
+```answer type=expression part=d
+I(\lambda) \sim \frac{6^{1/3}}{3}\,\Gamma(1/3)\,e^{i\pi/6}\,\lambda^{-1/3}
+```
+
+```answer type=expression part=e
+I(\lambda) = C_0\lambda^{-1/3} + C_1\lambda^{-1} + O(\lambda^{-5/3}),\quad C_0 = \frac{6^{1/3}}{3}\Gamma(1/3)e^{i\pi/6},\quad C_1 = \frac{i}{10}
+```
+
+`````solution
+## Necessary Insight
+
+The critical point at $x = 0$ is a **cubic (fold) singularity**: the first non-vanishing
+derivative of the phase is $\phi'''(0) = 1$, with both $\phi'(0) = \phi''(0) = 0$. The
+standard stationary-phase formula relies on a non-degenerate quadratic expansion
+($\phi'' \neq 0$) and therefore produces a divergent prefactor when applied blindly.
+
+The correct asymptotic is obtained by identifying the intrinsic scale
+$x \sim \lambda^{-1/3}$ at which the cubic term balances the large parameter $\lambda$, and
+evaluating the resulting Airy-type integral by contour rotation. The decay rate
+$\lambda^{-1/3}$ is a **universal signature** of cubic degeneracy, slower than the
+$\lambda^{-1/2}$ of ordinary stationary phase.
+
+The **false attractor** is the blind application of the standard stationary-phase formula.
+Even a solver who notices $\phi''(0) = 0$ may try to "regularize" by moving slightly away
+from the origin and taking a limit — this correctly anticipates the $\lambda^{-1/3}$
+scaling but yields an incorrect constant because the Gaussian approximation is never valid
+in the cubic regime.
+
+---
+
+### (a) Stationary points and degeneracy
+
+$\phi'(x) = 1 - \cos x = 0 \iff \cos x = 1 \iff x = 2\pi m,\; m \in \mathbb{Z}_{\ge 0}$.
+On $[0, \infty)$, the stationary points are $0, 2\pi, 4\pi, \ldots$. Only $x = 0$ lies in
+$[0, \infty)$ — it is the left endpoint of the integration range. (The points $2\pi, 4\pi, \ldots$
+are in the interior of $(0, \infty)$ but we only care about the endpoint here.)
+
+Derivatives at $0$:
+$\phi'(x) = 1 - \cos x$         → $\phi'(0) = 0$
+$\phi''(x) = \sin x$            → $\phi''(0) = 0$
+$\phi'''(x) = \cos x$           → $\phi'''(0) = 1$
+$\phi^{(4)}(x) = -\sin x$       → $\phi^{(4)}(0) = 0$
+$\phi^{(5)}(x) = -\cos x$       → $\phi^{(5)}(0) = -1$
+$\phi^{(6)}(x) = \sin x$        → $\phi^{(6)}(0) = 0$
+$\phi^{(7)}(x) = \cos x$        → $\phi^{(7)}(0) = 1$
+
+All even-order derivatives vanish because $\phi$ is odd:
+$\phi(-x) = -x + \sin x = -(x - \sin x) = -\phi(x)$. The Taylor series:
+
+$$\phi(x) = \frac{x^3}{6} - \frac{x^5}{120} + \frac{x^7}{5040} - \frac{x^9}{362880} + O(x^{11}).$$
+
+---
+
+### (b) Failure of standard stationary phase
+
+The standard formula for an interior critical point $c$ requires division by $\phi''(c)$.
+At $c = 0$, $\phi''(0) = 0$, so the prefactor $\sqrt{2\pi/(\lambda|\phi''(0)|)}$ diverges.
+
+The regularized attempt: at $x = \varepsilon$, $\phi''(\varepsilon) = \sin\varepsilon \approx \varepsilon$,
+$\phi(\varepsilon) \approx \varepsilon^3/6$. The standard formula would give
+
+$$I_{\text{reg}} \sim \sqrt{\frac{2\pi}{\lambda\varepsilon}}\,
+\exp\!\left(i\lambda\frac{\varepsilon^3}{6} + \frac{i\pi}{4}\right).$$
+
+The cubic term $\lambda\varepsilon^3/6$ is $O(1)$ when $\varepsilon \sim \lambda^{-1/3}$,
+giving amplitude $\sim \lambda^{-1/3}$. However, the constant is wrong because the integral
+shape is not a Gaussian — $\int e^{i\lambda x^3/6} dx$ has a completely different character
+from $\int e^{i\lambda \phi''(c) x^2/2} dx$. The Gaussian approximation is valid only when
+$\phi''$ is bounded away from zero, which fails when $\phi''(0) = 0$.
+
+---
+
+### (c) Leading asymptotic by rescaling
+
+Set $x = \lambda^{-1/3} t$, $dx = \lambda^{-1/3} dt$. Then
+
+$$\lambda\phi(x) = \lambda\left(
+\frac{\lambda^{-1}t^3}{6} - \frac{\lambda^{-5/3}t^5}{120}
++ \frac{\lambda^{-7/3}t^7}{5040} - \cdots\right)
+= \frac{t^3}{6} - \frac{t^5}{120\lambda^{2/3}} + \frac{t^7}{5040\lambda^{4/3}} - \cdots.$$
+
+Thus
+
+$$I(\lambda) = \lambda^{-1/3} \int_0^\infty
+\exp\!\left(i\frac{t^3}{6}\right)
+\exp\!\left(-i\frac{t^5}{120\lambda^{2/3}} + O(\lambda^{-4/3})\right) dt.$$
+
+For each fixed $t$, the second exponential → 1 as $\lambda \to \infty$. The integral
+$\int_0^\infty e^{it^3/6} dt$ converges conditionally via oscillation (after integration by
+parts, the tail decays as $O(t^{-2})$). The correction factor is
+$1 + O(\lambda^{-2/3} t^5)$, and $\int_0^\infty t^5 e^{it^3/6} dt$ also converges (as shown
+in part (e)), so dominated convergence justifies the termwise asymptotic expansion.
+
+Hence $I(\lambda) \sim \lambda^{-1/3} \int_0^\infty e^{it^3/6} dt$.
+
+---
+
+### (d) Evaluating the Airy-type integral
+
+Let $J = \int_0^\infty e^{it^3/6} dt$. Substituting $t = 6^{1/3} u$:
+
+$$J = 6^{1/3} \int_0^\infty e^{i u^3} du.$$
+
+Rotate the contour: $u = r e^{i\pi/6}$, $r \in [0, \infty)$. Then
+$u^3 = r^3 e^{i\pi/2} = i r^3$, so $i u^3 = -r^3$, and $du = e^{i\pi/6} dr$:
+
+$$J = 6^{1/3} e^{i\pi/6} \int_0^\infty e^{-r^3} dr.$$
+
+Let $s = r^3$, $r = s^{1/3}$, $dr = \frac{1}{3}s^{-2/3} ds$:
+
+$$\int_0^\infty e^{-r^3} dr = \frac{1}{3}\int_0^\infty s^{-2/3} e^{-s} ds
+= \frac{1}{3}\,\Gamma\!\left(\frac{1}{3}\right).$$
+
+Therefore
+
+$$J = \frac{6^{1/3}}{3}\,\Gamma\!\left(\frac{1}{3}\right) e^{i\pi/6},$$
+
+and the leading asymptotic is
+
+$$I(\lambda) \sim \frac{6^{1/3}}{3}\,\Gamma\!\left(\frac{1}{3}\right) e^{i\pi/6}\;
+\lambda^{-1/3}.$$
+
+The decay $\lambda^{-1/3}$ vs. $\lambda^{-1/2}$: at a cubic critical point, the phase varies
+more slowly ($\phi(x) \sim x^3$ vs. $x^2$), so the stationary region is wider
+($O(\lambda^{-1/3})$ vs. $O(\lambda^{-1/2})$), allowing contributions from a larger
+neighborhood to add coherently. This slows the decay.
+
+---
+
+### (e) Full asymptotic expansion
+
+Expand the correction exponential:
+
+$$\exp\!\left(-i\frac{t^5}{120\lambda^{2/3}} + i\frac{t^7}{5040\lambda^{4/3}} - \cdots\right)
+= 1 - i\frac{t^5}{120}\lambda^{-2/3}
++ \left(i\frac{t^7}{5040} - \frac{t^{10}}{2\cdot 120^2}\right)\lambda^{-4/3} + \cdots.$$
+
+Multiplying by $\lambda^{-1/3} e^{it^3/6}$ and integrating termwise:
+
+$$I(\lambda) = \lambda^{-1/3} J_0 + \lambda^{-1} J_1 + \lambda^{-5/3} J_2 + O(\lambda^{-7/3}),$$
+
+where $J_0 = \int_0^\infty e^{it^3/6} dt$ (computed above) and
+
+$$J_1 = -\frac{i}{120} \int_0^\infty t^5 e^{i t^3/6} dt.$$
+
+Compute $J_1$: substitute $t = 6^{1/3} u$, $t^3/6 = u^3$, $dt = 6^{1/3} du$,
+$t^5 = 6^{5/3} u^5$, so $t^5 dt = 36\, u^5 du$.
+
+$$\int_0^\infty t^5 e^{i t^3/6} dt = 36 \int_0^\infty u^5 e^{i u^3} du.$$
+
+Rotating $u = r e^{i\pi/6}$: $u^5 = r^5 e^{i 5\pi/6}$, $du = e^{i\pi/6} dr$,
+$u^5 du = r^5 e^{i\pi} dr = -r^5 dr$, and $i u^3 = -r^3$:
+
+$$\int_0^\infty u^5 e^{i u^3} du = -\int_0^\infty r^5 e^{-r^3} dr.$$
+
+With $s = r^3$, $r^5 dr = \frac{1}{3} s\, ds$:
+
+$$\int_0^\infty r^5 e^{-r^3} dr = \frac{1}{3}\int_0^\infty s e^{-s} ds
+= \frac{1}{3}\,\Gamma(2) = \frac{1}{3}.$$
+
+Thus $\int_0^\infty u^5 e^{i u^3} du = -1/3$, and
+
+$$\int_0^\infty t^5 e^{i t^3/6} dt = 36 \cdot \left(-\frac{1}{3}\right) = -12.$$
+
+Therefore
+
+$$J_1 = -\frac{i}{120} \cdot (-12) = \frac{i}{10}.$$
+
+The full expansion:
+
+$$I(\lambda) = \underbrace{\frac{6^{1/3}}{3}\Gamma(1/3)e^{i\pi/6}}_{C_0}\,
+\lambda^{-1/3} \;+\; \underbrace{\frac{i}{10}}_{C_1}\,
+\lambda^{-1} \;+\; O(\lambda^{-5/3}).$$
+
+The expansion proceeds in powers of $\lambda^{-2/3}$ because every term in the Taylor series
+of $\phi$ beyond the cubic contributes at relative order $\lambda^{-2/3}$ or higher after
+rescaling. There is no $\lambda^{-2/3}$ term in the final expansion because a relative order
+of $\lambda^{-2/3}$ inside the rescaled integral becomes absolute order $\lambda^{-1}$ after
+multiplying by the leading $\lambda^{-1/3}$.
+
+The ratio of successive terms: $|C_1/C_0| \lambda^{-2/3} \to 0$, confirming the series is
+asymptotic (divergent but useful).
+`````

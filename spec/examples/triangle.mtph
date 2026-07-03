@@ -1,0 +1,29 @@
+---
+mtph: "0.2"
+id: triangle-area-sas
+title: Area of a Triangle (SAS)
+subject: math
+topic: geometry/trigonometry
+difficulty: 2
+tags: [triangle, area, trigonometry]
+answer:
+  type: expression
+  value: '\tfrac{1}{2}\,a\,b\,\sin C'
+solution: |
+  Drop a perpendicular from $B$ to line $AC$; its length is $a\sin C$. Taking $b$ as the
+  base, the area is
+  $$\text{Area} = \tfrac{1}{2}\,b\,(a\sin C) = \tfrac{1}{2}\,a\,b\,\sin C.$$
+---
+
+In triangle $ABC$, side $a = BC$ and side $b = CA$ meet at vertex $C$, where the included
+angle is $C$. Write the area of the triangle in terms of $a$, $b$ and $C$.
+
+```figure caption="Triangle $ABC$ with included angle $C$ between sides $a$ and $b$."
+point A at=(0,0) label="A"
+point B at=(4.5,0) label="B"
+point C at=(1.3,2.7) label="C"
+polygon points=(0,0);(4.5,0);(1.3,2.7)
+label text="a" at=(2.9,1.35) anchor=right
+label text="b" at=(0.65,1.35) anchor=left
+angle between=A,C,B value="C" r=0.75
+```

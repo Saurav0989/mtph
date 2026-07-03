@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Projectile Range on Level Ground</title>
+<style>
+:root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --paper:#fff; --bg:#f7f7f8;
+  --chip-bg:#eef0f3; --chip-ink:#445; --code-bg:#f0f0f2; --summary:#334; --ok:#2a7; }
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e7e7e4; --muted:#9a9aa2; --line:#33343a; --paper:#1d1e22; --bg:#141519;
+    --chip-bg:#2a2c33; --chip-ink:#c3cbe0; --code-bg:#26282e; --summary:#c3cbe0; --ok:#4cd6a0; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,serif; }
+main { max-width:760px; margin:40px auto; background:var(--paper); padding:40px 48px;
+  border:1px solid var(--line); border-radius:10px; line-height:1.6; }
+h1 { font-size:1.6rem; margin:0 0 .4rem; }
+.meta { margin-bottom:1.6rem; }
+.chip { display:inline-block; font-size:.74rem; background:var(--chip-bg); color:var(--chip-ink);
+  padding:2px 9px; border-radius:20px; margin-right:6px; }
+.tag { font-size:.74rem; color:var(--muted); margin-right:6px; }
+.mtph-prose { margin:1rem 0; }
+.mtph-math { margin:1.3rem 0; text-align:center; overflow-x:auto; }
+.mtph-math.numbered { position:relative; padding-right:2.5rem; }
+.mtph-math.numbered .eqno { position:absolute; right:0; top:50%; transform:translateY(-50%);
+  color:var(--muted); font-variant-numeric:tabular-nums; }
+.eqref { text-decoration:none; color:inherit; border-bottom:1px dotted var(--muted); }
+.mtph-figure { margin:1.6rem 0; text-align:center; }
+/* Diagrams/plots draw their default ink with currentColor, so they follow the page theme;
+   the white knock-out fills and label halos are re-themed to the paper colour here. */
+.mtph-figure svg { max-width:100%; height:auto; color:var(--ink); }
+.mtph-figure svg .mtph-pp { fill:var(--paper); }
+.mtph-figure svg .mtph-lbl { fill:var(--paper); stroke:var(--paper); }
+figcaption { font-size:.85rem; color:var(--muted); margin-top:.4rem; }
+.mtph-aside { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-aside summary { cursor:pointer; font-weight:600; color:var(--summary); }
+.answer, .solution { margin-top:1rem; }
+.answer h3, .solution h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.6rem 0 .3rem; }
+.choices li.correct { font-weight:700; }
+.choices li.correct::after { content:" ✓"; color:var(--ok); }
+.grading .rubric { list-style:none; padding-left:0; }
+.grading .rubric li { margin:.25rem 0; }
+.grading .pts { display:inline-block; min-width:3.6em; font-variant-numeric:tabular-nums;
+  font-weight:600; color:var(--muted); }
+.grading .total { font-weight:600; margin-top:.4rem; }
+code { background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:.92em; }
+.mtph-quiz { margin-top:2rem; border-top:1px solid var(--line); padding-top:1rem; }
+.mtph-quiz h3 { font-size:.95rem; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--muted); margin:.4rem 0 .7rem; }
+.mtph-quiz .q { margin:.55rem 0; }
+.mtph-quiz .q-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.mtph-quiz .q-in { font:inherit; padding:4px 8px; border:1px solid var(--line); border-radius:6px;
+  background:var(--paper); color:var(--ink); width:8em; }
+.mtph-quiz .q-unit { color:var(--muted); }
+.mtph-quiz button { font:inherit; font-size:.85rem; padding:4px 12px; border:1px solid var(--line);
+  border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; }
+.mtph-quiz button:hover { border-color:var(--summary); }
+.mtph-quiz .q-choices { list-style:none; padding-left:0; display:flex; flex-direction:column;
+  gap:6px; margin:.3rem 0; }
+.mtph-quiz .q-opt { text-align:left; width:100%; }
+.mtph-quiz .q-opt.sel { border-color:var(--summary); font-weight:600; }
+.mtph-quiz .q-fb { font-weight:600; }
+.mtph-quiz .q-fb.ok { color:var(--ok); }
+.mtph-quiz .q-fb.no { color:#cc4b37; }
+.mtph-quiz .q-reveal { margin-top:1rem; border-top:1px solid var(--line); padding-top:.8rem; }
+.mtph-quiz .q-reveal summary { cursor:pointer; font-weight:600; color:var(--summary); }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false,errorColor:"#cc0000"});});</script>
+</head>
+<body>
+<main><h1>Projectile Range on Level Ground</h1>
+<div class="meta"><span class="chip">physics</span><span class="chip">mechanics/kinematics</span><span class="chip">difficulty 2/5</span><span class="tag">#projectile</span><span class="tag">#kinematics</span><span class="tag">#range</span><span class="tag">#explorable</span></div>
+<div class="mtph-prose"><p>A projectile is launched from level ground at speed $v_0$ and angle $\theta$ above the<br>
+horizontal. Find its range $R$ (neglect air resistance).</p>
+<p>Drag the sliders to see how the launch angle and speed reshape the launch vector and the<br>
+trajectory.</p></div>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375.6 189.6" width="376" height="190" font-family="Georgia, 'Times New Roman', serif">
+<line x1="39.64" y1="149.93" x2="349.64" y2="149.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<line x1="39.64" y1="149.93" x2="26.00" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="59.48" y1="149.93" x2="45.84" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="79.32" y1="149.93" x2="65.68" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="99.16" y1="149.93" x2="85.52" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="119.00" y1="149.93" x2="105.36" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="138.84" y1="149.93" x2="125.20" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="158.68" y1="149.93" x2="145.04" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="178.52" y1="149.93" x2="164.88" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="198.36" y1="149.93" x2="184.72" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="218.20" y1="149.93" x2="204.56" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="238.04" y1="149.93" x2="224.40" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="257.88" y1="149.93" x2="244.24" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="277.72" y1="149.93" x2="264.08" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="297.56" y1="149.93" x2="283.92" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="317.40" y1="149.93" x2="303.76" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="337.24" y1="149.93" x2="323.60" y2="163.57" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+<line x1="70.64" y1="149.93" x2="184.63" y2="54.28" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><polygon points="184.63,54.28 179.67,63.93 174.27,57.50" fill="currentColor"/>
+<text class="mtph-lbl" x="196.88" y="44.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">v</tspan><tspan dy="5.40" font-size="13.0">0</tspan></text><text x="196.88" y="44.00" text-anchor="start" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">v</tspan><tspan dy="5.40" font-size="13.0">0</tspan></text>
+<polyline points="114.04,149.93 113.87,146.15 113.38,142.40 112.56,138.70 111.42,135.09 109.97,131.59 108.23,128.23 106.19,125.04 103.89,122.03" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>
+<text class="mtph-lbl" x="127.74" y="129.15" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">θ</tspan></text><text x="127.74" y="129.15" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">θ</tspan></text>
+</svg></figure>
+<figure class="mtph-figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 380" width="560" height="380" fill="currentColor" font-family="Georgia, 'Times New Roman', serif">
+<line x1="44.00" y1="18.00" x2="44.00" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="114.57" y1="18.00" x2="114.57" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="185.14" y1="18.00" x2="185.14" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="255.71" y1="18.00" x2="255.71" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="326.29" y1="18.00" x2="326.29" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="396.86" y1="18.00" x2="396.86" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="467.43" y1="18.00" x2="467.43" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="538.00" y1="18.00" x2="538.00" y2="344.00" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="302.32" x2="538.00" y2="302.32" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="248.26" x2="538.00" y2="248.26" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="194.19" x2="538.00" y2="194.19" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="140.13" x2="538.00" y2="140.13" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="86.07" x2="538.00" y2="86.07" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="32.01" x2="538.00" y2="32.01" stroke="#e6e6e6" stroke-width="1"/>
+<line x1="44.00" y1="86.07" x2="538.00" y2="86.07" stroke="currentColor" stroke-width="1.4"/>
+<line x1="44.00" y1="18.00" x2="44.00" y2="344.00" stroke="currentColor" stroke-width="1.4"/>
+<line x1="114.57" y1="83.07" x2="114.57" y2="89.07" stroke="currentColor" stroke-width="1.2"/>
+<text x="114.57" y="99.07" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">10</tspan></text>
+<line x1="185.14" y1="83.07" x2="185.14" y2="89.07" stroke="currentColor" stroke-width="1.2"/>
+<text x="185.14" y="99.07" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">20</tspan></text>
+<line x1="255.71" y1="83.07" x2="255.71" y2="89.07" stroke="currentColor" stroke-width="1.2"/>
+<text x="255.71" y="99.07" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">30</tspan></text>
+<line x1="326.29" y1="83.07" x2="326.29" y2="89.07" stroke="currentColor" stroke-width="1.2"/>
+<text x="326.29" y="99.07" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">40</tspan></text>
+<line x1="396.86" y1="83.07" x2="396.86" y2="89.07" stroke="currentColor" stroke-width="1.2"/>
+<text x="396.86" y="99.07" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">50</tspan></text>
+<line x1="467.43" y1="83.07" x2="467.43" y2="89.07" stroke="currentColor" stroke-width="1.2"/>
+<text x="467.43" y="99.07" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">60</tspan></text>
+<line x1="538.00" y1="83.07" x2="538.00" y2="89.07" stroke="currentColor" stroke-width="1.2"/>
+<text x="538.00" y="99.07" text-anchor="middle" dominant-baseline="central" font-size="12"><tspan dy="0.00">70</tspan></text>
+<line x1="41.00" y1="302.32" x2="47.00" y2="302.32" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="302.32" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">-40</tspan></text>
+<line x1="41.00" y1="248.26" x2="47.00" y2="248.26" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="248.26" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">-30</tspan></text>
+<line x1="41.00" y1="194.19" x2="47.00" y2="194.19" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="194.19" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">-20</tspan></text>
+<line x1="41.00" y1="140.13" x2="47.00" y2="140.13" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="140.13" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">-10</tspan></text>
+<line x1="41.00" y1="32.01" x2="47.00" y2="32.01" stroke="currentColor" stroke-width="1.2"/>
+<text x="36.00" y="32.01" text-anchor="end" dominant-baseline="central" font-size="12"><tspan dy="0.00">10</tspan></text>
+<polyline points="44.00,86.07 46.06,84.76 48.12,83.46 50.17,82.19 52.23,80.93 54.29,79.69 56.35,78.48 58.41,77.28 60.47,76.10 62.52,74.94 64.58,73.80 66.64,72.68 68.70,71.57 70.76,70.49 72.82,69.43 74.88,68.38 76.93,67.36 78.99,66.35 81.05,65.36 83.11,64.40 85.17,63.45 87.22,62.52 89.28,61.61 91.34,60.72 93.40,59.84 95.46,58.99 97.52,58.16 99.58,57.34 101.63,56.55 103.69,55.77 105.75,55.02 107.81,54.28 109.87,53.56 111.93,52.86 113.98,52.18 116.04,51.52 118.10,50.88 120.16,50.26 122.22,49.65 124.28,49.07 126.33,48.51 128.39,47.96 130.45,47.43 132.51,46.93 134.57,46.44 136.62,45.97 138.68,45.52 140.74,45.09 142.80,44.68 144.86,44.29 146.92,43.91 148.97,43.56 151.03,43.23 153.09,42.91 155.15,42.62 157.21,42.34 159.27,42.08 161.32,41.84 163.38,41.62 165.44,41.43 167.50,41.24 169.56,41.08 171.62,40.94 173.68,40.82 175.73,40.71 177.79,40.63 179.85,40.56 181.91,40.52 183.97,40.49 186.02,40.48 188.08,40.49 190.14,40.52 192.20,40.57 194.26,40.64 196.32,40.73 198.38,40.84 200.43,40.97 202.49,41.11 204.55,41.28 206.61,41.46 208.67,41.66 210.73,41.89 212.78,42.13 214.84,42.39 216.90,42.67 218.96,42.97 221.02,43.29 223.07,43.63 225.13,43.98 227.19,44.36 229.25,44.75 231.31,45.17 233.37,45.60 235.43,46.06 237.48,46.53 239.54,47.02 241.60,47.53 243.66,48.06 245.72,48.61 247.77,49.18 249.83,49.76 251.89,50.37 253.95,51.00 256.01,51.64 258.07,52.31 260.12,52.99 262.18,53.69 264.24,54.41 266.30,55.15 268.36,55.91 270.42,56.69 272.48,57.49 274.53,58.31 276.59,59.15 278.65,60.00 280.71,60.88 282.77,61.77 284.82,62.69 286.88,63.62 288.94,64.57 291.00,65.54 293.06,66.53 295.12,67.54 297.17,68.57 299.23,69.62 301.29,70.69 303.35,71.78 305.41,72.88 307.47,74.01 309.52,75.15 311.58,76.31 313.64,77.50 315.70,78.70 317.76,79.92 319.82,81.16 321.88,82.42 323.93,83.70 325.99,85.00 328.05,86.31 330.11,87.65 332.17,89.01 334.23,90.38 336.28,91.77 338.34,93.19 340.40,94.62 342.46,96.07 344.52,97.54 346.58,99.03 348.63,100.54 350.69,102.07 352.75,103.62 354.81,105.18 356.87,106.77 358.92,108.37 360.98,110.00 363.04,111.64 365.10,113.30 367.16,114.99 369.22,116.69 371.27,118.41 373.33,120.15 375.39,121.91 377.45,123.68 379.51,125.48 381.57,127.30 383.62,129.13 385.68,130.99 387.74,132.86 389.80,134.75 391.86,136.67 393.92,138.60 395.98,140.55 398.03,142.52 400.09,144.51 402.15,146.52 404.21,148.54 406.27,150.59 408.33,152.66 410.38,154.74 412.44,156.84 414.50,158.97 416.56,161.11 418.62,163.27 420.67,165.45 422.73,167.65 424.79,169.87 426.85,172.11 428.91,174.37 430.97,176.65 433.02,178.94 435.08,181.26 437.14,183.59 439.20,185.95 441.26,188.32 443.32,190.71 445.38,193.13 447.43,195.56 449.49,198.01 451.55,200.48 453.61,202.96 455.67,205.47 457.73,208.00 459.78,210.54 461.84,213.11 463.90,215.69 465.96,218.30 468.02,220.92 470.08,223.56 472.13,226.22 474.19,228.90 476.25,231.60 478.31,234.32 480.37,237.06 482.42,239.82 484.48,242.59 486.54,245.39 488.60,248.20 490.66,251.04 492.72,253.89 494.77,256.76 496.83,259.65 498.89,262.56 500.95,265.49 503.01,268.44 505.07,271.41 507.12,274.40 509.18,277.41 511.24,280.43 513.30,283.48 515.36,286.54 517.42,289.63 519.48,292.73 521.53,295.85 523.59,298.99 525.65,302.15 527.71,305.33 529.77,308.53 531.83,311.75 533.88,314.99 535.94,318.24 538.00,321.52" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="538.00" y="76.07" text-anchor="end" dominant-baseline="central" font-size="15" font-style="italic"><tspan dy="0.00">x (m)</tspan></text>
+<text x="56.00" y="20.00" text-anchor="start" dominant-baseline="central" font-size="15" font-style="italic"><tspan dy="0.00">y (m)</tspan></text>
+</svg></figure>
+<div class="mtph-quiz"><h3>Check your answer</h3><details class="q-reveal"><summary>Show answer &amp; solution</summary><div class="answer"><h3>Answer</h3><p>$ R = \frac{v_0^2 \sin(2\theta)}{g} $</p></div>
+<div class="solution"><h3>Solution</h3><p>The time of flight is $T = \tfrac{2 v_0 \sin\theta}{g}$, and the horizontal range is<br>
+$$R = v_0\cos\theta \cdot T = \frac{v_0^2 \sin 2\theta}{g},$$<br>
+which is largest at $\theta = 45^\circ$.</p></div></details></div></main>
+<script>(function(){document.querySelectorAll('.mtph-quiz .q').forEach(function(q){var t=q.getAttribute('data-type');var fb=q.querySelector('.q-fb');if(t==='numeric'){var c=parseFloat(q.getAttribute('data-correct'));var tol=parseFloat(q.getAttribute('data-tol'))||0.01;var inp=q.querySelector('.q-in');var go=function(){var v=parseFloat((inp.value||'').replace(',','.'));if(isNaN(v)){fb.textContent='enter a number';fb.className='q-fb';return;}var ok=Math.abs(v-c)<=tol*Math.max(Math.abs(c),1e-12);fb.textContent=ok?'\u2713 correct':'\u2717 try again';fb.className='q-fb '+(ok?'ok':'no');};q.querySelector('.q-check').addEventListener('click',go);inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});}else if(t==='choice'){var ci=parseInt(q.getAttribute('data-correct'),10);q.querySelectorAll('.q-opt').forEach(function(b){b.addEventListener('click',function(){q.querySelectorAll('.q-opt').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');var ok=parseInt(b.getAttribute('data-i'),10)===ci;fb.textContent=ok?'\u2713 correct':'\u2717 not that one';fb.className='q-fb '+(ok?'ok':'no');});});}});})();</script>
+</body>
+</html>

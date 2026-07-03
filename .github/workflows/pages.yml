@@ -1,0 +1,54 @@
+# Build the browser playground (js/web → playground/app.js via esbuild) and publish playground/
+# to GitHub Pages. Zero-server: the page renders .mtph entirely client-side with the JS port, and
+# share links carry their source in the URL fragment. Enable once under Settings → Pages → Source:
+# "GitHub Actions".
+name: playground
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "playground/**"
+      - "js/**"
+      - "spec/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: js/package-lock.json
+      - name: Install and build the bundle
+        working-directory: js
+        run: |
+          npm ci
+          npm run build:web
+          npm run build:webcomponent
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: playground
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

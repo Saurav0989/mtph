@@ -1,0 +1,34 @@
+{
+  "blocks": [
+    {
+      "text": "Evaluate the definite integral",
+      "type": "prose"
+    },
+    {
+      "latex": "\\int_0^1 x^2 \\, dx.",
+      "type": "math"
+    },
+    {
+      "text": "Give your answer as an exact fraction. Recall the Fundamental Theorem of Calculus: if\n$F'(x) = f(x)$, then $\\displaystyle\\int_a^b f(x)\\,dx = F(b) - F(a)$.",
+      "type": "prose"
+    }
+  ],
+  "meta": {
+    "answer": {
+      "type": "expression",
+      "value": "\\frac{1}{3}"
+    },
+    "difficulty": 1,
+    "id": "definite-integral-x2",
+    "solution": "By the power rule $\\int x^2\\,dx = \\dfrac{x^3}{3}$. Evaluating between the limits,\n$$\\left.\\frac{x^3}{3}\\right|_{0}^{1} = \\frac{1}{3} - 0 = \\frac{1}{3}.$$\n",
+    "subject": "math",
+    "tags": [
+      "integral",
+      "polynomial",
+      "ftc"
+    ],
+    "title": "A Definite Integral",
+    "topic": "calculus/integration"
+  },
+  "mtph": "0.2"
+}

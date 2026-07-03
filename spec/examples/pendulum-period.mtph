@@ -1,0 +1,31 @@
+---
+mtph: "0.2"
+id: pendulum-period
+title: Period of a Simple Pendulum
+subject: physics
+topic: mechanics/oscillations
+difficulty: 2
+tags: [oscillations, pendulum, shm]
+symbols:
+  T: time
+  L: { dim: length, test: 1 }
+  g: { dim: acceleration, test: 9.8 }
+answer:
+  type: expression
+  value: 'T = 2\pi\sqrt{L/g}'
+  check: 2.007
+solution: |
+  For a small angular displacement the restoring torque gives $\ddot\theta = -(g/L)\theta$ —
+  simple harmonic motion with angular frequency $\omega = \sqrt{g/L}$. Hence the period is
+  $$T = \frac{2\pi}{\omega} = 2\pi\sqrt{\frac{L}{g}}.$$
+---
+
+A bob of mass $m$ hangs from a light string of length $L$ and is released from a small angle.
+Neglecting friction, find the period $T$ of its oscillation.
+
+```figure caption="The bob swings as a simple pendulum (small-angle SHM)."
+pendulum at=(0,3) length=2.6 angle=22 anim=spin anim-about=(0,3) anim-swing=44 anim-period=2
+dim from=(0.4,3) to=(0.4,0.4) off=0.0 label="L"
+```
+
+$$T = 2\pi\sqrt{L/g}$$

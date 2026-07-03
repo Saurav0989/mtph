@@ -1,0 +1,53 @@
+---
+mtph: "0.2"
+id: plot-mode-coverage
+title: Plot mode coverage (conformance fixture)
+subject: math
+topic: meta/conformance
+difficulty: 1
+tags: [conformance, plot, coverage]
+answer:
+  type: expression
+  value: 'n/a'
+solution: |
+  Not a real problem: this fixture exists so the conformance corpus exercises the parametric
+  and polar plot modes (and the grid / reference-line / label directives) that the curated
+  examples do not otherwise reach, giving the JS plot renderer a full parity target.
+---
+
+Synthetic coverage for the plot renderer.
+
+## Parametric (a Lissajous curve, equal-aspect trajectory)
+
+```plot
+mode: parametric
+t: 0..2*pi
+x(t) = cos(t)
+y(t) = sin(2*t)
+mark: (1, 0) label="t=0"
+grid: true
+```
+
+## Polar (a three-petal rose)
+
+```plot
+mode: polar
+theta: 0..2*pi
+r(theta) = 1 + 0.5*cos(3*theta)
+grid: true
+```
+
+## Function with reference lines and custom labels
+
+```plot
+x: -3..3
+f(x) = tanh(x)
+vline: 0
+hline: 1
+hline: -1
+xlabel: "u"
+ylabel: "\tanh u"
+samples: 120
+grid: true
+mark: (1, 0.7616) label="P" color="#c0392b"
+```

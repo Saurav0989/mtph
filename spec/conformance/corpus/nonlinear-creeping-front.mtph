@@ -1,0 +1,195 @@
+---
+mtph: "0.2"
+id: nonlinear-creeping-front
+title: The Nonlinear Creeping Front
+subject: physics
+topic: nonlinear-diffusion/thermodynamics/moving-boundary
+difficulty: 5
+tags: [stefan-problem, nonlinear-diffusion, similarity-solution, scaling-symmetry, domain-collision, false-attractor, moving-boundary, phase-change]
+answer:
+  type: expression
+  value: '\sqrt{\pi}\,\lambda\,e^{\lambda^2}\,\mathrm{erf}(\lambda) = \dfrac{c_p(T_0 - T_m)}{L}'
+solution: |
+  **(a) Scaling analysis and similarity reduction.**
+
+  The problem has dimensional parameters: $\alpha_0 = \kappa_0/(\rho c_p)$ (diffusivity, $L^2/T$),
+  $T_0 - T_m$ (temperature scale, $\Theta$), and $L/c_p$ (latent heat scale, $\Theta$).
+  No length scale exists except $\sqrt{\alpha_0 t}$.
+  Therefore the front position must scale as $s(t) \propto \sqrt{\alpha_0 t}$.
+
+  Define the similarity variable
+  $$\eta = \frac{x}{\sqrt{\alpha_0 t}}, \qquad u(x,t) = f(\eta), \qquad u = \frac{T - T_m}{T_0 - T_m}.$$
+
+  The heat equation $\partial_t u = \alpha_0\,\partial_x[\kappa_r(u)\,\partial_x u]$ with
+  $\kappa_r(u) = \kappa(u)/\kappa_0 = (1 + a u)^p$, $a = T_0/T_m - 1$, reduces to:
+
+  $$\boxed{\;\frac{d}{d\eta}\!\left[\kappa_r(f)\,f'\right] + \frac{\eta}{2}f' = 0\;}, \qquad 0 < \eta < \eta_s.$$
+
+  Boundary conditions: $f(0) = 1$, $f(\eta_s) = 0$. The Stefan condition at the front
+  $- \kappa_0\,\kappa_r(0)\,(T_0 - T_m)\,f'(\eta_s)/\sqrt{\alpha_0 t} = \rho L \cdot \eta_s\sqrt{\alpha_0}/(2\sqrt{t})$
+  simplifies to:
+
+  $$\boxed{\;f'(\eta_s) = -\frac{\mathrm{Ste}}{2}\,\eta_s\;}, \qquad \mathrm{Ste} \equiv \frac{L}{c_p(T_0 - T_m)}.$$
+
+  $\eta_s$ is a constant determined by the solution; $s(t) = \eta_s\sqrt{\alpha_0 t}$.
+
+  **(b) Classical solution: $p = 0$ (constant conductivity).**
+
+  $\kappa_r = 1$. ODE: $f'' + (\eta/2)f' = 0$. Solve:
+  $$f'(\eta) = A e^{-\eta^2/4}, \quad f(\eta) = A\!\int_\eta^\infty\! e^{-s^2/4}\,ds + B.$$
+
+  $f(\eta_s) = 0 \Rightarrow B = -A\sqrt{\pi}\,\mathrm{erfc}(\eta_s/2)$.
+  $f(0) = 1 \Rightarrow A\sqrt{\pi}\,\mathrm{erf}(\eta_s/2) = 1$.
+  Hence
+  $$f(\eta) = \frac{\mathrm{erfc}(\eta/2) - \mathrm{erfc}(\eta_s/2)}{\mathrm{erf}(\eta_s/2)}.$$
+
+  $f'(\eta_s) = -\dfrac{2e^{-\eta_s^2/4}}{\sqrt{\pi}\,\mathrm{erf}(\eta_s/2)}$.
+  Stefan condition gives $\lambda \equiv \eta_s/2$ satisfying:
+
+  $$\boxed{\;\sqrt{\pi}\,\lambda\,e^{\lambda^2}\,\mathrm{erf}(\lambda) = \frac{1}{\mathrm{Ste}} = \frac{c_p(T_0 - T_m)}{L}\;}.$$
+
+  This is the classical Neumann transcendental equation. For $\mathrm{Ste} \ll 1$
+  (large latent heat), $\lambda \ll 1$ and $\lambda \approx \sqrt{\mathrm{Ste}/(2\pi)}$.
+  For $\mathrm{Ste} \gg 1$, $\lambda \gg 1$ and $\lambda \approx \sqrt{\ln(1/(\sqrt{\pi}\,\mathrm{Ste}\,\lambda))}$,
+  i.e. the front moves logarithmically slowly.
+
+  **(c) First integral for arbitrary $p$.**
+
+  Integrate the ODE from $0$ to $\eta$:
+  $$\kappa_r(f)f' + \frac{\eta}{2}f - \frac{1}{2}\!\int_0^\eta\! f(s)\,ds = -q,$$
+  where $q \equiv -\kappa_r(1)f'(0) > 0$ is the dimensionless heat flux entering at $x=0$.
+  Equivalently, the local flux $J(\eta) = -\kappa_r(f)f'$ satisfies:
+  $$J(\eta) = q - \frac{\eta}{2}f(\eta) + \frac{1}{2}\!\int_0^\eta\! f(s)\,ds.$$
+
+  Physically: the flux at $\eta$ equals the flux at the origin, minus the energy used to
+  heat the material in $[0,\eta]$, plus a correction from the $\eta f$ term (geometric spreading).
+  This integro-differential form reduces the second-order ODE to first order.
+
+  **(d) Local behavior at the front.**
+
+  Near $\eta = \eta_s$, set $\varepsilon = \eta_s - \eta \ll 1$, $f \approx A\varepsilon^\gamma$.
+  Then $f' \approx -\gamma A\varepsilon^{\gamma-1}$, $f^p f' \approx -\gamma A^{p+1}\varepsilon^{p\gamma + \gamma - 1}$.
+
+  The ODE $(f^p f')' + \frac{\eta}{2}f' = 0$ becomes
+  $$-\gamma A^{p+1}(p\gamma + \gamma - 1)\varepsilon^{p\gamma + \gamma - 2}
+    - \frac{\eta_s}{2}\gamma A\varepsilon^{\gamma-1} = 0.$$
+
+  Dominant balance requires equal exponents: $p\gamma + \gamma - 2 = \gamma - 1 \;\Rightarrow\; p\gamma = 1$.
+  Thus
+
+  $$\boxed{\;\gamma = \frac{1}{p}\;}, \qquad f(\eta) \propto (\eta_s - \eta)^{1/p}\;\; \text{as}\;\; \eta \to \eta_s^-.$$
+
+  - $p = 0$: the nonlinear term vanishes; a separate balance gives $\gamma = 1$ (linear).
+  - $p = 1$: $\gamma = 1$, linear approach; $f'$ is finite at the front.
+  - $p > 1$: $\gamma < 1$, $f' \to \infty$ at the front — a **steepening** shock-like structure.
+  - $0 < p < 1$: $\gamma > 1$, $f' \to 0$ — the front is **blunted**, with vanishing gradient.
+
+  **Physical interpretation.** When $\kappa$ grows with temperature ($p > 0$), the hot side
+  conducts better than the cold side. Heat rushes through the hot region but stalls near the
+  front where $\kappa$ is low. This steepens the profile for $p > 1$ and flattens it for $p < 1$,
+  compared to the constant-conductivity case.
+
+  **(e) Regime analysis and the engineer's trap.**
+
+  An engineer replaces $\kappa(T)$ by its value at the average temperature
+  $\bar{\kappa} = \kappa_0[(T_0 + T_m)/(2T_m)]^p$ and uses the $p = 0$ solution.
+  This gives a front speed $\eta_s^{\text{(eng)}}$ from the Neumann transcendental equation
+  with $\mathrm{Ste}_{\text{eff}} = \mathrm{Ste} \times (\bar{\kappa}/\kappa_0)$.
+
+  The approximation fails **catastrophically** when:
+  1. **$p$ is large and $\mathrm{Ste}$ is small.** The true front steepens dramatically ($\gamma = 1/p \ll 1$),
+     concentrating the thermal resistance near the front. The average conductivity misses this
+     bottleneck entirely, overestimating front speed by a factor $\sim p$.
+  2. **$p < 0$ (unusual materials where $\kappa$ decreases with $T$).** The front blunts and
+     the effective resistance is dominated by the hot side, which the average also misrepresents.
+
+  When $\mathrm{Ste} \gg 1$ (latent heat dominates), the temperature profile is nearly linear
+  and the detailed shape of $\kappa(T)$ matters little — the approximation becomes reasonable.
+  When $\mathrm{Ste} \ll 1$, the profile curvature is maximal and the nonlinearity is amplified.
+
+  **Necessary Insight.** The PDE is invariant under the scaling $x \to \lambda x$, $t \to \lambda^2 t$,
+  which forces $s(t) \propto \sqrt{t}$ and collapses the nonlinear PDE with the moving boundary
+  into a single ODE with a free boundary at $\eta_s$. Without recognizing this similarity structure,
+  the problem is intractable — the moving boundary makes separation of variables impossible,
+  and the nonlinearity defeats Green's function methods. Once the similarity variable is found,
+  the problem reduces to analysis of a nonlinear ODE.
+---
+
+A semi-infinite medium $x \ge 0$ is initially at uniform temperature $T_m$, the
+melting (or phase-transition) temperature. At $t = 0$, the face $x = 0$ is brought to
+and held at $T_0 > T_m$. The thermal conductivity of the medium depends on temperature
+as
+
+$$\kappa(T) = \kappa_0\left(\frac{T}{T_m}\right)^{\!p}, \qquad p \in \mathbb{R},$$
+
+with $\kappa_0$ constant. The medium has density $\rho$, specific heat $c_p$, and the
+phase change at $T = T_m$ absorbs latent heat $L$ per unit mass.
+
+A sharp front at $x = s(t)$ separates the heated region ($T > T_m$) from the undisturbed
+medium ($T = T_m$). At the front the temperature is $T_m$ and the **Stefan condition** holds:
+
+$$-\kappa(T_m)\left.\frac{\partial T}{\partial x}\right|_{x = s(t)} = \rho L\,\frac{ds}{dt}.$$
+
+**(a)** By dimensional analysis, or by identifying the scaling symmetry of the governing
+equations, argue that the front position must obey $s(t) \propto \sqrt{t}$. Introduce a
+dimensionless temperature $u = (T - T_m)/(T_0 - T_m)$ and an appropriate similarity variable
+$\eta$, and show that the problem reduces to a **nonlinear ordinary differential equation**
+for $f(\eta)$ on the interval $0 < \eta < \eta_s$, where $\eta_s = s(t)/\sqrt{\alpha_0 t}$
+($\alpha_0 = \kappa_0/(\rho c_p)$) is a *constant* to be determined. Write down the ODE
+and all boundary conditions, including the Stefan condition in similarity variables.
+
+**(b)** Solve the problem **exactly** for the classical case $p = 0$ (constant conductivity).
+Express $f(\eta)$ using the error function and derive the transcendental equation that
+determines $\eta_s$ in terms of the **Stefan number** $\mathrm{Ste} = L/[c_p(T_0 - T_m)]$.
+
+**(c)** For general $p$, the ODE does not yield an elementary closed form. However, by
+integrating the ODE once, obtain a **first integral** relating the local heat flux
+$J(\eta) = -\kappa_r(f)f'$ (where $\kappa_r = \kappa/\kappa_0$) to the cumulative heat
+$\int_0^\eta f(s)\,ds$. Express this as an integro-differential equation of first order,
+and interpret each term physically.
+
+**(d)** Analyse the structure of the solution **near the front** ($\eta \to \eta_s^-$,
+$f \to 0^+$). By balancing the leading terms in the ODE, determine the exponent $\gamma$
+such that $f(\eta) \propto (\eta_s - \eta)^\gamma$, as a function of $p$. Describe the
+qualitatively distinct behaviours for $p = 0$, $p = 1$, $p > 1$, and $0 < p < 1$, and
+sketch the resulting temperature profiles at the front.
+
+**(e)** An engineer proposes the following shortcut: replace $\kappa(T)$ by its value at the
+average temperature $(T_0 + T_m)/2$, and then apply the classical ($p = 0$) Neumann solution
+from part (b). Under what conditions on $p$ and $\mathrm{Ste}$ does this approximation
+fail **catastrophically**? Give a clear physical argument — not a calculation — for why
+the error is largest in those regimes, and identify which physics the average-conductivity
+approximation fundamentally misses.
+
+```figure caption="Semi-infinite medium with temperature-dependent conductivity $\kappa(T) \propto T^p$ and a moving phase front at $x = s(t)$. Temperature profiles at $t_1 < t_2$ show the self-similar spreading $s(t) \propto \sqrt{t}$."
+wall at=(0,0) height=6 side=left
+ground at=(0,0) width=12
+heat at=(0.6,3.5) width=1.2 n=3
+label text="$T_0$" at=(-0.8,5.2) anchor=right
+label text="$T_m$" at=(-0.8,0.8) anchor=right
+path d="M(0,5) C(1.8,4.8)(3.2,4.0)(4.0,2.5) C(4.5,1.6)(4.8,1.0)(5.0,0.5)" style=solid width=1.5
+label text="$T(x,t_1)$" at=(2.5,3.0) anchor=right
+path d="M(0,5) C(3.5,4.9)(6.0,4.2)(7.5,3.0) C(8.5,2.2)(9.2,1.2)(9.5,0.5)" style=solid width=1.5
+label text="$T(x,t_2)$" at=(5.0,3.3) anchor=right
+line from=(5.0,0) to=(5.0,0.8) style=dashed
+label text="$s(t_1)$" at=(5.0,-0.5) anchor=center
+line from=(9.5,0) to=(9.5,0.8) style=dashed
+label text="$s(t_2)$" at=(9.5,-0.5) anchor=center
+rect at=(5.5,1.2) w=7 h=0.5 fill=lightgray
+label text="undisturbed ($T = T_m$)" at=(9.0,1.45) anchor=center
+vector from=(0.4,5.0) to=(2.0,5.0) label="$\dot{q}$" label_anchor=above
+label text="heated region" at=(4.0,5.8) anchor=center
+label text="$\kappa(T) \propto T^p$" at=(4.0,3.8) anchor=center
+point F1 at=(5.0,0.4) size=0.15
+point F2 at=(9.5,0.4) size=0.15
+```
+
+```plot caption="Gaussian factor $e^{-\eta^2/4}$ appearing in the classical ($p=0$) flux solution. Near the front at $\eta_s$, the temperature profile $f(\eta)$ is proportional to the integral of this curve."
+x: 0..4
+f(x) = exp(-x^2/4)
+g(x) = 1 - x/3
+grid: true
+mark: (1.5, 0.5698) label="\eta_s"
+xlabel: "\eta"
+ylabel: "e^{-\eta^2/4}"
+```

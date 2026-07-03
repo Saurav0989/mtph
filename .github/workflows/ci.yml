@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install (editable, with dev deps)
+        run: pip install -e ".[dev]"
+      - name: Run tests
+        run: pytest -q
+
+  conformance:
+    # Python↔JS parity: regenerate the corpus from the Python reference (fail on drift),
+    # then assert the JS port reproduces it. Keeps the two implementations in lockstep.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - run: pip install -e ".[dev]"
+      - name: Regenerate conformance corpus (must be committed / no drift)
+        run: |
+          python python/tools/gen_conformance.py
+          git diff --exit-code spec/conformance || (echo "conformance corpus is stale — run gen_conformance.py" && exit 1)
+      - uses: actions/setup-node@v4
+        with: { node-version: "22", cache: npm, cache-dependency-path: js/package-lock.json }
+      - name: JS conformance
+        working-directory: js
+        run: npm ci && npm test

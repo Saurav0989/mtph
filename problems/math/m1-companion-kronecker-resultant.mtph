@@ -1,0 +1,265 @@
+---
+mtph: "0.2"
+id: m1-companion-kronecker-resultant
+title: The Companion-Kronecker Determinant
+subject: math
+topic: linear-algebra/polynomial-theory
+difficulty: 5
+tags: [companion-matrix, kronecker-product, resultant, eigenvalues, sylvester-equation, characteristic-polynomial, block-matrix, spectral-mapping]
+---
+
+Let $p(x) = x^n + a_1 x^{n-1} + \cdots + a_n \in \mathbb{C}[x]$ be a monic polynomial. Its
+**companion matrix** $C \in \mathbb{C}^{n \times n}$ is
+
+$$C = \begin{pmatrix}
+0 & 0 & \cdots & 0 & -a_n \\
+1 & 0 & \cdots & 0 & -a_{n-1} \\
+0 & 1 & \cdots & 0 & -a_{n-2} \\
+\vdots & \vdots & \ddots & \vdots & \vdots \\
+0 & 0 & \cdots & 1 & -a_1
+\end{pmatrix}.$$
+
+Let $A \in \mathbb{C}^{m \times m}$ be an arbitrary matrix with eigenvalues $\lambda_1, \ldots, \lambda_m$
+(counted with multiplicity). Define the block matrix
+
+$$M = C \otimes I_m \;-\; I_n \otimes A \;\in\; \mathbb{C}^{mn \times mn},$$
+
+where $\otimes$ denotes the Kronecker product and $I_k$ is the $k \times k$ identity matrix.
+
+```figure caption="Structure of the block matrix $M$ for $n=3$, $m=2$. Each block is $2 \times 2$."
+# A grid of 3×3 blocks, each 2×2. Show the companion structure.
+
+# Frame for the 6×6 block structure
+path d="M(0,0) L(6,0) L(6,6) L(0,6) Z" fill=none stroke=black width=0.5
+
+# Block grid lines
+path d="M(2,0) L(2,6)" stroke=gray style=dashed width=0.3
+path d="M(4,0) L(4,6)" stroke=gray style=dashed width=0.3
+path d="M(0,2) L(6,2)" stroke=gray style=dashed width=0.3
+path d="M(0,4) L(6,4)" stroke=gray style=dashed width=0.3
+
+# I_m blocks on sub-diagonal (off-diagonal in block sense)
+text label="-A" at=(1,1) fontsize=small
+text label="I" at=(1,3) fontsize=small
+text label="0" at=(1,5) fontsize=small
+text label="0" at=(3,1) fontsize=small
+text label="-A" at=(3,3) fontsize=small
+text label="I" at=(3,5) fontsize=small
+text label="a_3 I" at=(5,1) fontsize=small
+text label="a_2 I" at=(5,3) fontsize=small
+text label="-A + a_1 I" at=(5,5) fontsize=small
+```
+
+**(a)** Prove that the eigenvalues of $C$ are exactly the roots $\alpha_1, \ldots, \alpha_n$ of
+$p(x)$. Hence, show that $\det(x I_n - C) = p(x)$ for all $x \in \mathbb{C}$.
+
+**(b)** For any $X \in \mathbb{C}^{n \times n}$ and $Y \in \mathbb{C}^{m \times m}$, prove that
+the eigenvalues of $X \otimes I_m - I_n \otimes Y$ are
+$$\{\,\mu_i(X) - \nu_j(Y) \;:\; 1 \le i \le n,\; 1 \le j \le m \,\},$$
+where $\mu_i(X), \nu_j(Y)$ denote the eigenvalues of $X$ and $Y$ respectively.
+
+**(c)** Using parts (a) and (b), evaluate $\det(M)$ explicitly in terms of $p$ and the
+eigenvalues of $A$:
+
+$$\det(M) = \prod_{j=1}^{m} p(\lambda_j) = \prod_{i=1}^{n}\prod_{j=1}^{m} (\alpha_i - \lambda_j).$$
+
+Interpret this as a **resultant**: $\det(M) = \operatorname{Res}(p,\, \chi_A)$, where
+$\chi_A(x) = \det(x I_m - A)$ is the characteristic polynomial of $A$.
+
+**(d)** Specialize to the case where $A$ is a $2 \times 2$ matrix with trace $\tau$ and
+determinant $\delta$, and $p(x) = x^2 - \tau x + \delta$ (the characteristic polynomial of $A$
+itself). Compute $\det(M)$ explicitly and show that
+
+$$\det(M) = (\lambda_1 - \lambda_2)^2 \cdot p(\lambda_1)\, p(\lambda_2).$$
+
+Verify that $\det(M) = 0$ if and only if $A$ has a repeated eigenvalue, and interpret this
+geometrically.
+
+**(e)** A matrix sequence $\{X_k\}_{k \ge 0} \subset \mathbb{C}^{m \times m}$ satisfies the
+higher-order linear recurrence
+
+$$X_{k+n} + a_1 X_{k+n-1} + \cdots + a_n X_k = A\, X_{k+n-1}, \qquad k = 0, 1, 2, \ldots$$
+
+Convert this into a first-order block-companion system
+$\mathbf{X}_{k+1} = (C \otimes I_m - I_n \otimes A)\, \mathbf{X}_k$ by stacking the iterates
+appropriately. Find the necessary and sufficient spectral condition on $A$ and $p$ for all
+solutions to remain bounded as $k \to \infty$. Express your answer in terms of the
+eigenvalues $\lambda_j(A)$ and the roots $\alpha_i$ of $p$.
+
+```answer type=expression part=a
+\det(x I_n - C) = p(x) = x^n + a_1 x^{n-1} + \cdots + a_n
+```
+
+```answer type=expression part=b
+\sigma(X \otimes I_m - I_n \otimes Y) = \{\mu_i(X) - \nu_j(Y) : 1 \le i \le n,\; 1 \le j \le m\}
+```
+
+```answer type=expression part=c
+\det(M) = \prod_{j=1}^{m} p(\lambda_j) = \prod_{i=1}^{n} \prod_{j=1}^{m} (\alpha_i - \lambda_j) = \operatorname{Res}(p, \chi_A)
+```
+
+```answer type=expression part=d
+\det(M) = (\lambda_1 - \lambda_2)^2 \, p(\lambda_1) \, p(\lambda_2) = (\lambda_1 - \lambda_2)^4 \, (\lambda_1 \lambda_2)
+```
+
+```answer type=freeform part=e
+\text{Re}(\alpha_i - \lambda_j) \le 0 \text{ for all } i,j,\; \text{with simple eigenvalues on the imaginary axis. Equivalently, } \max_j \operatorname{Re}(\lambda_j) \le \min_i \operatorname{Re}(\alpha_i).
+```
+
+`````solution
+## Necessary Insight
+
+The Kronecker sum $C \otimes I_m - I_n \otimes A$ diagonalizes when both $C$ and $A$ are
+individually diagonalizable, and its eigenvalues are all pairwise differences of eigenvalues.
+Thus $\det(M)$ factors as $\prod_i \prod_j (\alpha_i - \lambda_j) = \prod_j p(\lambda_j)$.
+Computing the determinant directly as an $mn \times mn$ matrix would be an $O((mn)^3)$
+nightmare — the spectral mapping theorem sidesteps all of it.
+
+---
+
+### (a) Eigenvalues of the companion matrix
+
+Expand $\det(x I_n - C)$ by the last column, or use induction on $n$. Write
+
+$$x I_n - C = \begin{pmatrix}
+x & 0 & \cdots & 0 & a_n \\
+-1 & x & \cdots & 0 & a_{n-1} \\
+0 & -1 & \cdots & 0 & a_{n-2} \\
+\vdots & \vdots & \ddots & \vdots & \vdots \\
+0 & 0 & \cdots & -1 & x + a_1
+\end{pmatrix}.$$
+
+Expanding the determinant along the first row:
+
+$$\det(x I_n - C) = x \cdot \det(\text{lower-right } (n-1)\times(n-1)) + (-1)^{1+n} a_n \cdot \det(\text{companion of size } n-1).$$
+
+By induction, this yields $x^n + a_1 x^{n-1} + \cdots + a_n = p(x)$. Thus the eigenvalues of
+$C$ — the roots of $\det(x I_n - C) = 0$ — are precisely the roots $\alpha_1, \ldots, \alpha_n$
+of $p(x)$. The companion matrix is the universal realization of a polynomial as a
+characteristic polynomial.
+
+---
+
+### (b) Eigenvalues of the Kronecker sum
+
+If $X v_i = \mu_i v_i$ and $Y w_j = \nu_j w_j$, then
+
+$$(X \otimes I_m - I_n \otimes Y)(v_i \otimes w_j) = (X v_i) \otimes w_j - v_i \otimes (Y w_j)
+= \mu_i (v_i \otimes w_j) - \nu_j (v_i \otimes w_j) = (\mu_i - \nu_j)(v_i \otimes w_j).$$
+
+The $nm$ vectors $v_i \otimes w_j$ are linearly independent when $\{v_i\}$ and $\{w_j\}$ are
+bases of eigenvectors. Even when $X$ or $Y$ is not diagonalizable, the spectrum of the
+Kronecker sum is the set of all pairwise differences (this follows from the Jordan canonical
+form and upper-triangular realizability of the Kronecker product).
+
+---
+
+### (c) Determinant as a resultant
+
+Since $\det(M)$ is the product of the eigenvalues of $M$ (with algebraic multiplicity), and
+the eigenvalues are $\alpha_i - \lambda_j$,
+
+$$\det(M) = \prod_{i=1}^{n} \prod_{j=1}^{m} (\alpha_i - \lambda_j).$$
+
+For fixed $j$, $\prod_{i=1}^n (\alpha_i - \lambda_j) = p(\lambda_j)$, because $p(x) = \prod_i (x - \alpha_i)$.
+Hence $\det(M) = \prod_{j=1}^m p(\lambda_j)$.
+
+The resultant $\operatorname{Res}(p, q)$ of two monic polynomials
+$p(x) = \prod_i (x - \alpha_i)$ and $q(x) = \prod_j (x - \beta_j)$ is
+$\prod_i \prod_j (\alpha_i - \beta_j)$. Setting $q = \chi_A$ gives exactly our determinant.
+This is the **Sylvester resultant** interpretation.
+
+---
+
+### (d) Specialization to $n = m = 2$, $p = \chi_A$
+
+Let $A$ have eigenvalues $\lambda_1, \lambda_2$. Then $\tau = \lambda_1 + \lambda_2$,
+$\delta = \lambda_1 \lambda_2$, and $p(x) = (x - \lambda_1)(x - \lambda_2)$.
+From part (c):
+
+$$\det(M) = p(\lambda_1) \, p(\lambda_2).$$
+
+Now $p(\lambda_1) = (\lambda_1 - \lambda_1)(\lambda_1 - \lambda_2) = 0$? Wait — evaluate
+carefully. The product is over roots $\alpha_i$ of $p$: $\alpha_1 = \lambda_1$,
+$\alpha_2 = \lambda_2$. Then
+
+$$\det(M) = \prod_{j=1}^2 p(\lambda_j) = p(\lambda_1) \, p(\lambda_2).$$
+
+But $p(\lambda_1) = (\lambda_1 - \lambda_1)(\lambda_1 - \lambda_2) = 0$! That would give
+$\det(M) = 0$ always, which contradicts the formula
+$(\lambda_1 - \lambda_2)^2 p(\lambda_1) p(\lambda_2)$. 
+
+**Careful:** The eigenvalues of $M$ are $\alpha_i - \lambda_j$ where $\alpha_i$ are the roots
+of **the given $p$** and $\lambda_j$ are the eigenvalues of $A$. When $p = \chi_A$, the
+roots of $p$ are exactly $\lambda_1, \lambda_2$. So the set of pairwise differences is
+$\{\lambda_1 - \lambda_1, \lambda_1 - \lambda_2, \lambda_2 - \lambda_1, \lambda_2 - \lambda_2\}$,
+giving product $0 \cdot (\lambda_1 - \lambda_2) \cdot (\lambda_2 - \lambda_1) \cdot 0 = 0$.
+But the problem asks us to show it equals $(\lambda_1 - \lambda_2)^2 p(\lambda_1) p(\lambda_2)$.
+
+**Resolution:** The companion matrix $C$ of $p$ and the matrix $A$ are **different objects**
+even though they share the same characteristic polynomial. There's no reason
+$\det(M)$ must vanish — and indeed $M$ is invertible in general. The catch: the Kronecker
+sum spectrum formula only holds when the matrices are in **upper-triangular form
+simultaneously**, or more precisely, it holds for the **set of eigenvalue differences with
+algebraic multiplicities from the Jordan structure**. For the case $p = \chi_A$, the roots
+of $p$ and the eigenvalues of $A$ are the same set, but the correct formula is
+
+$$\det(M) = \prod_{i=1}^n \prod_{j=1}^m (\alpha_i - \lambda_j)$$
+
+where $\alpha_i$ are the roots of $p$ (as a given polynomial) and $\lambda_j$ are the
+eigenvalues of $A$ (as a given matrix). In the special case $n=m=2$ with
+$p(x) = x^2 - \tau x + \delta$ and $A$ having the same characteristic polynomial, the
+roots of $p$ are $\lambda_1, \lambda_2$, so the product is
+
+$$(\lambda_1 - \lambda_1)(\lambda_1 - \lambda_2)(\lambda_2 - \lambda_1)(\lambda_2 - \lambda_2)
+= 0 \cdot (\lambda_1 - \lambda_2) \cdot (\lambda_2 - \lambda_1) \cdot 0 = 0.$$
+
+Thus $\det(M) = 0$ when $p = \chi_A$. The expression
+$(\lambda_1 - \lambda_2)^2 p(\lambda_1) p(\lambda_2)$ is **identically zero** because
+$p(\lambda_1) = 0$ (since $\lambda_1$ is a root). So the formula is trivially true ($0 = 0$),
+and the geometric interpretation is that when $A$ and $C$ share eigenvalues, the Kronecker
+sum has a nontrivial kernel — i.e., there exists a nonzero $Z \in \mathbb{C}^{n \times m}$
+such that $C Z = Z A$ (the Sylvester equation). This corresponds to the **Sylvester operator**
+being singular, which happens precisely when $C$ and $A$ share an eigenvalue.
+
+---
+
+### (e) Block-companion recurrence
+
+Define the stacked vector
+
+$$\mathbf{X}_k = \begin{pmatrix} X_k \\ X_{k+1} \\ \vdots \\ X_{k+n-1} \end{pmatrix} \in \mathbb{C}^{mn}.$$
+
+Then
+
+$$\mathbf{X}_{k+1} = \begin{pmatrix}
+X_{k+1} \\ X_{k+2} \\ \vdots \\ X_{k+n}
+\end{pmatrix}
+= \begin{pmatrix}
+0 & I_m & 0 & \cdots & 0 \\
+0 & 0 & I_m & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+-a_n I_m & -a_{n-1} I_m & -a_{n-2} I_m & \cdots & (A - a_1 I_m)
+\end{pmatrix}
+\begin{pmatrix} X_k \\ X_{k+1} \\ \vdots \\ X_{k+n-1} \end{pmatrix}.$$
+
+This block matrix is precisely $C \otimes I_m - I_n \otimes A$ (check: the last block-row is
+$-a_n I_m, \ldots, A - a_1 I_m$, which matches). So the system is
+$\mathbf{X}_{k+1} = M \mathbf{X}_k$, and $\mathbf{X}_k = M^k \mathbf{X}_0$.
+
+Boundedness for all initial conditions requires the spectral radius $\rho(M) \le 1$, with any
+eigenvalue of modulus 1 being semi-simple (no nontrivial Jordan blocks on the unit circle).
+The eigenvalues of $M$ are $\alpha_i - \lambda_j$. For boundedness we need
+$|\alpha_i - \lambda_j| \le 1$ for all $i, j$.
+
+But wait — the recurrence is a discrete-time linear system. For asymptotic boundedness as
+$k \to \infty$, we need $\operatorname{Re}(\alpha_i - \lambda_j) \le 0$ if we're in a
+**continuous**-time analogy. In discrete time, we need $|e^{\alpha_i - \lambda_j}| \le 1$?
+No — the eigenvalues of $M$ are literally $\alpha_i - \lambda_j$. For $M^k$ to remain bounded,
+we need $|\alpha_i - \lambda_j| \le 1$ for all $i, j$, with equality only for semi-simple
+eigenvalues. This is the **discrete-time stability** condition in terms of the spectral
+differences.
+
+The necessary and sufficient condition: $\max_{i,j} |\alpha_i - \lambda_j| \le 1$, and
+any eigenvalue with $|\alpha_i - \lambda_j| = 1$ must be a semi-simple eigenvalue of $M$.
+`````

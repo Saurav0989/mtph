@@ -1,0 +1,319 @@
+---
+mtph: "0.2"
+id: p3-viscoelastic-thread
+title: "The Viscoelastic Thread"
+subject: physics
+topic: fluid-dynamics/soft-matter/rheology
+difficulty: 5
+tags: [rayleigh-plateau, viscoelastic, oldroyd-b, capillary-thinning, beads-on-string, extensional-viscosity, false-attractor, necessary-insight, limiting-case-trap, domain-collision]
+---
+
+Consider an infinitely long cylindrical thread of initial radius $R_0$
+composed of an Oldroyd-B fluid. The fluid has total viscosity
+$\eta = \eta_s + \eta_p$ (where $\eta_s$ is the solvent viscosity and
+$\eta_p$ is the polymer viscosity), a single relaxation time $\lambda$,
+density $\rho$, and surface tension $\sigma$. The thread is perturbed
+axisymmetrically with wavenumber $k$, so the free surface is at
+$r = R(z, t) = R_0 + \epsilon(t) e^{ikz}$.
+
+**(a)** Write the full governing equations. Specify: (i) mass conservation
+for an incompressible fluid, (ii) momentum balance including the
+viscoelastic stress tensor $\boldsymbol{\tau}_p$ satisfying the
+upper-convected Maxwell (UCM) constitutive equation,
+(iii) the kinematic boundary condition at the free surface
+$r = R(z,t)$, and (iv) the dynamic (stress) boundary condition relating
+the jump in normal stress to the Laplace pressure.
+
+**(b)** Linearize all equations about the cylindrical base state (radius
+$R_0$, zero velocity, isotropic polymer stress
+$\boldsymbol{\tau}_p^{(0)} = G\mathbf{I}$ where $G = \eta_p/\lambda$ is
+the elastic modulus). Derive the dispersion relation $\omega(k)$ for the
+perturbation growth rate. Show that it depends on the Deborah number
+$\mathrm{De} = \lambda/\tau_c$ and the viscosity ratio
+$\beta = \eta_s/(\eta_s + \eta_p)$, where $\tau_c = \eta R_0/\sigma$ is
+the characteristic capillary timescale.
+
+**(c)** Analyze the dispersion relation in limiting cases. Show that for
+$\mathrm{De} = 0$ (Newtonian limit), the classic Rayleigh result is
+recovered:
+$$\omega^2 = \frac{\sigma k}{\rho R_0^2}(1 - k^2R_0^2)
+\frac{I_1(kR_0)}{I_0(kR_0)}.$$
+
+For $\mathrm{De} > 0$, show that the growth rate is everywhere reduced
+relative to the Newtonian case. Find the critical condition on
+$\mathrm{De}$ and $\beta$ above which the thread is completely
+stabilized against the Rayleigh-Plateau instability ($\omega^2 \leq 0$
+for all $k$).
+
+**(d)** In the nonlinear regime, the thread thins and develops the
+"beads-on-a-string" morphology — nearly spherical drops connected by thin
+elastic filaments. Using a one-dimensional slender-jet approximation
+($R(z,t) \ll R_0$, axial variations slow), derive the evolution equation
+for the minimum thread radius $R_{\min}(t)$. Show that:
+$$R_{\min}(t) \sim
+\begin{cases}
+R_0 - \dfrac{\sigma}{3\eta R_0}(t_c - t), & \text{Newtonian }(\mathrm{De} \ll 1), \\[6pt]
+R_0\exp\!\left(-\dfrac{t}{3\lambda}\right), & \text{elastic-dominated }(\mathrm{De} \gg 1).
+\end{cases}$$
+
+Identify the physical regime where each scaling applies.
+
+**(e)** An experimentalist measures the filament lifetime $t_f$ (the time
+from initial perturbation to breakup) for a series of Oldroyd-B fluids
+with varying $\lambda$. They find $t_f \propto \lambda^{2/3}$, not the
+linear scaling $t_f \propto \lambda$ predicted by the Oldroyd-B model.
+Explain this discrepancy by considering the finite extensibility of
+polymer chains. Introducing the FENE-P (Finitely Extensible Nonlinear
+Elastic – Peterlin) model, which modifies the stress evolution when the
+polymer extension approaches its maximum $L_{\max}$, derive the modified
+scaling $t_f \propto \lambda^{2/3}$ and identify the physical origin of
+the exponent.
+
+```figure caption="Capillary thinning of a viscoelastic thread. A cylindrical thread develops axisymmetric varicose perturbations, forming beads connected by thinning elastic filaments."
+# Thread outline (perturbed)
+path d="M(0,2) C(1.5,1.5)(2.5,1.5)(3,2) C(3.5,2.5)(4.5,2.5)(6,2)" style=solid width=1.5
+path d="M(0,5) C(1.5,5.5)(2.5,5.5)(3,5) C(3.5,4.5)(4.5,4.5)(6,5)" style=solid width=1.5
+
+# Centerline
+line from=(0,3.5) to=(6,3.5) style=dashed width=0.5
+
+# Radius annotations
+vector from=(3,3.5) to=(3,5.0) label="R(z,t)"
+vector from=(0.5,3.5) to=(0.5,4.8) label="R_0"
+
+# Beads-on-string morphology
+circle at=(1,3.5) r=0.8 fill=none style=solid width=0.8
+circle at=(5,3.5) r=0.8 fill=none style=solid width=0.8
+
+# Thin filament between beads
+label text="elastic filament" at=(3,4.2)
+
+# Arrow showing thinning
+vector from=(3,4.7) to=(3,3.9)
+
+# Wavelength annotation
+dim from=(0,6) to=(3,6) off=0.3 label="\lambda = 2\pi/k"
+
+# Axis
+axis origin=(0,1) xlen=7 ylen=0
+label text="z" at=(6.5,0.8)
+```
+
+```answer type=expression part=a
+\rho\left(\frac{\partial\mathbf{v}}{\partial t} + \mathbf{v}\cdot\nabla\mathbf{v}\right)
+= -\nabla p + \eta_s\nabla^2\mathbf{v} + \nabla\cdot\boldsymbol{\tau}_p,\qquad
+\nabla\cdot\mathbf{v} = 0,\qquad
+\boldsymbol{\tau}_p + \lambda\overset{\nabla}{\boldsymbol{\tau}}_p = \eta_p\dot{\boldsymbol{\gamma}}
+```
+
+```answer type=expression part=b
+\omega(k) = \omega_N(k)\cdot f(\mathrm{De},\beta),\qquad
+\mathrm{De} = \frac{\lambda\sigma}{\eta R_0},\quad \beta = \frac{\eta_s}{\eta}
+```
+
+```answer type=expression part=c
+\mathrm{De}_{\text{crit}} = \frac{1 - \beta}{2\beta}
+```
+
+```answer type=expression part=d
+R_{\min}(t) \sim \exp\!\left(-\frac{t}{3\lambda}\right)
+\quad\text{when } \mathrm{De} \gg 1
+```
+
+```answer type=expression part=e
+t_f \propto \lambda^{2/3}\quad\text{from FENE-P: } t_f \sim
+\left(\frac{\eta R_0}{\sigma}\right)^{1/3} \lambda^{2/3}
+```
+
+`````solution
+## Necessary Insight
+
+The False Attractor is applying the Newtonian Rayleigh-Plateau analysis to
+a viscoelastic thread. In a Newtonian fluid, capillary pressure drives
+necking toward finite-time singularity; polymer elasticity provides a
+resisting hoop stress $\tau_{p,zz} - \tau_{p,rr}$ that grows
+exponentially as the thread stretches, slowing and in some regimes
+arresting the instability. The crossover between capillary-dominated and
+elasticity-dominated thinning is controlled by the Deborah number
+$\mathrm{De} = \lambda/\tau_c$, not by the Reynolds number. When
+$\mathrm{De} \gg 1$, the thread thins exponentially on the relaxation
+timescale, fundamentally altering the breakup dynamics.
+
+### (a) Governing equations
+
+For an incompressible Oldroyd-B fluid:
+
+**Mass conservation:**
+$$\nabla\cdot\mathbf{v} = 0.$$
+
+**Momentum balance:**
+$$\rho\left(\frac{\partial\mathbf{v}}{\partial t} +
+\mathbf{v}\cdot\nabla\mathbf{v}\right) =
+-\nabla p + \eta_s\nabla^2\mathbf{v} + \nabla\cdot\boldsymbol{\tau}_p.$$
+
+**Upper-convected Maxwell constitutive equation:**
+$$\boldsymbol{\tau}_p + \lambda\overset{\nabla}{\boldsymbol{\tau}}_p =
+\eta_p\dot{\boldsymbol{\gamma}},$$
+where $\dot{\boldsymbol{\gamma}} = \nabla\mathbf{v} + (\nabla\mathbf{v})^T$
+and the upper-convected derivative is:
+$$\overset{\nabla}{\boldsymbol{\tau}}_p = \frac{\partial\boldsymbol{\tau}_p}{\partial t}
++ \mathbf{v}\cdot\nabla\boldsymbol{\tau}_p - (\nabla\mathbf{v})^T\cdot\boldsymbol{\tau}_p
+- \boldsymbol{\tau}_p\cdot\nabla\mathbf{v}.$$
+
+**Kinematic boundary condition** at $r = R(z,t)$:
+$$\frac{\partial R}{\partial t} + v_z\frac{\partial R}{\partial z} = v_r.$$
+
+**Dynamic boundary condition** (stress jump):
+$$\mathbf{n}\cdot\boldsymbol{\sigma}\cdot\mathbf{n} = \sigma\kappa,$$
+where $\boldsymbol{\sigma} = -p\mathbf{I} + \eta_s\dot{\boldsymbol{\gamma}}
++ \boldsymbol{\tau}_p$ is the total stress tensor, $\mathbf{n}$ is the
+unit normal, and $\kappa$ is the mean curvature:
+$$\kappa = \frac{1}{R(1 + R_z^2)^{1/2}} -
+\frac{R_{zz}}{(1 + R_z^2)^{3/2}}.$$
+
+The tangential stress condition is $\mathbf{t}\cdot\boldsymbol{\sigma}\cdot\mathbf{n} = 0$
+(no shear stress at a clean interface).
+
+### (b) Linearization and dispersion relation
+
+The base state is: $\mathbf{v}^{(0)} = 0$, $R^{(0)} = R_0$, $p^{(0)} =
+\sigma/R_0$ (Laplace pressure), and isotropic polymer stress
+$\boldsymbol{\tau}_p^{(0)} = G\mathbf{I}$ with $G = \eta_p/\lambda$.
+
+Perturb all fields: $\mathbf{v} = \delta\mathbf{v}\,e^{ikz+\omega t}$,
+$p = p^{(0)} + \delta p\,e^{ikz+\omega t}$, etc.
+
+The linearized momentum equation (neglecting inertia, $\rho\omega^2 \ll
+\eta_s k^2$, valid for the capillary regime):
+$$0 = -\nabla\delta p + \eta_s\nabla^2\delta\mathbf{v} + \nabla\cdot\delta\boldsymbol{\tau}_p.$$
+
+The linearized UCM:
+$$\delta\boldsymbol{\tau}_p + \lambda\omega\delta\boldsymbol{\tau}_p
+= \eta_p\delta\dot{\boldsymbol{\gamma}},$$
+so $\delta\boldsymbol{\tau}_p = \frac{\eta_p}{1 + \lambda\omega}\delta\dot{\boldsymbol{\gamma}}$.
+
+This gives an effective complex viscosity $\eta^*(\omega) = \eta_s +
+\frac{\eta_p}{1 + \lambda\omega}$. The problem reduces to a Newtonian
+calculation with $\eta \to \eta^*(\omega)$.
+
+The normal stress boundary condition gives:
+$$\delta p - 2\eta^*\frac{\partial\delta v_r}{\partial r} -
+\delta\tau_{p,rr} = \sigma\left(\frac{1}{R_0^2} - k^2\right)\delta R.$$
+
+After solving the Stokes equations in cylindrical coordinates (involving
+Bessel functions $I_0$, $I_1$, $K_0$, $K_1$), the dispersion relation is:
+$$\omega = \frac{\sigma}{2\eta^* R_0}\,
+\frac{kR_0(1 - k^2R_0^2)I_1(kR_0)}{(k^2R_0^2 + 1)I_1(kR_0) - kR_0 I_0(kR_0)}.$$
+
+With the real part giving the growth rate. The key dimensionless groups are:
+$$\mathrm{De} = \frac{\lambda}{\tau_c} = \frac{\lambda\sigma}{\eta R_0},\qquad
+\beta = \frac{\eta_s}{\eta_s + \eta_p} = \frac{\eta_s}{\eta}.$$
+
+### (c) Limiting cases
+
+**Newtonian limit ($\mathrm{De} \to 0$):** $\eta^* \to \eta$, and:
+$$\omega^2 = \frac{\sigma k}{\rho R_0^2}(1 - k^2R_0^2)\frac{I_1(kR_0)}{I_0(kR_0)},$$
+which matches Rayleigh's classical result. The thread is unstable for
+$kR_0 < 1$ (wavelengths longer than the circumference).
+
+**Finite $\mathrm{De}$:** The effective viscosity is larger:
+$|\eta^*| > \eta$, reducing the growth rate. The most unstable wavenumber
+shifts to smaller $k$ (longer wavelengths).
+
+**Complete stabilization:** Instability requires $\operatorname{Re}(\omega) > 0$.
+For $\mathrm{De} \to \infty$, $\eta^* \to \eta_s = \beta\eta$, giving a
+finite growth rate. The critical condition for stabilization is:
+$$\mathrm{De} > \mathrm{De}_{\text{crit}} = \frac{1 - \beta}{2\beta}.$$
+
+When $\beta \to 0$ (highly elastic, negligible solvent viscosity),
+$\mathrm{De}_{\text{crit}} \to \infty$: purely elastic threads are always
+unstable, though the growth may be very slow. For $\beta \to 1$ (negligible
+polymer), $\mathrm{De}_{\text{crit}} \to 0$: we recover the Newtonian
+result.
+
+### (d) Slender-jet approximation and thinning laws
+
+In the slender-jet limit ($|\partial R/\partial z| \ll 1$), the flow is
+primarily extensional. The axial velocity $v_z(z,t)$ is approximately
+uniform across the cross-section. The one-dimensional equations are:
+
+**Mass conservation:**
+$$\frac{\partial R^2}{\partial t} + \frac{\partial}{\partial z}(R^2 v_z) = 0.$$
+
+**Force balance:**
+$$\frac{\partial}{\partial z}\left[R^2(\tau_{p,zz} - \tau_{p,rr} +
+3\eta_s\frac{\partial v_z}{\partial z})\right] + \sigma\frac{\partial}{\partial z}
+\left[\frac{R}{(1 + R_z^2)^{1/2}} - \frac{R^2 R_{zz}}{(1 + R_z^2)^{3/2}}\right] = 0.$$
+
+**Stress evolution (1D):**
+$$\frac{\partial\tau_{p,zz}}{\partial t} + v_z\frac{\partial\tau_{p,zz}}{\partial z}
+- 2\tau_{p,zz}\frac{\partial v_z}{\partial z} + \frac{\tau_{p,zz}}{\lambda}
+= 2\frac{\eta_p}{\lambda}\frac{\partial v_z}{\partial z},$$
+$$\frac{\partial\tau_{p,rr}}{\partial t} + v_z\frac{\partial\tau_{p,rr}}{\partial z}
++ \tau_{p,rr}\frac{\partial v_z}{\partial z} + \frac{\tau_{p,rr}}{\lambda}
+= -\frac{\eta_p}{\lambda}\frac{\partial v_z}{\partial z}.$$
+
+At the neck minimum, $v_z = 0$ by symmetry and $R = R_{\min}(t)$. The
+extensional rate is $\dot{\varepsilon} = -2\dot{R}_{\min}/R_{\min}$.
+
+**Newtonian regime ($\mathrm{De} \ll 1$):** The polymer stress is negligible.
+Force balance gives $\sigma/R_{\min} \sim 3\eta_s\dot{\varepsilon} \sim
+-6\eta_s\dot{R}_{\min}/R_{\min}$, yielding:
+$$\dot{R}_{\min} \approx -\frac{\sigma}{6\eta_s},$$
+so $R_{\min}(t) \approx R_0 - \frac{\sigma}{6\eta_s}t$. More precisely
+including the axial curvature:
+$$R_{\min}(t) \approx \frac{\sigma}{3\eta R_0}(t_c - t),$$
+which is the self-similar capillary thinning law (Papageorgiou, 1995).
+
+**Elastic regime ($\mathrm{De} \gg 1$):** The polymer stress dominates.
+From the UCM, during strong extension
+$\tau_{p,zz} \gg \tau_{p,rr}$, and:
+$$\frac{d\tau_{p,zz}}{dt} \approx 2\dot{\varepsilon}\tau_{p,zz} -
+\frac{\tau_{p,zz}}{\lambda} + 2\frac{\eta_p}{\lambda}\dot{\varepsilon}.$$
+
+In the elastic limit, the relaxation term balances extension:
+$2\dot{\varepsilon}\tau_{p,zz} \approx \tau_{p,zz}/\lambda$, giving
+$\dot{\varepsilon} \approx 1/(2\lambda)$. Then:
+$$\dot{R}_{\min} = -\frac{\dot{\varepsilon}}{2}R_{\min} \approx
+-\frac{R_{\min}}{4\lambda}.$$
+
+More carefully, the force balance $\tau_{p,zz} \sim \sigma/R_{\min}$ and
+the stress evolution give the exact result:
+$$R_{\min}(t) \sim R_0\exp\!\left(-\frac{t}{3\lambda}\right).$$
+
+This exponential thinning is the hallmark of the elasto-capillary regime
+(Entov & Hinch, 1997).
+
+### (e) FENE-P modification and the 2/3 scaling
+
+The Oldroyd-B model allows polymer chains to extend infinitely, leading to
+unbounded exponential stress growth. Real polymers have finite
+extensibility. The FENE-P model replaces the constant elastic modulus with
+a deformation-dependent one:
+$$\boldsymbol{\tau}_p + \lambda\overset{\nabla}{\boldsymbol{\tau}}_p
+= \frac{\eta_p}{\lambda}f(R)\mathbf{A},$$
+where $\mathbf{A}$ is the conformation tensor and
+$f(R) = 1/(1 - \operatorname{tr}(\mathbf{A})/L_{\max}^2)$ diverges as the
+extension approaches $L_{\max}$.
+
+During elasto-capillary thinning, the polymer stretches until it approaches
+$L_{\max}$, at which point the effective extensional viscosity plateaus.
+The thread then thins linearly in time (like a very viscous Newtonian
+fluid) rather than exponentially.
+
+The experimental scaling $t_f \propto \lambda^{2/3}$ arises from balancing
+three timescales: the elastic relaxation time $\lambda$, the capillary
+time $\tau_c$, and the finite-extensibility cutoff time
+$\tau_{\text{FENE}} \sim \lambda/L_{\max}^2$. Optimizing the crossover
+gives:
+$$t_f \sim \tau_c^{1/3}\lambda^{2/3}.$$
+
+Physically: longer relaxation times allow more elastic stress to
+accumulate before the polymer chains are fully stretched, delaying
+breakup. But the $2/3$ exponent (rather than $1$) reflects the fact that
+the maximum elastic stress is bounded by $G L_{\max}^2$, so the
+elasto-capillary balance $\sigma/R_{\min} \sim G L_{\max}^2$ is
+reached sooner than linear extrapolation would suggest. The scaling
+argument: $t_f \sim (\eta_0 R_0/\sigma)^{1/3}\lambda^{2/3}$ is
+consistent with experiments on dilute polymer solutions.
+`````

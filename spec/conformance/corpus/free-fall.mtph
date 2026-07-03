@@ -1,0 +1,33 @@
+---
+mtph: "0.2"
+id: free-fall
+title: Free Fall — Impact Speed
+subject: physics
+topic: mechanics/kinematics
+difficulty: 1
+tags: [kinematics, free-fall, energy]
+answer:
+  type: numeric
+  value: 19.8
+  unit: "m/s"
+  tolerance: 0.02
+solution: |
+  Energy conservation gives $\tfrac{1}{2}v^2 = gh$, so $v = \sqrt{2gh}$. With $g = 9.8\,$m/s²
+  and $h = 20\,$m, $v = \sqrt{2\cdot 9.8\cdot 20} \approx 19.8\,$m/s.
+---
+
+A ball is released from rest and falls $h = 20\ \text{m}$ to the ground. Taking
+$g = 9.8\ \text{m/s}^2$ and neglecting air resistance, find its speed $v$ at impact.
+
+Turn on **Quiz mode** to check your own answer.
+
+```figure
+point A at=(0,3) label="A" dot=true
+point B at=(0,0) label="B" dot=true
+line from=(0,3) to=(0,0) style=dashed
+vector from=(0,1.4) to=(0,0.4) label="v"
+ground at=(-1,0) width=2
+dim from=(0.55,3) to=(0.55,0) off=0.0 label="h"
+```
+
+$$v = \sqrt{2gh}$$

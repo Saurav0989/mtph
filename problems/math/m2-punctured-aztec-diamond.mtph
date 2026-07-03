@@ -1,0 +1,224 @@
+---
+mtph: "0.2"
+id: m2-punctured-aztec-diamond
+title: Tiling a Punctured Aztec Diamond
+subject: math
+topic: combinatorics/statistical-mechanics
+difficulty: 5
+tags: [domino-tiling, aztec-diamond, kasteleyn, arctic-circle, defect, dimer-model, pfaffian, determinant, asymptotic, correlation]
+---
+
+The **Aztec diamond** $A_n$ of order $n$ is the union of unit squares in $\mathbb{Z}^2$ whose
+centers $(x, y)$ satisfy $|x| + |y| \le n+1$ and $x + y \equiv n+1 \pmod{2}$. Equivalently,
+$A_n$ is the region tiled by $2 \times 1$ dominoes in the celebrated theorem of
+Elkies–Kuperberg–Larsen–Propp: the number of domino tilings of $A_n$ is
+
+$$T(A_n) = 2^{\,n(n+1)/2}.$$
+
+```figure caption="The Aztec diamond $A_3$ with one square at $(-1, 0)$ removed (punctured). Shading indicates the checkerboard coloring."
+# Draw A_3 as a tilted square (diamond shape) made of unit squares
+
+# Outer diamond boundary (tilted 45 degrees)
+# Coordinates: diamond of "radius" 4 units in checkerboard
+path d="M(0,4) L(4,0) L(8,4) L(4,8) Z" fill=none stroke=black width=0.6
+
+# Horizontal-ish lines (rows of squares)
+path d="M(1,3) L(7,3)" stroke=gray style=dashed width=0.3
+path d="M(0.5,3.5) L(7.5,3.5)" stroke=gray style=dashed width=0.3
+path d="M(0,4) L(8,4)" stroke=gray width=0.3
+path d="M(0.5,4.5) L(7.5,4.5)" stroke=gray style=dashed width=0.3
+path d="M(1,5) L(7,5)" stroke=gray style=dashed width=0.3
+
+# Vertical-ish lines
+path d="M(4,0) L(4,8)" stroke=gray width=0.3
+path d="M(3,0.5) L(3,7.5)" stroke=gray style=dashed width=0.3
+path d="M(5,0.5) L(5,7.5)" stroke=gray style=dashed width=0.3
+path d="M(2,1) L(2,7)" stroke=gray style=dashed width=0.3
+path d="M(6,1) L(6,7)" stroke=gray style=dashed width=0.3
+
+# Mark removed square at (-1,0) in grid coordinates → near (3,4) in figure
+# Draw a small "X" or empty region
+path d="M(3.3,3.7) L(3.7,4.3)" stroke=black width=0.5
+path d="M(3.7,3.7) L(3.3,4.3)" stroke=black width=0.5
+
+# Arctic circle (dashed)
+path d="M(4,0.6) C(5.5,1.8)(6.5,3.5)(4,7.4)" stroke=black style=dotted width=0.4
+path d="M(4,0.6) C(2.5,1.8)(1.5,3.5)(4,7.4)" stroke=black style=dotted width=0.4
+
+text label="removed" at=(3,3.2) fontsize=tiny
+text label="arctic circle" at=(6.5,2) fontsize=tiny
+```
+
+A **punctured Aztec diamond** $A_n \setminus \{(i,j)\}$ is the region obtained by removing
+the unit square whose center has integer coordinates $(i, j)$.
+
+**(a)** Verify the formula $T(A_n) = 2^{n(n+1)/2}$ for $n = 2, 3, 4$ by direct enumeration or
+by using the recurrence $T(A_n) = 2^n \, T(A_{n-1})$. Compute the exact numerical values.
+
+**(b)** Let $K$ be the Kasteleyn matrix (a signed adjacency matrix of the bipartite graph of
+$A_n$). For the punctured region $A_n \setminus \{(i,j)\}$, the number of domino tilings is
+
+$$T\!\big(A_n \setminus \{(i,j)\}\big) = T(A_n) \cdot \big|K^{-1}_{(i,j),(i,j)}\big|,$$
+
+where $K^{-1}_{(i,j),(i,j)}$ is the diagonal entry of the inverse Kasteleyn matrix
+corresponding to the removed square. Explain why this formula holds heuristically: interpret
+it via the **Jacobi complement formula** (also known as the matrix-tree-type identity for
+near-perfect matchings), or by considering the ratio of the Pfaffian of $K$ with one row and
+column removed to the full Pfaffian.
+
+**(c)** In the thermodynamic limit $n \to \infty$, the **arctic circle theorem** states that,
+after scaling coordinates by $1/n$, domino orientations are frozen (deterministic) outside
+the inscribed circle of radius $n/\sqrt{2}$ and disordered inside. If the removed square
+$(i,j)$ lies in the *temperate region* (well inside the arctic circle, at a fixed fraction of
+$n$ from the center), show that
+
+$$T\!\big(A_n \setminus \{(i,j)\}\big) \;\sim\; T(A_n) \cdot \frac{c_0}{n},$$
+
+and find the constant $c_0$ in terms of the position $(i,j)$ and the slope of the limit shape.
+*Hint:* The inverse Kasteleyn matrix entry $K^{-1}_{(i,j),(i,j)}$ is the *local dimer
+placement probability* at site $(i,j)$, which is $\sim 1/(\pi n)$ in the temperate region.
+
+**(d)** If $(i,j)$ lies in the *frozen region* (outside the arctic circle), prove that
+$T(A_n \setminus \{(i,j)\}) = 0$ for sufficiently large $n$ — i.e., no domino tiling exists.
+Characterize precisely which lattice squares can be removed while still admitting a tiling;
+this reduces to a parity-and-boundary condition derived from the bipartite nature of the
+dimer model.
+
+**(e)** Now suppose $k$ squares are removed from $A_n$, with centers at
+$(i_1, j_1), \ldots, (i_k, j_k)$, all lying in the temperate region and pairwise separated by
+distances $\gg 1$ (on the lattice scale). Argue that, asymptotically,
+
+$$T\!\big(A_n \setminus \{\text{defects}\}\big) \;\sim\; T(A_n) \cdot \prod_{r=1}^{k} \big|K^{-1}_{(i_r, j_r), (i_r, j_r)}\big|.$$
+
+Explain when this **factorization breaks down**: if two defects are adjacent or separated by
+$O(1)$ lattice steps, their removal probabilities become correlated and the determinant of
+the $k \times k$ submatrix of $K^{-1}$ no longer factorizes. Relate this to the asymptotic
+behavior of the **dimer–dimer correlation function** in the temperate region.
+
+```answer type=expression part=a
+T(A_2) = 8,\quad T(A_3) = 64,\quad T(A_4) = 1024
+```
+
+```answer type=freeform part=b
+T(A_n \setminus \{(i,j)\}) = T(A_n) \cdot |K^{-1}_{(i,j),(i,j)}|. This follows from the Jacobi complement formula: removing row and column (i,j) from the Pfaffian of K gives the number of near-perfect matchings with defect at (i,j), and the ratio to the full Pfaffian is |K^{-1}_{ii}|.
+```
+
+```answer type=expression part=c
+c_0 = \dfrac{1}{\pi} \cdot \dfrac{1}{\sqrt{1 - 2(x^2 + y^2)/n^2}}, \quad T(A_n \setminus \{(i,j)\}) \sim T(A_n) \cdot \frac{c_0}{n}
+```
+
+```answer type=freeform part=d
+\text{A square }(i,j)\text{ is removable iff it has the same parity as the corners of }A_n\text{ that are matched; equivalently, }i+j \equiv n+1 \pmod{2}.\text{ In frozen regions, removal destroys the forced local tile pattern, making tiling impossible.}
+```
+
+```answer type=expression part=e
+T \sim T(A_n) \prod_{r=1}^{k} |K^{-1}_{(i_r,j_r),(i_r,j_r)}|; \quad \text{breaks when } |(i_r,j_r) - (i_s,j_s)| = O(1)
+```
+
+`````solution
+## Necessary Insight
+
+A single defect in the Aztec diamond modifies the tiling count by a factor equal to the
+corresponding diagonal entry of the inverse Kasteleyn matrix — a direct consequence of
+Cramer's rule / Jacobi's complement formula for Pfaffians. This is not an ad hoc
+combinatorial trick but a structural property of determinantal point processes. The false
+attractor is to attempt a direct Kasteleyn-Pfaffian enumeration of the punctured region,
+which fails because the bipartite graph is no longer balanced (one black vertex is missing),
+breaking the standard perfect-matching Pfaffian formulation.
+
+---
+
+### (a) Tiling counts
+
+The recurrence $T(A_n) = 2^n \, T(A_{n-1})$ with $T(A_1) = 2$ gives:
+
+$$T(A_2) = 2^2 \cdot 2 = 8,$$
+$$T(A_3) = 2^3 \cdot 8 = 64,$$
+$$T(A_4) = 2^4 \cdot 64 = 1024.$$
+
+These can also be verified directly: $A_2$ has 8 tilings (all combinations of horizontal vs.
+vertical dominoes in the $2 \times 2$ central region consistent with the forced boundary
+dominoes). The general formula $2^{n(n+1)/2}$ follows by induction from the recurrence:
+$\prod_{k=1}^n 2^k = 2^{\sum_{k=1}^n k} = 2^{n(n+1)/2}$.
+
+---
+
+### (b) Jacobi complement / near-perfect matchings
+
+The Kasteleyn matrix $K$ is a signed adjacency matrix of the bipartite graph of $A_n$. Its
+Pfaffian $\operatorname{Pf}(K)$ counts perfect matchings (domino tilings).
+If we remove the vertex corresponding to the black square at $(i,j)$ and its white partner
+(the two vertices of the removed domino square), we obtain a graph with one fewer black and
+one fewer white vertex — still balanced — whose perfect matchings correspond to tilings of
+the punctured region.
+
+By Jacobi's formula for Pfaffians (the Pfaffian analogue of $\det(A_{\setminus i,i}) = \det(A) \cdot (A^{-1})_{ii}$):
+
+$$\frac{\operatorname{Pf}(K_{\setminus i,i})}{\operatorname{Pf}(K)} = |(K^{-1})_{ii}|,$$
+
+where $K_{\setminus i,i}$ denotes $K$ with the $i$-th row and column removed. Since
+$\operatorname{Pf}(K_{\setminus i,i})$ counts near-perfect matchings with a defect at $i$
+(i.e., matchings that cover all vertices *except* the two vertices of the removed square,
+paired in a specific way), the number of tilings of the punctured region is
+$T(A_n) \cdot |K^{-1}_{(i,j),(i,j)}|$.
+
+---
+
+### (c) Asymptotics in the temperate region
+
+In the thermodynamic limit, the inverse Kasteleyn matrix entry $K^{-1}_{(i,j),(i,j)}$ is
+the probability that a domino covers the edge between the vertices associated with square
+$(i,j)$ in a uniformly random tiling. Inside the arctic circle, this probability is
+position-dependent but scales as $O(1/n)$.
+
+Specifically, for the Aztec diamond, the limit shape yields
+$K^{-1}_{(i,j),(i,j)} \sim \frac{1}{\pi n} \cdot \frac{1}{\sqrt{1 - 2r^2/n^2}}$ where
+$r = \sqrt{i^2 + j^2}$ is the distance from the center. At the center ($r=0$),
+
+$$K^{-1}_{(0,0),(0,0)} \sim \frac{1}{\pi n},$$
+
+so $c_0 = 1/\pi$ times a geometric factor depending on position. Thus
+
+$$T(A_n \setminus \{(i,j)\}) \sim T(A_n) \cdot \frac{c_0}{n}.$$
+
+The removal reduces the tiling count by a factor of order $1/n$.
+
+---
+
+### (d) Frozen region impossibility
+
+In the frozen region (outside the arctic circle), the tiling is deterministic in the
+$n \to \infty$ limit: every domino orientation is forced to be a specific direction
+(horizontal near the left/right corners, vertical near the top/bottom corners). Removing a
+square breaks this forced local pattern. Since the frozen pattern has exactly one domino
+covering the removed square in a specific orientation, removing that square leaves the
+adjacent square uncovered with no alternative domino placement possible — the region cannot
+be perfectly matched.
+
+A necessary condition for a square to be removable is the **parity condition**:
+$i + j \equiv n+1 \pmod{2}$, i.e., the square must have the same parity as the squares at
+the corners that are matched. This ensures the remaining region has an equal number of
+black and white squares. However, in the frozen region, even this parity condition is
+insufficient — the geometric constraints dominate.
+
+---
+
+### (e) Multiple defects and correlation breakdown
+
+For $k$ defects $(i_1,j_1), \ldots, (i_k,j_k)$ far apart (separations $\gg 1$), the
+removal events are approximately independent. The Jacobi formula generalizes: the number of
+tilings with $k$ defects is
+
+$$T = T(A_n) \cdot \big|\det\!\big([K^{-1}]_{r,s}\big)_{r,s=1}^{k}\big|,$$
+
+where $[K^{-1}]_{r,s}$ is the $k \times k$ submatrix of the inverse Kasteleyn matrix indexed
+by the defect sites. When defects are far apart, the off-diagonal entries
+$K^{-1}_{(i_r,j_r),(i_s,j_s)}$ (the dimer–dimer correlations) decay as
+$O(1/|r-s|)$ (or faster, depending on the region), making the $k \times k$ determinant
+approximately the product of the diagonal entries.
+
+The factorization breaks down when two defects are at $O(1)$ separation, because the
+off-diagonal correlations are $O(1)$ and the determinant no longer factorizes. This is
+directly analogous to the cluster property in statistical mechanics: distant defects
+decorrelate, but nearby ones interact through the Coulomb-gas physics of the dimer model.
+`````
