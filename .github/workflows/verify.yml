@@ -52,7 +52,17 @@ jobs:
 
       - name: Verify
         id: verify
-        run: python .github/scripts/verify_changed.py ${{ steps.changed.outputs.files }}
+        env:
+          FILES: ${{ steps.changed.outputs.files }}
+        # $FILES is unquoted on purpose: bash word-splits the newline-separated list into
+        # separate arguments (mtph filenames have no spaces). Substituting the multi-line output
+        # inline would instead run every line after the first as its own shell command.
+        run: |
+          if [ -n "$FILES" ]; then
+            python .github/scripts/verify_changed.py $FILES
+          else
+            echo "No .mtph files to verify."
+          fi
 
       - name: Sticky PR comment
         if: ${{ always() && github.event_name == 'pull_request' && hashFiles('verify-report.md') != '' }}
