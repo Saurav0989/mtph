@@ -1,0 +1,34 @@
+---
+mtph: "0.2"
+id: incline-frictionless
+title: Block on a Frictionless Incline
+subject: physics
+topic: mechanics/dynamics
+difficulty: 2
+tags: [newton, incline, free-body]
+symbols:
+  a: acceleration
+  g: { dim: acceleration, test: 9.8 }
+  theta: { dim: angle, test: 0.5236 }
+  m: mass
+answer:
+  type: expression
+  value: 'a = g\cos\theta'
+  check: 4.9
+solution: |
+  Resolve forces along and perpendicular to the surface. Perpendicular to the incline the
+  block is in equilibrium, so $N = mg\cos\theta$. Along the incline only gravity contributes,
+  giving
+  $$mg\sin\theta = ma \implies a = g\sin\theta.$$
+---
+
+A block of mass $m$ rests on a **frictionless** incline that makes an angle $\theta$ with the
+horizontal. Find the magnitude of its acceleration down the slope.
+
+```figure caption="Free-body diagram: weight $mg$ and normal force $N$."
+incline angle=30 length=6
+mass m at=incline.mid size=0.9 label="m"
+force from=m dir=down label="mg"
+force from=m dir=perp-out label="N"
+angle at=incline.base from=0 to=30 value="\theta"
+```

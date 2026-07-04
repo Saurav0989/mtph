@@ -1,0 +1,98 @@
+---
+mtph: "0.2"
+id: rotating-hoop
+title: The Bead That Climbs When You Spin Faster
+subject: physics
+topic: mechanics/rotating-frames
+difficulty: 4
+notation: irodov
+tags: [rotating-frame, effective-potential, bifurcation, false-attractor, limiting-case]
+symbols:
+  m: mass
+  g: acceleration
+  R: length
+  omega: angularvelocity
+grading:
+  - part: a
+    points: 3
+    criteria: 'Correct effective potential $U_{\mathrm{eff}}(\theta)$ in the rotating frame.'
+  - part: b
+    points: 4
+    criteria: 'Both equilibria found; the critical angular speed identified.'
+  - part: c
+    points: 3
+    criteria: 'Stability decided from $U_{\mathrm{eff}}''''(\theta)$, not by intuition.'
+---
+
+A bead of mass $m$ slides without friction on a circular hoop of radius $R$ that spins about its
+vertical diameter at a constant angular speed $\omega$. Let $\theta$ be the bead's angle from the
+downward vertical.
+
+**(a)** Working in the rotating frame, write the effective potential $U_{\mathrm{eff}}(\theta)$
+(gravity plus the centrifugal term). **(b)** Find every equilibrium angle and the critical speed
+$\omega_c$ at which their number changes. **(c)** The bead is nudged from the bottom. A common
+claim is *"the bottom is the stable rest point, as for any pendulum."* Decide when that is true —
+and what \ref{eq:Ueff} says happens above $\omega_c$.
+
+```figure
+circle at=(0,0) r=1.6 dash=dashed
+line from=(0,1.9) to=(0,-1.9) dash=dotted
+mass b at=(1.13,-1.13) size=0.42 label="m"
+line from=(0,0) to=(1.13,-1.13)
+angle at=(0,0) from=270 to=315 value="\theta" r=0.5
+omega at=(0,1.9) label="\omega"
+label text="R" at=(0.72,-0.5) anchor=center
+```
+
+The effective potential (dropping a constant) governs everything:
+
+```math
+U_{\mathrm{eff}}(\theta) = -mgR\cos\theta - \tfrac{1}{2}mR^2\omega^2\sin^2\theta \label{eq:Ueff}
+```
+
+Below $\omega_c$ the bottom is the only stable point; above it, $\theta=0$ turns into a hilltop and
+two tilted equilibria appear — a pitchfork:
+
+```plot
+x: 0..3.14159
+f(x) = -cos(x) - 0.3*sin(x)^2
+g(x) = -cos(x) - 1.2*sin(x)^2
+mark: (0, -1) label="slow: bottom stable"
+xlabel: "\theta"
+ylabel: "U_{eff}"
+grid: true
+```
+
+```answer type=expression part=a
+U_{\mathrm{eff}}(\theta) = -mgR\cos\theta - \tfrac{1}{2}mR^2\omega^2\sin^2\theta
+```
+
+```answer type=expression part=b
+\theta = 0,\ \pi\ \text{always};\quad \cos\theta_\pm = \frac{g}{R\omega^2}\ \text{for}\ \omega>\omega_c=\sqrt{g/R}.
+```
+
+```answer type=freeform part=c
+The bottom is stable only for $\omega<\omega_c=\sqrt{g/R}$. Above $\omega_c$ the sign of
+$U_{\mathrm{eff}}''(0)=mR(g-R\omega^2)$ flips: $\theta=0$ becomes unstable and the tilted angles
+$\theta_\pm$ take over — the pendulum intuition (the false attractor) fails.
+```
+
+````solution
+**Necessary insight.** In the rotating frame the centrifugal force derives from a potential
+$-\tfrac12 mR^3\omega^2\sin^2\theta$; adding gravity gives \ref{eq:Ueff}, and *every* question is
+then just "where are the minima of one function."
+
+**(a)** Height above the bottom is $R(1-\cos\theta)$ and the distance from the spin axis is
+$R\sin\theta$, so $U_{\mathrm{eff}} = -mgR\cos\theta - \tfrac12 mR^2\omega^2\sin^2\theta$ up to a
+constant.
+
+**(b)** $U_{\mathrm{eff}}'(\theta) = mgR\sin\theta - mR^2\omega^2\sin\theta\cos\theta =
+mR\sin\theta\,(g - R\omega^2\cos\theta)$. Zeros: $\sin\theta=0$ (so $\theta=0,\pi$) and
+$\cos\theta = g/(R\omega^2)$, which has a solution only once $R\omega^2 > g$, i.e.
+$\omega_c = \sqrt{g/R}$.
+
+**(c)** $U_{\mathrm{eff}}''(0) = mR(g - R\omega^2)$. For $\omega<\omega_c$ this is positive — the
+bottom is stable, exactly the pendulum intuition. For $\omega>\omega_c$ it is negative: the bottom
+becomes a local maximum (the false attractor fails) and the two symmetric tilted angles $\theta_\pm$
+are the new minima. Spinning faster makes the bead *climb*.
+````

@@ -1,0 +1,76 @@
+---
+mtph: "0.2"
+id: spring-friction-loop
+title: Spring, Friction Patch, and a Vertical Loop
+subject: physics
+topic: mechanics/energy-circular-motion
+difficulty: 5
+tags: [energy, friction, circular-motion, hooke, jee-advanced]
+symbols:
+  d_min: length
+  m: { dim: mass, test: 1 }
+  g: { dim: acceleration, test: 9.8 }
+  k: { dim: spring_constant, test: 100 }
+  mu: { dim: dimensionless, test: 0.5 }
+  L: { dim: length, test: 2 }
+  R: { dim: length, test: 1 }
+answer:
+  type: expression
+  value: 'd_{\min} = \sqrt{\dfrac{mg}{k}\,(2\mu L - 5R)}'
+  check: 0.828
+solution: |
+  **(a) Minimum compression.** Let the loop (radius $R$) be smooth. To *just* complete the
+  loop, gravity alone supplies the centripetal force at the top:
+  $$mg = \frac{m v_{\text{top}}^2}{R} \;\Rightarrow\; v_{\text{top}}^2 = gR.$$
+  Energy from release to the top (height $2R$), losing $\mu m g L$ to friction on the rough
+  patch:
+  $$\tfrac{1}{2}k d_{\min}^2 = \mu m g L + \tfrac{1}{2}m v_{\text{top}}^2 + mg(2R)
+     = \mu m g L + \tfrac{5}{2}mgR.$$
+  $$\boxed{\,d_{\min} = \sqrt{\tfrac{mg}{k}\,(2\mu L + 5R)}\,}.$$
+
+  **(b) Normal force at the lowest point.** For $d = d_{\min}$, energy from release to the
+  bottom of the loop gives $\tfrac{1}{2}m v_{\text{bot}}^2 = \tfrac{1}{2}k d_{\min}^2 - \mu mgL
+  = \tfrac{5}{2}mgR$, so $v_{\text{bot}}^2 = 5gR$. At the bottom,
+  $$N - mg = \frac{m v_{\text{bot}}^2}{R} = 5mg \;\Rightarrow\; \boxed{N = 6mg}.$$
+
+  **(c) Leaving the track.** If the block enters the loop with a smaller speed $v_{\text{bot}}$
+  (where $2gR \le v_{\text{bot}}^2 < 5gR$) it leaves the track on the way up, where $N = 0$.
+  At an angle $\theta$ from the top, $mg\cos\theta = \dfrac{mv^2}{R}$ and energy conservation
+  on the smooth loop give
+  $$\boxed{\cos\theta = \frac{v_{\text{bot}}^2 - 2gR}{3gR}},\qquad
+    v_{\text{bot}}^2 = \frac{k d^2}{m} - 2\mu g L.$$
+---
+
+A small block of mass $m$ is pressed against a spring of force constant $k$, compressing it by
+a distance $d$ on a **smooth** horizontal floor. When released, the block crosses a **rough**
+strip of length $L$ (kinetic friction coefficient $\mu$) and then enters a **smooth** vertical
+circular loop of radius $R$ that is tangent to the floor.
+
+1. Find the minimum compression $d_{\min}$ for which the block *just* completes the loop.
+2. For $d = d_{\min}$, find the normal reaction $N$ on the block at the lowest point of the loop.
+3. If the block enters the loop too slowly to complete it, it leaves the track where $N = 0$.
+   Find the angle $\theta$ (measured at the centre from the upward vertical) of that point in
+   terms of the entry speed $v_{\text{bot}}$.
+
+```figure caption="Spring launch across a rough strip $L$ into a smooth vertical loop of radius $R$."
+ground at=(-0.3,0) width=12.3
+wall at=(0,0) height=1.5 side=left
+spring from=(0,0.55) to=(1.55,0.55) coils=7 label="k"
+mass blk at=(2.0,0.55) size=0.78 label="m"
+rect at=(5.0,0.08) w=2.6 h=0.16 fill=lightgray
+label text="\mu" at=(5.0,0.16) anchor=above
+dim from=(3.7,0) to=(6.3,0) off=-0.7 label="L"
+circle at=(9.0,2.0) r=2.0
+point O at=(9.0,2.0)
+line from=(9.0,2.0) to=(11.0,2.0)
+label text="R" at=(10.0,2.0) anchor=above
+vector from=(9.0,4.0) to=(9.0,3.4)
+label text="mg" at=(9.0,3.6) anchor=right
+vector from=(9.0,4.0) to=(8.1,4.0) label="v_{top}"
+vector from=(9.0,0.07) to=(9.0,1.05) label="N"
+vector from=(7.9,0) to=(8.8,0) label="v_{bot}"
+point P at=(10.231,3.576)
+line from=(9.0,2.0) to=(10.231,3.576) style=dashed
+angle at=(9.0,2.0) from=52 to=90 value="\theta" r=0.8
+vector from=(10.231,3.576) to=(9.55,4.1) label="v"
+```
