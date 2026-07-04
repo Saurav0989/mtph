@@ -36,6 +36,12 @@ jobs:
         run: |
           python python/tools/gen_conformance.py
           git diff --exit-code spec/conformance || (echo "conformance corpus is stale — run gen_conformance.py" && exit 1)
+      - name: Regenerate mutation corpus (must be committed / no drift)
+        run: |
+          python python/tools/gen_mutations.py
+          git diff --exit-code spec/mutations || (echo "mutation corpus is stale — run gen_mutations.py" && exit 1)
+      - name: Mutation harness tests
+        run: pytest python/tests/test_mutations.py -q
       - uses: actions/setup-node@v4
         with: { node-version: "22", cache: npm, cache-dependency-path: js/package-lock.json }
       - name: JS conformance
