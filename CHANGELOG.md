@@ -8,6 +8,19 @@ All notable changes to mtph are documented here. Format loosely follows
 Toward v0.2 — making the format *honest* and giving it *feedback*.
 
 ### Added
+- **Verifier QA harness — a committed mutation corpus + catch-rate report.** Before writing new
+  checkers, mtph now *measures* the ones it has. `python/tools/gen_mutations.py` applies five small,
+  realistic mutation operators (`signflip`, `factor`, `trig`, `power`, `unit`) to the annotated
+  examples and writes a committed, diffable corpus (`spec/mutations/*.mtph` + `manifest.json`);
+  `python/tools/mutation_report.py` runs `mtph verify` over it and prints a per-class **confusion
+  table** — catch rate and false-positive rate, with `--assert-bar` for the published target
+  (≥80% of seeded gross errors caught, <5% false positives). Each mutant is one textual slip that
+  still parses and validates, tagged with the finding id that *should* catch it, so a *missed*
+  mutant is counted honestly rather than hidden (P4). The corpus regenerates deterministically and
+  is CI-gated exactly like the conformance gold. Curated examples (`incline`, `projectile-range`,
+  `loop-the-loop`, `rotating-hoop`, …) gain `symbols:`/`test:`/`check:` annotations so the dimension
+  and numeric checks have something to bite on. Dev tooling only — the format, `schema.json`, and
+  both renderers are untouched, and every example still verifies `ok`.
 - **Numeric spot-check of answers (`check:` + `test:`).** Dimensional analysis is blind to a
   numeric slip — `\tfrac12 mv^2` and `2mv^2` share a dimension. Now give an answer's symbols a
   numeric `test` value (a `symbols:` entry may be `{ dim, test }` instead of a bare dimension

@@ -39,6 +39,11 @@ pip install -e ".[app]"                                     # native viewer wind
   schema, so keep it implementation-neutral.
 - **A new DSL command or block type needs four things:** a `SPEC.md` entry, a compiler/renderer
   implementation, an entry in `AGENTS.md` (so AIs know it exists), and a test.
+- **The generated corpora are committed, never hand-edited.** `spec/conformance/` (the Python↔JS
+  parity gold) and `spec/mutations/` (the verifier QA corpus) are produced by
+  `python/tools/gen_conformance.py` and `python/tools/gen_mutations.py`. Change the reference
+  behaviour, then *regenerate and commit the result* — CI runs each generator and
+  `git diff --exit-code`s, so a hand-edit or an un-regenerated change fails the build.
 - Keep core dependencies minimal; heavy/optional features (PNG export, native window) go behind
   extras.
 - The renderer must **never crash to empty output** — any error renders a readable error page
