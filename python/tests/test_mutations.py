@@ -138,3 +138,17 @@ def test_manifest_integrity():
             for touched in mtext.splitlines()[j1:j2]:
                 assert "criteria:" not in touched, f"{e['file']} mutated a grading criteria"
                 assert "\\label{" not in touched, f"{e['file']} mutated a labelled display block"
+
+
+def test_report_contract():
+    """`mutation_report.run()` returns the shape plans 12-14 consume, and no clean annotated
+    example false-alarms (principle P4 — a mismatch finding is never a false alarm)."""
+    import mutation_report as mr
+
+    m = mr.run()
+    assert set(m) >= {"caught", "missed", "false_pos", "catch_rate", "fp_rate", "by_class"}
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    assert m["caught"] + m["missed"] == len(manifest)
+    assert set(m["by_class"]) >= {"signflip", "factor", "trig", "power", "unit"}
+    assert 0.0 <= m["catch_rate"] <= 1.0
+    assert m["false_pos"] == 0 and m["fp_rate"] == 0.0, "a clean example raised a spurious error"
