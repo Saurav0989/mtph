@@ -80,6 +80,14 @@
     "id": "earnshaw-trap",
     "notation": "american",
     "subject": "physics",
+    "symbols": {
+      "Q": "charge",
+      "a": "length",
+      "phi": "potential",
+      "q": "charge",
+      "x": "length",
+      "y": "length"
+    },
     "tags": [
       "electrostatics",
       "earnshaw",

@@ -11,12 +11,13 @@ params:
   v0: { min: 8, max: 25, default: 20, unit: "m/s" }
 symbols:
   R: length
-  v_0: velocity
-  g: acceleration
-  theta: angle
+  v_0: { dim: velocity, test: 20 }
+  g: { dim: acceleration, test: 9.8 }
+  theta: { dim: angle, test: 0.5236 }
 answer:
   type: expression
   value: 'R = \frac{v_0^2 \sin(2\theta)}{g}'
+  check: 35.35
 solution: |
   The time of flight is $T = \tfrac{2 v_0 \sin\theta}{g}$, and the horizontal range is
   $$R = v_0\cos\theta \cdot T = \frac{v_0^2 \sin 2\theta}{g},$$

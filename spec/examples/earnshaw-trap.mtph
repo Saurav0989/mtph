@@ -7,6 +7,13 @@ topic: electromagnetism/electrostatics
 difficulty: 5
 notation: american
 tags: [electrostatics, earnshaw, saddle, stability, false-attractor, domain-collision]
+symbols:
+  q: charge
+  Q: charge
+  a: length
+  x: length
+  y: length
+  phi: potential
 grading:
   - part: a
     points: 2

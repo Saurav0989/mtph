@@ -72,6 +72,11 @@
     "id": "two-expansions",
     "notation": "american",
     "subject": "physics",
+    "symbols": {
+      "T": "temperature",
+      "V": "volume",
+      "n": "dimensionless"
+    },
     "tags": [
       "entropy",
       "state-function",

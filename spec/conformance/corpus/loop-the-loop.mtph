@@ -6,9 +6,18 @@ subject: physics
 topic: mechanics/energy-circular-motion
 difficulty: 5
 tags: [energy, friction, circular-motion, hooke, jee-advanced]
+symbols:
+  d_min: length
+  m: { dim: mass, test: 1 }
+  g: { dim: acceleration, test: 9.8 }
+  k: { dim: spring_constant, test: 100 }
+  mu: { dim: dimensionless, test: 0.5 }
+  L: { dim: length, test: 2 }
+  R: { dim: length, test: 1 }
 answer:
   type: expression
   value: 'd_{\min} = \sqrt{\dfrac{mg}{k}\,(2\mu L + 5R)}'
+  check: 0.828
 solution: |
   **(a) Minimum compression.** Let the loop (radius $R$) be smooth. To *just* complete the
   loop, gravity alone supplies the centripetal force at the top:

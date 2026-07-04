@@ -72,6 +72,12 @@
     "id": "rotating-hoop",
     "notation": "irodov",
     "subject": "physics",
+    "symbols": {
+      "R": "length",
+      "g": "acceleration",
+      "m": "mass",
+      "omega": "angularvelocity"
+    },
     "tags": [
       "rotating-frame",
       "effective-potential",

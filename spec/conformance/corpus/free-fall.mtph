@@ -6,6 +6,10 @@ subject: physics
 topic: mechanics/kinematics
 difficulty: 1
 tags: [kinematics, free-fall, energy]
+symbols:
+  v: velocity
+  g: acceleration
+  h: length
 answer:
   type: numeric
   value: 19.8

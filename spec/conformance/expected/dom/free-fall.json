@@ -24,6 +24,11 @@
     "id": "free-fall",
     "solution": "Energy conservation gives $\\tfrac{1}{2}v^2 = gh$, so $v = \\sqrt{2gh}$. With $g = 9.8\\,$m/s²\nand $h = 20\\,$m, $v = \\sqrt{2\\cdot 9.8\\cdot 20} \\approx 19.8\\,$m/s.\n",
     "subject": "physics",
+    "symbols": {
+      "g": "acceleration",
+      "h": "length",
+      "v": "velocity"
+    },
     "tags": [
       "kinematics",
       "free-fall",

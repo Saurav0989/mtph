@@ -12,6 +12,7 @@
   ],
   "meta": {
     "answer": {
+      "check": 4.9,
       "type": "expression",
       "value": "a = g\\sin\\theta"
     },
@@ -21,9 +22,15 @@
     "subject": "physics",
     "symbols": {
       "a": "acceleration",
-      "g": "acceleration",
+      "g": {
+        "dim": "acceleration",
+        "test": 9.8
+      },
       "m": "mass",
-      "theta": "angle"
+      "theta": {
+        "dim": "angle",
+        "test": 0.5236
+      }
     },
     "tags": [
       "newton",

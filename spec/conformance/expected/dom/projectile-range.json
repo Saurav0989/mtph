@@ -15,6 +15,7 @@
   ],
   "meta": {
     "answer": {
+      "check": 35.35,
       "type": "expression",
       "value": "R = \\frac{v_0^2 \\sin(2\\theta)}{g}"
     },
@@ -38,9 +39,18 @@
     "subject": "physics",
     "symbols": {
       "R": "length",
-      "g": "acceleration",
-      "theta": "angle",
-      "v_0": "velocity"
+      "g": {
+        "dim": "acceleration",
+        "test": 9.8
+      },
+      "theta": {
+        "dim": "angle",
+        "test": 0.5236
+      },
+      "v_0": {
+        "dim": "velocity",
+        "test": 20
+      }
     },
     "tags": [
       "projectile",

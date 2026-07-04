@@ -7,6 +7,10 @@ topic: thermodynamics/entropy
 difficulty: 4
 notation: american
 tags: [entropy, state-function, free-expansion, irreversibility, false-attractor]
+symbols:
+  n: dimensionless
+  V: volume
+  T: temperature
 grading:
   - part: a
     points: 3

@@ -7,6 +7,11 @@ topic: mechanics/rotating-frames
 difficulty: 4
 notation: irodov
 tags: [rotating-frame, effective-potential, bifurcation, false-attractor, limiting-case]
+symbols:
+  m: mass
+  g: acceleration
+  R: length
+  omega: angularvelocity
 grading:
   - part: a
     points: 3
