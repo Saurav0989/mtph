@@ -21,6 +21,16 @@ Toward v0.2 — making the format *honest* and giving it *feedback*.
   `loop-the-loop`, `rotating-hoop`, …) gain `symbols:`/`test:`/`check:` annotations so the dimension
   and numeric checks have something to bite on. Dev tooling only — the format, `schema.json`, and
   both renderers are untouched, and every example still verifies `ok`.
+- **Multi-point sampling & expression equivalence (`mathr.equiv`).** The numeric layer graduates
+  from one test point to *K* sampled points, and gains the primitive every later checker rests on:
+  `equivalent(a, b, symbols)` — *are two LaTeX expressions the same function of the declared
+  symbols?* It returns `True` only when every evaluable sample agrees (relative `1e-6`), `False` on
+  any real disagreement, and `None` when it can't fully evaluate both sides — so it tells
+  genuinely different functions apart even when they coincide at one point (`\sin\theta` vs
+  `\tan\theta` near `\theta=0`), and a `False` is never a guess (P4). A symbol's `test:` may now be
+  a **`{ from, to }` range** (schema-additive; flows through the JS validator unchanged) sampled
+  deterministically; a range-only symbol used by a `check:` reports the new
+  **`numeric.unpinned_symbol`** warning. This is the engine the `solution` step-checker consumes.
 - **Numeric spot-check of answers (`check:` + `test:`).** Dimensional analysis is blind to a
   numeric slip — `\tfrac12 mv^2` and `2mv^2` share a dimension. Now give an answer's symbols a
   numeric `test` value (a `symbols:` entry may be `{ dim, test }` instead of a bare dimension

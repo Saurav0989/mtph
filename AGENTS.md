@@ -122,8 +122,8 @@ single-backslash world (no YAML escaping) and lets a solution contain figures/pl
   marking rubric with a total. (It's YAML, so single-quote any criteria containing LaTeX.)
 - Optional **`symbols:`** — map each answer symbol to its dimension (`a: acceleration`,
   `k: force/length`, `E: M L^2 T^-2`); `mtph verify` dimension-checks the answer (`dimension.mismatch`).
-  Add a symbol `test:` value (`L: {dim: length, test: 1}`) + an answer **`check:`** number and it also
-  spot-checks the arithmetic (`numeric.mismatch`) — the factor-of-2/sign slip dimensions miss. (SPEC §6.3.)
+  Add a symbol `test:` value (`L: {dim: length, test: 1}`, or a `{from, to}` range for stronger
+  multi-point checks) + an answer **`check:`** number → it spot-checks the arithmetic (`numeric.mismatch`). (SPEC §6.3.)
 - Optional **`params:`** in front-matter — declare `{ min, max, default, unit? }` and reference it
   as `{{name}}` in a figure/plot to make the problem *explorable* (a slider in the viewer). Static
   output uses the `default`, so it stays deterministic. Great for "how does the trajectory change

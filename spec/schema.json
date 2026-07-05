@@ -128,8 +128,21 @@
                     "description": "Physical dimension (same grammar as the string form)."
                   },
                   "test": {
-                    "type": "number",
-                    "description": "A numeric test value to substitute for this symbol when spot-checking answers."
+                    "description": "A test value for this symbol. A number pins it (used to numerically spot-check an answer's `check`); an object `{from, to}` gives a sampling range that drives multi-point equivalence checks (`mtph verify` samples it deterministically).",
+                    "oneOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "from": { "type": "number" },
+                          "to": { "type": "number" }
+                        },
+                        "required": ["from", "to"],
+                        "additionalProperties": false
+                      }
+                    ]
                   }
                 },
                 "minProperties": 1,

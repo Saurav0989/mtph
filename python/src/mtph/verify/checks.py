@@ -17,6 +17,7 @@ from ..diagram.dsl import DiagramSyntaxError
 from ..diagram.inspect import inspect_figure
 from ..diagram.plot import PlotError, make_func, make_func2, parse_plot
 from ..mathr.dimension import (
+    _tok_latex,
     dim_of_latex,
     normalize_symbol,
     parse_dim_spec,
@@ -538,15 +539,23 @@ def _symbol_dim_test(spec):
     """Read a ``symbols:`` value in either form → ``(dim_spec_or_None, test_or_None)``.
 
     The value is a string (the dimension spec) *or* an object ``{dim?, test?}`` carrying the
-    dimension and/or a numeric test value. A test-only symbol has no dimension (``dim`` is None)."""
+    dimension and/or a test value. The test is a pinned ``float``, a ``(lo, hi)`` range tuple
+    (the ``{from, to}`` sampling form — plan 12), or ``None``. A test-only symbol has no
+    dimension (``dim`` is None)."""
     if isinstance(spec, str):
         return spec, None
     if isinstance(spec, dict):
         dim = spec.get("dim")
-        test = spec.get("test")
         dim = dim if isinstance(dim, str) else None
-        test = float(test) if isinstance(test, (int, float)) and not isinstance(test, bool) else None
-        return dim, test
+        test = spec.get("test")
+        if isinstance(test, (int, float)) and not isinstance(test, bool):
+            return dim, float(test)
+        if isinstance(test, dict):
+            lo, hi = test.get("from"), test.get("to")
+            if (isinstance(lo, (int, float)) and not isinstance(lo, bool)
+                    and isinstance(hi, (int, float)) and not isinstance(hi, bool)):
+                return dim, (float(lo), float(hi))
+        return dim, None
     return None, None
 
 
@@ -623,6 +632,15 @@ def _answer_checks(ctx: Context):
         yield from one(f"answers[{i}].value", a)
 
 
+def _expr_symbols(value: str) -> set:
+    """The normalized symbol names referenced on an answer expression's right-hand side."""
+    rhs = value.rsplit("=", 1)[1] if "=" in value else value
+    try:
+        return {t[1] for t in _tok_latex(rhs) if t[0] == "sym"}
+    except Exception:
+        return set()
+
+
 def check_numeric(ctx: Context) -> CheckResult:
     """Numeric spot-check: evaluate an answer expression at the symbols' ``test`` values and confirm
     it equals the declared ``check``. This catches a dropped factor or a flipped sign — errors a
@@ -637,14 +655,31 @@ def check_numeric(ctx: Context) -> CheckResult:
                            message="no answer declares a `check:` value; numeric spot-check not run.")
     symbols = ctx.doc.meta.get("symbols")
     test_values: dict = {}
+    ranged: set = set()  # symbols declared with a `{from,to}` range but no pinned value (plan 12)
     if isinstance(symbols, dict):
         for name, spec in symbols.items():
             _, test = _symbol_dim_test(spec)
-            if test is not None:
-                test_values[normalize_symbol(str(name))] = test
+            nn = normalize_symbol(str(name))
+            if isinstance(test, tuple):
+                ranged.add(nn)
+            elif test is not None:
+                test_values[nn] = test
 
     findings: List[Finding] = []
     for label, value, expected in checks:
+        # A `check:` is one specific substitution, so every symbol it references must be *pinned*.
+        # A range-only symbol can't answer "what number?" → a precise warning, not a silent bail.
+        unpinned = sorted(ranged & _expr_symbols(value))
+        if unpinned:
+            for s in unpinned:
+                findings.append(Finding(
+                    id="numeric.unpinned_symbol", severity="warning",
+                    message=(f"{label}: declares `check: {expected:g}`, but `{s}` has a `test:` "
+                             f"range, not a single value — a `check:` needs one substitution."),
+                    fix=(f"pin a `test:` value for {s} (ranges drive equivalence checks, not "
+                         f"`check:`) — or drop `check:`."),
+                    line=_find_line(ctx.text, value), context=label))
+            continue
         got = eval_latex(value, test_values)
         if got is None:
             findings.append(Finding(

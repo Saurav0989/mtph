@@ -8,10 +8,10 @@ difficulty: 4
 notation: irodov
 tags: [rotating-frame, effective-potential, bifurcation, false-attractor, limiting-case]
 symbols:
-  m: mass
-  g: acceleration
-  R: length
-  omega: angularvelocity
+  m: { dim: mass, test: 1 }
+  g: { dim: acceleration, test: 9.8 }
+  R: { dim: length, test: 1 }
+  omega: { dim: angularvelocity, test: { from: 3.5, to: 6.0 } }
 grading:
   - part: a
     points: 3

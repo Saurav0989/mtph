@@ -419,6 +419,23 @@ un-checked, never a false mismatch) on `\log` (ambiguous base), an undeclared sy
 shorthand such as `\frac12` (write `\frac{1}{2}`). No answer declares `check:` → the `numeric`
 group is `unknown`.
 
+A `test` value may also be a **sampling range** `{ from, to }` instead of a pinned number
+(v0.3). A range doesn't answer "what number?" for a `check:` — it drives *multi-point
+equivalence* checks (the `solution` group, §6.3.2), which compare two expressions at several
+sampled points and so tell genuinely different functions apart even when they agree at one point
+(`\sin\theta` vs `\tan\theta` near `\theta=0`). Sampling is deterministic (a fixed seed), so
+`verify` output never varies run to run.
+
+```yaml
+symbols:
+  g: { dim: acceleration, test: 9.8 }         # pinned — a single value
+  theta: { dim: angle, test: { from: 0.2, to: 1.2 } }   # a range — sampled uniformly
+```
+
+A `check:` needs one specific substitution, so every symbol its answer references must be
+**pinned**. If one is range-only, `verify` reports **`numeric.unpinned_symbol`** (warning): pin a
+`test:` value for it, or drop `check:` (ranges are for equivalence checks, not `check:`).
+
 ### 6.4 Explorable parameters (v0.2)
 
 Declare `params:` in front-matter and reference them as `{{name}}` inside figure/plot sources. A

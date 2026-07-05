@@ -37,6 +37,19 @@ def test_examples_validate(path):
     assert validate(load(path)) == []
 
 
+def test_symbol_test_range_form_validates():
+    """Plan 12: a symbol's `test:` may be a pinned number *or* a `{from, to}` sampling range.
+    Both forms validate; a range missing an endpoint or with a stray key does not."""
+    base = ('---\nmtph: "0.2"\nid: r\ntitle: T\nsubject: physics\n'
+            "symbols:\n  {SYM}\n---\n\nbody $x$\n")
+    assert validate(parse(base.replace("{SYM}", "theta: { test: { from: 0.1, to: 1.2 } }"))) == []
+    assert validate(parse(base.replace("{SYM}", "g: { dim: acceleration, test: 9.8 }"))) == []
+    # a range needs both endpoints
+    assert validate(parse(base.replace("{SYM}", "theta: { test: { from: 0.1 } }"))) != []
+    # no extra keys inside the range object
+    assert validate(parse(base.replace("{SYM}", "theta: { test: { from: 0, to: 1, mid: 0.5 } }"))) != []
+
+
 def test_both_format_versions_validate():
     # 0.2 is a backward-compatible superset; 0.1 files must still validate (same MAJOR).
     from mtph import SCHEMA_VERSION

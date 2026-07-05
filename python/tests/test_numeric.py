@@ -137,3 +137,18 @@ def test_check_unknown_without_any_check():
     rep = verify(text)
     c = next(cc for cc in rep.checks if cc.group == "numeric")
     assert c.status == "unknown"
+
+
+def test_check_unpinned_range_symbol_warns():
+    """Plan 12 decision 5: a `check:` needs a single substitution, so a symbol the answer uses
+    that carries a `test:` range (not a pinned number) can't satisfy it — a precise warning
+    naming the symbol, not a silent bail or a false mismatch."""
+    doc = _DOC.replace("test: 9.8", "test: { from: 9.0, to: 10.0 }")  # g becomes range-only
+    rep = verify(doc.replace("{VAL}", r"T = 2\pi\sqrt{L/g}").replace("{CHECK}", "2.007"))
+    grp = next(cc for cc in rep.checks if cc.group == "numeric")
+    assert grp.status == "warning"
+    ids = {f.id for f in grp.findings}
+    assert ids == {"numeric.unpinned_symbol"}
+    f = grp.findings[0]
+    assert "g" in f.message and "range" in f.message
+    assert "drop `check:`" in f.fix
