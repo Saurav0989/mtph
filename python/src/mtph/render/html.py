@@ -456,6 +456,7 @@ def render_html(
     grid: bool = False,
     subset: bool = True,
     quiz: bool = False,
+    badge: Optional[str] = None,
 ) -> str:
     """Render ``doc`` to an HTML string.
 
@@ -465,6 +466,9 @@ def render_html(
         (drops Fraktur/Script/Typewriter/SansSerif/Caligraphic when unused). Safe; on by default.
     quiz: render the answer section as a self-quiz (input + tolerance check / clickable choices,
         with a reveal) instead of the plain answer aside.
+    badge: an optional honest verification line rendered under the title (a `<p class=
+        "mtph-verified">`). Composed only by the CLI (`mtph render --badge`), never by the
+        renderer on its own, so default output — and the JS port — stay untouched.
     """
     mode = _resolve_mode(katex)
     drop = _font_drop_set(doc) if (mode == "inline" and subset) else frozenset()
@@ -474,6 +478,8 @@ def render_html(
         aside = _render_quiz(doc, grid, labels) if quiz else _render_aside(doc, grid=grid, labels=labels)
     body = (
         _render_header(doc.meta)
+        + (f'\n<p class="mtph-verified" style="color:var(--muted);font-size:.8rem;'
+           f'margin:.2rem 0 1rem">{html.escape(badge)}</p>' if badge else "")
         + "\n"
         + _render_blocks(doc, grid=grid, labels=labels)
         + (("\n" + aside) if include_answer else "")

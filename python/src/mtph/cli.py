@@ -342,6 +342,26 @@ def _print_inspect_human(results) -> None:
         _print_scene_human(r)
 
 
+def _verified_badge(file: Path) -> Optional[str]:
+    """Compose the honest verification badge for ``--badge``: only when verify confirms at least
+    one checked solution step and reports no error anywhere. Any error → no badge + a stderr note
+    (the renderer never invents a badge on its own — principle P1)."""
+    import datetime
+
+    from .verify import verify
+
+    rep = verify(file.read_text(encoding="utf-8"), path=str(file))
+    sol = next((c for c in rep.checks if c.group == "solution"), None)
+    steps = sol.extra.get("steps_checked", 0) if sol else 0
+    if steps >= 1 and rep.status != "error":
+        pts = sol.extra.get("points", 0)
+        return (f"solution checked ✓ — {steps} step(s) at {pts} sample point(s) "
+                f"({datetime.date.today().isoformat()})")
+    typer.secho("note: --badge skipped — verify found no checked solution step (or an error).",
+                fg=typer.colors.YELLOW, err=True)
+    return None
+
+
 @app.command()
 def render(
     file: Path = typer.Argument(..., help="The .mtph file to render."),
@@ -358,6 +378,9 @@ def render(
                                   "lighter than inline. Paste into a claude.ai HTML artifact."),
     quiz: bool = typer.Option(False, "--quiz", help="Render the answer as an interactive self-quiz "
                               "(input + tolerance check / clickable choices, with a reveal)."),
+    badge: bool = typer.Option(False, "--badge", help="Add an honest 'solution checked ✓' line "
+                               "under the title — only if verify confirms ≥1 solution step and "
+                               "finds no error (HTML only)."),
 ) -> None:
     """Render a .mtph file to HTML (default), PNG, or SVG."""
     try:
@@ -379,8 +402,10 @@ def render(
     try:
         if fmt == "html":
             katex_mode = "cdnjs" if artifact else "cdn" if cdn else "auto"
+            badge_str = _verified_badge(file) if badge else None
             output.write_text(
-                render_html(doc, include_answer=not no_answer, grid=grid, katex=katex_mode, quiz=quiz),
+                render_html(doc, include_answer=not no_answer, grid=grid, katex=katex_mode,
+                            quiz=quiz, badge=badge_str),
                 encoding="utf-8",
             )
         elif fmt in ("png", "svg"):

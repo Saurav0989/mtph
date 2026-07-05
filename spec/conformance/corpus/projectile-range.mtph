@@ -19,8 +19,9 @@ answer:
   value: 'R = \frac{v_0^2 \sin(2\theta)}{g}'
   check: 35.35
 solution: |
-  The time of flight is $T = \tfrac{2 v_0 \sin\theta}{g}$, and the horizontal range is
-  $$R = v_0\cos\theta \cdot T = \frac{v_0^2 \sin 2\theta}{g},$$
+  The range is the horizontal speed times the time of flight. Writing the flight time as
+  $2 v_0\sin\theta/g$ and using $2\sin\theta\cos\theta = \sin 2\theta$,
+  $$R = v_0\cos\theta \cdot \frac{2 v_0 \sin\theta}{g} = \frac{v_0^2 \sin(2\theta)}{g},$$
   which is largest at $\theta = 45^\circ$.
 ---
 

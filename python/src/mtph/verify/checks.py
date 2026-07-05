@@ -704,6 +704,25 @@ def check_numeric(ctx: Context) -> CheckResult:
     return CheckResult("numeric", findings)
 
 
+def check_solution(ctx: Context) -> CheckResult:
+    """Numerically check the equation chain already inside the solution (plan 13).
+
+    Splits solution display math into rows and top-level ``=`` chains and compares each adjacent
+    pair — and the final result against the declared answer — with plan 12's multi-point sampler.
+    A step that fails is ``solution.step_mismatch`` (error); one that can't be evaluated is tallied
+    *unverifiable*, never a silent pass (P4). No checkable equality (no ``symbols:``, or only
+    prose/approximate steps) → ``unknown``. The walk lives in :mod:`.solution`."""
+    from .solution import check_solution as _walk_solution
+
+    symbols = ctx.doc.meta.get("symbols")
+    answer_specs = list(_answer_specs(ctx))
+    findings, extra, unknown_msg = _walk_solution(
+        ctx.doc, ctx.text, answer_specs, symbols, lambda needle: _find_line(ctx.text, needle))
+    if unknown_msg is not None:
+        return CheckResult("solution", findings, declared="unknown", message=unknown_msg, extra=extra)
+    return CheckResult("solution", findings, extra=extra)
+
+
 def check_notation(ctx: Context) -> CheckResult:
     # With a declared `notation:` pack we check convention drift; without one we honestly report
     # `unknown` (principle P4 — never a false `ok`).
@@ -737,10 +756,13 @@ def check_notation(ctx: Context) -> CheckResult:
 
 
 def check_content(ctx: Context) -> CheckResult:
-    # Physical correctness, answer↔solution agreement, difficulty justification: a human must
-    # judge these. Never report `ok` here (principle P4).
+    # Mathematical consistency is now checked by the `solution` group (plan 13). What remains for a
+    # human is the physics: modeling assumptions, whether the result is physically reasonable, and
+    # difficulty justification. Never report `ok` here (principle P4).
     return CheckResult("content", declared="unknown",
-                       message="answer/solution correctness and physics need human review.")
+                       message="modeling assumptions and physical reasonableness need human review "
+                               "(mathematical consistency is checked by the `solution` group when "
+                               "symbols are declared).")
 
 
 # Ordered registry — name -> function. Order is leverage order.
@@ -755,6 +777,7 @@ CHECKS: List[tuple] = [
     ("params", check_params),
     ("dimension", check_dimension),
     ("numeric", check_numeric),
+    ("solution", check_solution),
     ("notation", check_notation),
     ("content", check_content),
 ]

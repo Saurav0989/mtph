@@ -55,6 +55,9 @@ class CheckResult:
     # (e.g. content correctness, or a check we can't run in this environment).
     declared: Optional[str] = None
     message: str = ""  # for unknown/empty groups, why
+    # structured group-level counts (e.g. the `solution` group's step tallies) — machine-readable
+    # evidence for what was and wasn't checked. Emitted in ``to_dict`` only when non-empty.
+    extra: Dict[str, Any] = field(default_factory=dict)
 
     @property
     def status(self) -> str:
@@ -70,6 +73,8 @@ class CheckResult:
         d: Dict[str, Any] = {"status": self.status}
         if self.message:
             d["message"] = self.message
+        if self.extra:
+            d["extra"] = self.extra
         if self.findings:
             d["findings"] = [f.to_dict() for f in self.findings]
         return d

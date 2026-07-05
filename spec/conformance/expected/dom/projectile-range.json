@@ -35,7 +35,7 @@
         "unit": "m/s"
       }
     },
-    "solution": "The time of flight is $T = \\tfrac{2 v_0 \\sin\\theta}{g}$, and the horizontal range is\n$$R = v_0\\cos\\theta \\cdot T = \\frac{v_0^2 \\sin 2\\theta}{g},$$\nwhich is largest at $\\theta = 45^\\circ$.\n",
+    "solution": "The range is the horizontal speed times the time of flight. Writing the flight time as\n$2 v_0\\sin\\theta/g$ and using $2\\sin\\theta\\cos\\theta = \\sin 2\\theta$,\n$$R = v_0\\cos\\theta \\cdot \\frac{2 v_0 \\sin\\theta}{g} = \\frac{v_0^2 \\sin(2\\theta)}{g},$$\nwhich is largest at $\\theta = 45^\\circ$.\n",
     "subject": "physics",
     "symbols": {
       "R": "length",
