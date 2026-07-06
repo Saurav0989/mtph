@@ -436,6 +436,40 @@ A `check:` needs one specific substitution, so every symbol its answer reference
 **pinned**. If one is range-only, `verify` reports **`numeric.unpinned_symbol`** (warning): pin a
 `test:` value for it, or drop `check:` (ranges are for equivalence checks, not `check:`).
 
+#### 6.3.2 Solution step checking (v0.3)
+
+The equations of a worked solution are a chain of claimed equalities — and `verify`'s `solution`
+group **reads them**. There is no new syntax: write the derivation as display math (`$$…$$`, or
+```` ```math ```` inside a ```` ```solution ```` block) as you already would, and verify checks it
+numerically. Each display row is split into its top-level `=` chain, and every adjacent pair is
+compared with the multi-point sampler (§6.3.1) at the symbols' `test` values:
+
+```
+$$T = \frac{2\pi}{\sqrt{g/L}} = 2\pi\sqrt{\frac{L}{g}}.$$   # two segments checked as one pair
+```
+
+- **`solution.step_mismatch`** (error) — two sides of a `=` disagree numerically (an algebra slip);
+  the message quotes both segments, the sample-point count, and the max relative error.
+- **`solution.answer_mismatch`** (error) — the solution's result disagrees with the declared
+  answer. Agreement is **quantity-aware**: an answer `LHS = RHS` is paired with the solution line
+  that derives *that same left-hand side*, so a multi-part problem never compares part (b)'s answer
+  against part (a)'s working. A compound answer (several top-level `=`) is not paired.
+- **`solution.step_unverifiable`** (info) — some step couldn't be evaluated (a symbol lacks a
+  `test:`, or the step uses something the evaluator won't guess at). Reported, never a silent pass
+  (P4). A rounded *dependent* intermediate (e.g. pinning `v=\sqrt{2gh}` to `19.8`) will not verify
+  exactly — declare the **independent** symbols and let the identity hold for all of them.
+
+A row containing `\approx`, an inequality, `\pm`, `\to`, `\Rightarrow`, `\propto`, … is not a
+checkable equality and is skipped. No declared `symbols:` (or only prose/approximate steps) → the
+group is `unknown`. Rendering can carry an **honest badge** — `mtph render --badge` injects a
+`solution checked ✓ — N steps at K sample points` line **only** when the `solution` group checked
+≥1 step with zero errors anywhere (otherwise it renders with no badge and notes why on stderr).
+
+Across the annotated example bank the checkers catch **≥80%** of seeded gross errors at **<5%**
+false positives — a bar enforced in CI (`mutation_report.py --assert-bar`); the residual misses are
+documented blind spots (conceptual answers with no test values; solution steps that substitute
+on-shell values into undeclared intermediates), counted honestly as missed.
+
 ### 6.4 Explorable parameters (v0.2)
 
 Declare `params:` in front-matter and reference them as `{{name}}` inside figure/plot sources. A

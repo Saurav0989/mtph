@@ -149,20 +149,31 @@ MUTATIONS = _ROOT / "spec" / "mutations"
 # What SHOULD catch each mutant, by its nature — not what today's verifier happens to emit. A
 # mutation of an answer expression is a dimension/numeric error; a mutation buried in a solution
 # step is `solution.step_mismatch` (plan 13) and so is honestly *missed* until that checker lands.
+# A mutation is legitimately *caught* by any check that should logically bite on that error:
+# a wrong answer trips the numeric spot-check *or* the solution↔answer agreement; a wrong
+# solution step trips step checking *or* (if it propagates to the result) answer agreement.
+_ANS = "solution.answer_mismatch"
+_STEP = "solution.step_mismatch"
 EXPECTED: Dict[str, Dict[str, List[str]]] = {
-    "signflip": {"answer": ["numeric.mismatch"], "solution": ["solution.step_mismatch"]},
-    "factor":   {"answer": ["numeric.mismatch"], "solution": ["solution.step_mismatch"]},
-    "trig":     {"answer": ["numeric.mismatch"], "solution": ["solution.step_mismatch"]},
-    "power":    {"answer": ["dimension.mismatch", "numeric.mismatch"],
-                 "solution": ["solution.step_mismatch"]},
+    "signflip": {"answer": ["numeric.mismatch", _ANS], "solution": [_STEP, _ANS]},
+    "factor":   {"answer": ["numeric.mismatch", _ANS], "solution": [_STEP, _ANS]},
+    "trig":     {"answer": ["numeric.mismatch", _ANS], "solution": [_STEP, _ANS]},
+    "power":    {"answer": ["dimension.mismatch", "numeric.mismatch", _ANS],
+                 "solution": [_STEP, _ANS]},
 }
 UNIT_EXPECTED = ["dimension.mismatch"]
+
+
+_DISPLAY_RE = re.compile(r"\$\$(.+?)\$\$", re.S)
 
 
 def _regions(doc) -> List[Tuple[str, str]]:
     """The mutable LaTeX regions of a document as ``(kind, content)`` pairs, in document order.
     ``kind`` is ``answer`` (an answer expression a checker could bite on) or ``solution`` (a
-    solution step). Freeform answers and prose are not targeted."""
+    step of the solution's *display-math derivation*). We seed errors only where a checker looks —
+    the answer, and the display-math chain the `solution` group reads — not into inline prose
+    asides (those are exposition, and an error there is a documented blind spot, not the claim).
+    Freeform answers and prose are not targeted."""
     out: List[Tuple[str, str]] = []
     meta = doc.meta
     ans = meta.get("answer")
@@ -177,12 +188,16 @@ def _regions(doc) -> List[Tuple[str, str]]:
             out.append(("answer", b.value))
     sol = meta.get("solution")
     if isinstance(sol, str):
-        out.append(("solution", sol))
+        out += [("solution", m.group(1)) for m in _DISPLAY_RE.finditer(sol)]
     for b in doc.blocks:
-        if getattr(b, "type", None) == "solution":
-            for c in getattr(b, "children", []) or []:
-                if isinstance(getattr(c, "text", None), str):
-                    out.append(("solution", c.text))
+        if getattr(b, "type", None) != "solution":
+            continue
+        for c in getattr(b, "children", []) or []:
+            t = getattr(c, "type", None)
+            if t == "math":
+                out.append(("solution", c.latex))
+            elif t == "prose" and isinstance(getattr(c, "text", None), str):
+                out += [("solution", m.group(1)) for m in _DISPLAY_RE.finditer(c.text)]
     return out
 
 

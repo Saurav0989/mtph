@@ -22,7 +22,7 @@
     },
     "difficulty": 2,
     "id": "pendulum-period",
-    "solution": "For a small angular displacement the restoring torque gives $\\ddot\\theta = -(g/L)\\theta$ —\nsimple harmonic motion with angular frequency $\\omega = \\sqrt{g/L}$. Hence the period is\n$$T = \\frac{2\\pi}{\\omega} = 2\\pi\\sqrt{\\frac{L}{g}}.$$\n",
+    "solution": "A small angular displacement gives simple harmonic motion whose angular frequency is the\nsquare root of $g/L$. The period is a full turn divided by that frequency:\n$$T = \\frac{2\\pi}{\\sqrt{g/L}} = 2\\pi\\sqrt{\\frac{L}{g}}.$$\n",
     "subject": "physics",
     "symbols": {
       "L": {

@@ -10,7 +10,8 @@ tags: [rotating-frame, effective-potential, bifurcation, false-attractor, limiti
 symbols:
   m: { dim: mass, test: 1 }
   g: { dim: acceleration, test: 9.8 }
-  R: { dim: length, test: 1 }
+  R: { dim: length, test: 1.2 }
+  theta: { dim: angle, test: 0.5236 }
   omega: { dim: angularvelocity, test: { from: 3.5, to: 6.0 } }
 grading:
   - part: a
@@ -83,8 +84,8 @@ $-\tfrac12 mR^2\omega^2\sin^2\theta$; adding gravity gives \ref{eq:Ueff}, and *e
 then just "where are the minima of one function."
 
 **(a)** Height above the bottom is $R(1-\cos\theta)$ and the distance from the spin axis is
-$R\sin\theta$, so $U_{\mathrm{eff}} = -mgR\cos\theta - \tfrac12 mR^2\omega^2\sin^2\theta$ up to a
-constant.
+$R\sin\theta$, so up to a constant
+$$U_{\mathrm{eff}} = -mgR\cos\theta - \tfrac{1}{2}mR^2\omega^2\sin^2\theta.$$
 
 **(b)** $U_{\mathrm{eff}}'(\theta) = mgR\sin\theta - mR^2\omega^2\sin\theta\cos\theta =
 mR\sin\theta\,(g - R\omega^2\cos\theta)$. Zeros: $\sin\theta=0$ (so $\theta=0,\pi$) and

@@ -8,6 +8,22 @@ All notable changes to mtph are documented here. Format loosely follows
 Toward v0.2 — making the format *honest* and giving it *feedback*.
 
 ### Added
+- **Solution step checking — `verify` reads the equation chain inside a `solution`.** No new
+  syntax: write the derivation as display math as you already would, and the new `solution` check
+  group splits each row into its top-level `=` chain and checks every adjacent pair numerically at
+  the symbols' `test` values (via the multi-point sampler). A step that doesn't hold is
+  **`solution.step_mismatch`** (error, quoting both sides + the max relative error); the final
+  result is compared to the declared answer — **quantity-aware**, pairing an answer `LHS = RHS`
+  with the solution line that derives that same left-hand side, so a multi-part problem never
+  cross-compares parts — as **`solution.answer_mismatch`** (error); anything unevaluable is tallied
+  **`solution.step_unverifiable`** (info), never a silent pass (P4). A numeric answer's `unit:` is
+  now dimension-checked against the formula the document derives for that quantity (a speed reported
+  in watts is caught). `mtph render --badge` injects an honest *“solution checked ✓ — N steps at K
+  sample points”* line, but only when ≥1 step checked with zero errors anywhere. On the annotated
+  bank the checkers now catch **82%** of seeded gross errors at **0%** false positives (bar: ≥80% /
+  <5%), enforced in CI via `mutation_report.py --assert-bar`; residual misses are documented blind
+  spots. `check_content`'s old confession (“answer/solution correctness … need human review”) is
+  rewritten to claim exactly what is now true. See SPEC §6.3.2.
 - **Verifier QA harness — a committed mutation corpus + catch-rate report.** Before writing new
   checkers, mtph now *measures* the ones it has. `python/tools/gen_mutations.py` applies five small,
   realistic mutation operators (`signflip`, `factor`, `trig`, `power`, `unit`) to the annotated

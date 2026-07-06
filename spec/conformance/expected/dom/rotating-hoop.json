@@ -43,7 +43,15 @@
     {
       "blocks": [
         {
-          "text": "**Necessary insight.** In the rotating frame the centrifugal force derives from a potential\n$-\\tfrac12 mR^2\\omega^2\\sin^2\\theta$; adding gravity gives \\ref{eq:Ueff}, and *every* question is\nthen just \"where are the minima of one function.\"\n\n**(a)** Height above the bottom is $R(1-\\cos\\theta)$ and the distance from the spin axis is\n$R\\sin\\theta$, so $U_{\\mathrm{eff}} = -mgR\\cos\\theta - \\tfrac12 mR^2\\omega^2\\sin^2\\theta$ up to a\nconstant.\n\n**(b)** $U_{\\mathrm{eff}}'(\\theta) = mgR\\sin\\theta - mR^2\\omega^2\\sin\\theta\\cos\\theta =\nmR\\sin\\theta\\,(g - R\\omega^2\\cos\\theta)$. Zeros: $\\sin\\theta=0$ (so $\\theta=0,\\pi$) and\n$\\cos\\theta = g/(R\\omega^2)$, which has a solution only once $R\\omega^2 > g$, i.e.\n$\\omega_c = \\sqrt{g/R}$.\n\n**(c)** $U_{\\mathrm{eff}}''(0) = mR(g - R\\omega^2)$. For $\\omega<\\omega_c$ this is positive — the\nbottom is stable, exactly the pendulum intuition. For $\\omega>\\omega_c$ it is negative: the bottom\nbecomes a local maximum (the false attractor fails) and the two symmetric tilted angles $\\theta_\\pm$\nare the new minima. Spinning faster makes the bead *climb*.",
+          "text": "**Necessary insight.** In the rotating frame the centrifugal force derives from a potential\n$-\\tfrac12 mR^2\\omega^2\\sin^2\\theta$; adding gravity gives \\ref{eq:Ueff}, and *every* question is\nthen just \"where are the minima of one function.\"\n\n**(a)** Height above the bottom is $R(1-\\cos\\theta)$ and the distance from the spin axis is\n$R\\sin\\theta$, so up to a constant",
+          "type": "prose"
+        },
+        {
+          "latex": "U_{\\mathrm{eff}} = -mgR\\cos\\theta - \\tfrac{1}{2}mR^2\\omega^2\\sin^2\\theta.",
+          "type": "math"
+        },
+        {
+          "text": "**(b)** $U_{\\mathrm{eff}}'(\\theta) = mgR\\sin\\theta - mR^2\\omega^2\\sin\\theta\\cos\\theta =\nmR\\sin\\theta\\,(g - R\\omega^2\\cos\\theta)$. Zeros: $\\sin\\theta=0$ (so $\\theta=0,\\pi$) and\n$\\cos\\theta = g/(R\\omega^2)$, which has a solution only once $R\\omega^2 > g$, i.e.\n$\\omega_c = \\sqrt{g/R}$.\n\n**(c)** $U_{\\mathrm{eff}}''(0) = mR(g - R\\omega^2)$. For $\\omega<\\omega_c$ this is positive — the\nbottom is stable, exactly the pendulum intuition. For $\\omega>\\omega_c$ it is negative: the bottom\nbecomes a local maximum (the false attractor fails) and the two symmetric tilted angles $\\theta_\\pm$\nare the new minima. Spinning faster makes the bead *climb*.",
           "type": "prose"
         }
       ],
@@ -75,7 +83,7 @@
     "symbols": {
       "R": {
         "dim": "length",
-        "test": 1
+        "test": 1.2
       },
       "g": {
         "dim": "acceleration",
@@ -91,6 +99,10 @@
           "from": 3.5,
           "to": 6.0
         }
+      },
+      "theta": {
+        "dim": "angle",
+        "test": 0.5236
       }
     },
     "tags": [

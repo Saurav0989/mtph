@@ -76,6 +76,7 @@ def run(paths: Optional[Iterable[str]] = None) -> Dict:
 
     by_class: Dict[str, Dict[str, int]] = {c: {"caught": 0, "missed": 0} for c in CLASSES}
     caught = missed = 0
+    missed_files: List[str] = []
     for e in manifest:
         err_ids = _error_ids(_ROOT / e["file"])
         hit = any(eid in err_ids for eid in e["expected_ids"])
@@ -86,6 +87,7 @@ def run(paths: Optional[Iterable[str]] = None) -> Dict:
         else:
             missed += 1
             bucket["missed"] += 1
+            missed_files.append(Path(e["file"]).name)
 
     clean = _clean_examples()
     false_pos = sum(1 for p in clean if _has_fp(p))
@@ -94,6 +96,7 @@ def run(paths: Optional[Iterable[str]] = None) -> Dict:
     return {
         "caught": caught,
         "missed": missed,
+        "missed_files": missed_files,
         "false_pos": false_pos,
         "clean": len(clean),
         "catch_rate": (caught / total) if total else 0.0,
@@ -102,6 +105,16 @@ def run(paths: Optional[Iterable[str]] = None) -> Dict:
                          if (v["caught"] + v["missed"]) else 0.0}
                      for c, v in by_class.items()},
     }
+
+
+# Why the corpus's residual misses are *legitimate* blind spots, not checker bugs — each is a
+# mutation of content the verifier honestly cannot judge (P4: unverifiable, never a false pass).
+BLIND_SPOTS = {
+    "earnshaw-trap": "conceptual E&M: the answers are statements (∇²φ=0, curvature signs), with "
+                     "no numeric test values to sample.",
+    "loop-the-loop": "solution steps substitute on-shell values (v_top²=gR) into undeclared "
+                     "intermediates, so the written equalities are not free-variable identities.",
+}
 
 
 def _format(metrics: Dict) -> str:
@@ -122,6 +135,13 @@ def _format(metrics: Dict) -> str:
     lines.append(f"false-positive  : {metrics['fp_rate'] * 100:5.1f}%  "
                  f"({metrics['false_pos']}/{metrics['clean']} clean examples flagged)  "
                  f"[bar < {BAR_FP * 100:.0f}%]")
+    missed_files = metrics.get("missed_files") or []
+    if missed_files:
+        lines += ["", "known blind spots (counted as missed above):"]
+        for name in missed_files:
+            stem = name.split("__")[0]
+            why = BLIND_SPOTS.get(stem, "")
+            lines.append(f"  · {name}" + (f"  — {why}" if why else ""))
     return "\n".join(lines)
 
 

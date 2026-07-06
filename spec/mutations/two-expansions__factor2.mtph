@@ -8,7 +8,8 @@ difficulty: 4
 notation: american
 tags: [entropy, state-function, free-expansion, irreversibility, false-attractor]
 symbols:
-  n: dimensionless
+  n: { dim: dimensionless, test: 2 }
+  R: { dim: energy/temperature, test: 8.314 }
   V: volume
   T: temperature
 grading:
@@ -86,7 +87,9 @@ endpoints, so it is identical for the two routes. To compute it, integrate along
 path connecting them — the quasi-static isotherm — even for the free expansion.
 
 **(a)** Isothermal, so $\mathrm{d}U=0$ and $\mathrm{d}Q = \mathrm{d}W = P\,\mathrm{d}V = nRT\,
-\mathrm{d}V/V$. Then $\Delta S_{\mathrm{gas}} = \int \mathrm{d}Q/T = nR\ln 1$ — equation \ref{eq:dS}.
+\mathrm{d}V/V$. Integrating $\mathrm{d}Q/T$ from $V$ to $2V$ along the isotherm (equation
+\ref{eq:dS}),
+$$\Delta S_{\mathrm{gas}} = nR\ln 1.$$
 
 **(b)** The false attractor is "$Q=0 \Rightarrow \Delta S=0$." That formula, $\Delta S=\int
 \mathrm{d}Q/T$, holds only for a *reversible* path; the free expansion is irreversible. Because $S$

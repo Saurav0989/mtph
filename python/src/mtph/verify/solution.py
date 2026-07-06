@@ -13,7 +13,7 @@ splitters — :func:`split_rows`, :func:`split_chain` — are unit-tested in iso
 from __future__ import annotations
 
 import re
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from ..mathr.equiv import equivalent_detail
 from ..render.equations import strip_label
@@ -102,6 +102,56 @@ def split_chain(row: str) -> List[str]:
     return segs if len(segs) >= 2 else []
 
 
+# --------------------------------------------------------------------------- LHS matching
+_WRAP_RE = re.compile(r"\\(?:mathrm|mathbf|mathsf|mathit|text|operatorname)\s*\{([^{}]*)\}")
+_SPACE_CMD_RE = re.compile(r"\\[,;!: ]")
+
+
+def _strip_trailing_paren(s: str) -> str:
+    """Drop a single trailing balanced ``(…)`` — a function-call argument, so ``U_{eff}(\\theta)``
+    and ``U_{eff}`` name the same quantity. Leaves ``(a+b)`` mid-string alone."""
+    s = s.rstrip()
+    if not s.endswith(")"):
+        return s
+    depth = 0
+    for i in range(len(s) - 1, -1, -1):
+        if s[i] == ")":
+            depth += 1
+        elif s[i] == "(":
+            depth -= 1
+            if depth == 0:
+                return s[:i].rstrip()
+    return s
+
+
+def _lhs_key(seg: str) -> str:
+    """A normalized key for the quantity a segment *names* (its left-hand side), so an answer and
+    the solution line that derives the same quantity can be paired. Unwraps ``\\mathrm{…}`` &
+    friends, drops spacing macros and a trailing ``(arg)``, and removes whitespace — but keeps
+    subscripts and primes, so ``U'`` ≠ ``U`` and ``v_{top}`` ≠ ``v_{bot}``."""
+    s = seg.strip()
+    for _ in range(4):  # unwrap possibly-nested \mathrm{…}
+        s2 = _WRAP_RE.sub(r"\1", s)
+        if s2 == s:
+            break
+        s = s2
+    s = _SPACE_CMD_RE.sub("", s).replace(r"\left", "").replace(r"\right", "")
+    s = _strip_trailing_paren(s)
+    return re.sub(r"\s+", "", s)
+
+
+def _split_top_eq(s: str) -> List[str]:
+    """Split ``s`` on top-level ``=`` (brace depth 0) — how many quantities it chains together."""
+    segs: List[str] = []
+    start = 0
+    for i, tok, depth in _iter_top_level(s):
+        if tok == "=" and depth == 0:
+            segs.append(s[start:i])
+            start = i + 1
+    segs.append(s[start:])
+    return [x.strip() for x in segs if x.strip()]
+
+
 # --------------------------------------------------------------------------- the walk
 def _display_sources(text: str) -> List[str]:
     """Every ``$$…$$`` display-math body inside a chunk of prose/solution text."""
@@ -145,6 +195,10 @@ def check_solution(doc, text, answer_specs, symbols, find_line):
     steps_checked = steps_skipped = steps_unverifiable = 0
     points = 0
     last_evaluable: Optional[str] = None
+    # (lhs_key, final-evaluable-segment) per checkable chain — lets us pair an answer with the
+    # solution line that derives *that same quantity*, so a multi-part problem never cross-compares
+    # part (b)'s answer against part (a)'s derivation (a false `answer_mismatch`).
+    results: List[Tuple[str, str]] = []
 
     for src in _solution_sources(doc):
         for row in split_rows(src):
@@ -172,21 +226,32 @@ def check_solution(doc, text, answer_specs, symbols, find_line):
             for seg in reversed(segs):
                 if equivalent_detail(seg, seg, symbols).verdict is not None:
                     last_evaluable = seg
+                    results.append((_lhs_key(segs[0]), seg))
                     break
 
-    # Answer agreement: the solution's final evaluable result vs each declared answer expression.
-    if last_evaluable is not None:
-        for label, value, _unit in answer_specs:
-            d = equivalent_detail(last_evaluable, value, symbols)
-            if d.verdict is False:
-                findings.append(Finding(
-                    id="solution.answer_mismatch", severity="error",
-                    message=(f"the solution's final result `{_trim(last_evaluable)}` disagrees with "
-                             f"the declared {label} `{_trim(value)}` (max relative error "
-                             f"{d.max_rel_err:.2g} over {d.points_used} sample point(s))."),
-                    fix="The solution and the answer must agree — re-derive one, or correct the "
-                        "declared answer.",
-                    line=find_line(value), context="solution"))
+    # Answer agreement: pair each answer with the solution's derivation of the *same* quantity.
+    for label, value, _unit in answer_specs:
+        parts = _split_top_eq(value)
+        if len(parts) == 2:  # a plain `LHS = RHS` answer — compare RHS to the matching derivation
+            key, rhs = _lhs_key(parts[0]), parts[1]
+            matched = [seg for (k, seg) in results if k and k == key]
+            target = matched[-1] if matched else None
+        elif len(parts) == 1:  # a bare expression — fall back to the solution's final result
+            target, rhs = last_evaluable, value
+        else:  # a compound multi-`=` statement: no single quantity to pair against (P4 — don't guess)
+            continue
+        if target is None:
+            continue
+        d = equivalent_detail(target, rhs, symbols)
+        if d.verdict is False:
+            findings.append(Finding(
+                id="solution.answer_mismatch", severity="error",
+                message=(f"the solution's result `{_trim(target)}` disagrees with the declared "
+                         f"{label} `{_trim(value)}` (max relative error {d.max_rel_err:.2g} over "
+                         f"{d.points_used} sample point(s))."),
+                fix="The solution and the answer must agree — re-derive one, or correct the "
+                    "declared answer.",
+                line=find_line(value), context="solution"))
 
     extra = {
         "steps_checked": steps_checked,

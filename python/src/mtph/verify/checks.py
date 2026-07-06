@@ -516,6 +516,65 @@ def check_params(ctx: Context) -> CheckResult:
     return CheckResult("params", findings)
 
 
+def _top_level_eq_count(s: str) -> int:
+    """Count ``=`` signs at brace/paren depth 0 — how many equalities a statement chains. More
+    than one means a compound statement the dimension pairing can't safely interpret."""
+    depth = n = i = 0
+    while i < len(s):
+        c = s[i]
+        if c == "\\":
+            i += 2  # skip an escaped char / command letter so `\{` doesn't shift the depth
+            continue
+        if c in "{(":
+            depth += 1
+        elif c in "})":
+            depth = max(0, depth - 1)
+        elif c == "=" and depth == 0:
+            n += 1
+        i += 1
+    return n
+
+
+def _split_top_eq(s: str) -> List[str]:
+    """Split ``s`` on ``=`` at brace/paren depth 0 (escaped chars skipped)."""
+    depth = i = start = 0
+    parts: List[str] = []
+    while i < len(s):
+        c = s[i]
+        if c == "\\":
+            i += 2
+            continue
+        if c in "{(":
+            depth += 1
+        elif c in "})":
+            depth = max(0, depth - 1)
+        elif c == "=" and depth == 0:
+            parts.append(s[start:i])
+            start = i + 1
+        i += 1
+    parts.append(s[start:])
+    return [p.strip() for p in parts]
+
+
+def _defining_dim(value: str, sym_dims: dict):
+    """If ``value`` is a single ``sym = RHS`` defining equation whose left side is *one* declared
+    symbol and whose right side has a determined dimension, return that dimension; else ``None``.
+    (Used to pin the dimension a numeric answer's ``unit`` ought to match.)"""
+    parts = _split_top_eq(value)
+    if len(parts) != 2:
+        return None
+    try:
+        toks = [t for t in _tok_latex(parts[0]) if t[0] != "space"]
+    except Exception:
+        return None
+    if len(toks) != 1 or toks[0][0] != "sym":
+        return None
+    if normalize_symbol(toks[0][1]) not in sym_dims:
+        return None
+    res = dim_of_latex(parts[1], sym_dims)
+    return res.dim if (res.determined and res.uses_symbol) else None
+
+
 def _answer_specs(ctx: Context):
     """Yield ``(label, value, unit)`` for every answer *expression* in the document (the
     dimensionally-meaningful kinds: ``expression`` and ``numeric``)."""
@@ -590,6 +649,9 @@ def check_dimension(ctx: Context) -> CheckResult:
 
     checked = False
     for label, value, unit in _answer_specs(ctx):
+        if _top_level_eq_count(value) > 1:
+            continue  # a compound multi-`=` statement (e.g. `θ=0,π; ω_c=√(g/R)`): the first-LHS /
+            # last-RHS pairing would be a false alarm, so we bail rather than guess (P4).
         res = dim_of_latex(value, sym_dims)
         if not (res.determined and res.uses_symbol):
             continue  # a bare number or an expression we can't fully resolve — stay silent (P4)
@@ -608,6 +670,34 @@ def check_dimension(ctx: Context) -> CheckResult:
                 message=f"{label}: the result has dimension {res.dim}, but {src} is {target}.",
                 fix="Re-derive the answer, or correct the declared symbol dimensions if they're wrong.",
                 line=_find_line(ctx.text, value), context=label))
+
+    # A *numeric* answer states a bare number plus a `unit:` — no expression for the loop above to
+    # analyse. But if the document derives that quantity (`sym = RHS` in the body/solution), the
+    # unit must carry the dimension that derivation produces: a speed reported in watts is a real
+    # error a bare-number `check:` is blind to. We only speak up when the unit matches *no* such
+    # derivation (P4 — silent when it could plausibly be right).
+    ans = ctx.doc.meta.get("answer")
+    if isinstance(ans, dict) and ans.get("type") == "numeric" and isinstance(ans.get("unit"), str) \
+            and not isinstance(ans.get("value"), str):
+        u = parse_unit(ans["unit"])
+        if u is not None:
+            cand = []
+            for seg in _latex_segments(ctx):
+                if seg.context not in ("math block", "inline math", "solution"):
+                    continue
+                for row in seg.text.split(r"\\"):
+                    d = _defining_dim(row, sym_dims)
+                    if d is not None:
+                        cand.append(d)
+            if cand and all(d != u for d in cand):
+                checked = True
+                findings.append(Finding(
+                    id="dimension.mismatch", severity="error",
+                    message=(f"answer.unit: the answer is given in `{ans['unit']}` ({u}), but the "
+                             f"derivation produces {cand[0]}."),
+                    fix="Fix the answer's `unit` (or the symbol dimensions) — a numeric answer's "
+                        "unit must match the dimension its own formula yields.",
+                    line=_find_line(ctx.text, str(ans["unit"])), context="answer.unit"))
 
     if not checked and not findings:
         return CheckResult("dimension", declared="unknown",

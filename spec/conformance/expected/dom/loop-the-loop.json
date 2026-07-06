@@ -12,7 +12,7 @@
   ],
   "meta": {
     "answer": {
-      "check": 0.828,
+      "check": 1.038,
       "type": "expression",
       "value": "d_{\\min} = \\sqrt{\\dfrac{mg}{k}\\,(2\\mu L + 5R)}"
     },
@@ -23,7 +23,7 @@
     "symbols": {
       "L": {
         "dim": "length",
-        "test": 2
+        "test": 6
       },
       "R": {
         "dim": "length",

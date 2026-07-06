@@ -18,7 +18,7 @@
     },
     "difficulty": 2,
     "id": "incline-frictionless",
-    "solution": "Resolve forces along and perpendicular to the surface. Perpendicular to the incline the\nblock is in equilibrium, so $N = mg\\cos\\theta$. Along the incline only gravity contributes,\ngiving\n$$mg\\sin\\theta = ma \\implies a = g\\sin\\theta.$$\n",
+    "solution": "Perpendicular to the incline the block is in equilibrium; along the surface the only driving\nforce is the down-slope component of the weight, so Newton's second law gives\n$$a = \\frac{m g \\sin\\theta}{m} = g\\sin\\theta.$$\n",
     "subject": "physics",
     "symbols": {
       "a": "acceleration",
@@ -26,7 +26,10 @@
         "dim": "acceleration",
         "test": 9.8
       },
-      "m": "mass",
+      "m": {
+        "dim": "mass",
+        "test": 2
+      },
       "theta": {
         "dim": "angle",
         "test": 0.5236

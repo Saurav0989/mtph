@@ -83,6 +83,7 @@ mtph verify problem.mtph         # graduated checks (silent errors + fixes, as J
 mtph audit problem.mtph          # verify + structural nudges + the hard-problem checklist
 mtph inspect problem.mtph        # a figure's resolved scene as data (coords, overlaps)
 mtph validate problem.mtph       # fast schema-only gate
+mtph render problem.mtph --badge -o problem.html  # HTML + an honest "solution checked ✓" line
 mtph render spec/examples/(problem path) -o (problem).html #create the html file reg .mtph file.
 ```
 
@@ -131,6 +132,14 @@ mtph render spec/examples/earnshaw-trap.mtph --artifact -o problem.html
 GitHub Action runs `mtph verify` on every changed `.mtph` in a PR, comments the findings, and
 fails on any error — so a doubled backslash, a dangling `\ref`, or an undefined figure anchor
 never lands silently.
+
+**Content that proves itself.** Give the symbols `test:` values and `verify` doesn't just lint —
+it *reads the math*: it evaluates the answer, and walks the equation chain inside the `solution`
+step by step, flagging any step that doesn't hold and any result that disagrees with the declared
+answer ([SPEC §6.3.2](spec/SPEC.md)). On a committed corpus of deliberately-broken problems the
+checkers catch **82%** of seeded gross errors at **0%** false positives (bar: ≥80% / <5%, enforced
+in CI); the honest misses are documented, not hidden. `mtph render --badge` then stamps a
+*“solution checked ✓”* line — a claim about exactly what was verified, nothing more.
 
 ---
 

@@ -1,51 +1,12 @@
 [
   {
-    "cls": "factor",
-    "expected_ids": [
-      "solution.step_mismatch"
-    ],
-    "file": "spec/mutations/earnshaw-trap__factor1.mtph",
-    "source": "spec/examples/earnshaw-trap.mtph"
-  },
-  {
-    "cls": "power",
-    "expected_ids": [
-      "solution.step_mismatch"
-    ],
-    "file": "spec/mutations/earnshaw-trap__power1.mtph",
-    "source": "spec/examples/earnshaw-trap.mtph"
-  },
-  {
     "cls": "signflip",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/earnshaw-trap__signflip1.mtph",
     "source": "spec/examples/earnshaw-trap.mtph"
-  },
-  {
-    "cls": "signflip",
-    "expected_ids": [
-      "solution.step_mismatch"
-    ],
-    "file": "spec/mutations/earnshaw-trap__signflip2.mtph",
-    "source": "spec/examples/earnshaw-trap.mtph"
-  },
-  {
-    "cls": "factor",
-    "expected_ids": [
-      "solution.step_mismatch"
-    ],
-    "file": "spec/mutations/free-fall__factor1.mtph",
-    "source": "spec/examples/free-fall.mtph"
-  },
-  {
-    "cls": "power",
-    "expected_ids": [
-      "solution.step_mismatch"
-    ],
-    "file": "spec/mutations/free-fall__power1.mtph",
-    "source": "spec/examples/free-fall.mtph"
   },
   {
     "cls": "unit",
@@ -58,7 +19,8 @@
   {
     "cls": "trig",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/incline__trig1.mtph",
     "source": "spec/examples/incline.mtph"
@@ -66,7 +28,8 @@
   {
     "cls": "trig",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/incline__trig2.mtph",
     "source": "spec/examples/incline.mtph"
@@ -74,7 +37,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/loop-the-loop__factor1.mtph",
     "source": "spec/examples/loop-the-loop.mtph"
@@ -82,7 +46,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/loop-the-loop__factor2.mtph",
     "source": "spec/examples/loop-the-loop.mtph"
@@ -90,7 +55,8 @@
   {
     "cls": "power",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/loop-the-loop__power1.mtph",
     "source": "spec/examples/loop-the-loop.mtph"
@@ -98,7 +64,8 @@
   {
     "cls": "signflip",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/loop-the-loop__signflip1.mtph",
     "source": "spec/examples/loop-the-loop.mtph"
@@ -106,7 +73,8 @@
   {
     "cls": "signflip",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/loop-the-loop__signflip2.mtph",
     "source": "spec/examples/loop-the-loop.mtph"
@@ -114,7 +82,8 @@
   {
     "cls": "trig",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/loop-the-loop__trig1.mtph",
     "source": "spec/examples/loop-the-loop.mtph"
@@ -122,7 +91,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/pendulum-period__factor1.mtph",
     "source": "spec/examples/pendulum-period.mtph"
@@ -130,7 +100,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/pendulum-period__factor2.mtph",
     "source": "spec/examples/pendulum-period.mtph"
@@ -138,7 +109,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/projectile-range__factor1.mtph",
     "source": "spec/examples/projectile-range.mtph"
@@ -146,7 +118,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/projectile-range__factor2.mtph",
     "source": "spec/examples/projectile-range.mtph"
@@ -155,7 +128,8 @@
     "cls": "power",
     "expected_ids": [
       "dimension.mismatch",
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/projectile-range__power1.mtph",
     "source": "spec/examples/projectile-range.mtph"
@@ -163,7 +137,8 @@
   {
     "cls": "power",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/projectile-range__power2.mtph",
     "source": "spec/examples/projectile-range.mtph"
@@ -171,7 +146,8 @@
   {
     "cls": "trig",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/projectile-range__trig1.mtph",
     "source": "spec/examples/projectile-range.mtph"
@@ -179,7 +155,8 @@
   {
     "cls": "trig",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/projectile-range__trig2.mtph",
     "source": "spec/examples/projectile-range.mtph"
@@ -187,7 +164,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/rotating-hoop__factor1.mtph",
     "source": "spec/examples/rotating-hoop.mtph"
@@ -195,7 +173,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/rotating-hoop__factor2.mtph",
     "source": "spec/examples/rotating-hoop.mtph"
@@ -204,7 +183,8 @@
     "cls": "power",
     "expected_ids": [
       "dimension.mismatch",
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/rotating-hoop__power1.mtph",
     "source": "spec/examples/rotating-hoop.mtph"
@@ -212,7 +192,8 @@
   {
     "cls": "power",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/rotating-hoop__power2.mtph",
     "source": "spec/examples/rotating-hoop.mtph"
@@ -220,7 +201,8 @@
   {
     "cls": "signflip",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/rotating-hoop__signflip1.mtph",
     "source": "spec/examples/rotating-hoop.mtph"
@@ -228,7 +210,8 @@
   {
     "cls": "signflip",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/rotating-hoop__signflip2.mtph",
     "source": "spec/examples/rotating-hoop.mtph"
@@ -236,7 +219,8 @@
   {
     "cls": "trig",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/rotating-hoop__trig1.mtph",
     "source": "spec/examples/rotating-hoop.mtph"
@@ -244,7 +228,8 @@
   {
     "cls": "trig",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/rotating-hoop__trig2.mtph",
     "source": "spec/examples/rotating-hoop.mtph"
@@ -252,7 +237,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "numeric.mismatch"
+      "numeric.mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/two-expansions__factor1.mtph",
     "source": "spec/examples/two-expansions.mtph"
@@ -260,7 +246,8 @@
   {
     "cls": "factor",
     "expected_ids": [
-      "solution.step_mismatch"
+      "solution.step_mismatch",
+      "solution.answer_mismatch"
     ],
     "file": "spec/mutations/two-expansions__factor2.mtph",
     "source": "spec/examples/two-expansions.mtph"

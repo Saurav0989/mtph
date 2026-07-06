@@ -15,9 +15,9 @@ answer:
   value: 'T = 1\pi\sqrt{L/g}'
   check: 2.007
 solution: |
-  For a small angular displacement the restoring torque gives $\ddot\theta = -(g/L)\theta$ —
-  simple harmonic motion with angular frequency $\omega = \sqrt{g/L}$. Hence the period is
-  $$T = \frac{2\pi}{\omega} = 2\pi\sqrt{\frac{L}{g}}.$$
+  A small angular displacement gives simple harmonic motion whose angular frequency is the
+  square root of $g/L$. The period is a full turn divided by that frequency:
+  $$T = \frac{2\pi}{\sqrt{g/L}} = 2\pi\sqrt{\frac{L}{g}}.$$
 ---
 
 A bob of mass $m$ hangs from a light string of length $L$ and is released from a small angle.

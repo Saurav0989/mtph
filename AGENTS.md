@@ -121,30 +121,26 @@ single-backslash world (no YAML escaping) and lets a solution contain figures/pl
 - Optional **`grading:`** in front-matter — a list of `{part, points, criteria}` renders as a
   marking rubric with a total. (It's YAML, so single-quote any criteria containing LaTeX.)
 - Optional **`symbols:`** — map each answer symbol to its dimension (`a: acceleration`,
-  `k: force/length`, `E: M L^2 T^-2`); `mtph verify` dimension-checks the answer (`dimension.mismatch`).
-  Add a symbol `test:` value (`L: {dim: length, test: 1}`, or a `{from, to}` range for stronger
-  multi-point checks) + an answer **`check:`** number → it spot-checks the arithmetic (`numeric.mismatch`). (SPEC §6.3.)
+  `k: force/length`); `mtph verify` dimension-checks the answer. Add a `test:` value (`L: {dim: length,
+  test: 1}`, or a `{from, to}` range) + an answer **`check:`** number → it spot-checks arithmetic too. (SPEC §6.3.)
 - Optional **`params:`** in front-matter — declare `{ min, max, default, unit? }` and reference it
   as `{{name}}` in a figure/plot to make the problem *explorable* (a slider in the viewer). Static
-  output uses the `default`, so it stays deterministic. Great for "how does the trajectory change
-  with the launch angle?" (SPEC §6.4.)
+  output uses the `default`, so it stays deterministic. (SPEC §6.4.)
 - **Self-quiz.** A `numeric` answer (with a `tolerance`) or a `choice` answer (`options` +
   `correct`) is auto-checkable: `mtph render --quiz` (and the viewer's Quiz toggle) render an input
-  or clickable options that grade the reader, with a reveal. Prefer these answer types when you
-  want the problem to test the reader, not just show the answer.
+  or clickable options that grade the reader. Prefer these when you want to test the reader.
 
 **Backslash rule (now simple):** inside **any** block — fences, `$$…$$`, ```` ```answer ````,
 ```` ```solution ```` — write a **single** backslash (`\theta`, `\frac`, `\vec`), exactly as in a
-`.tex` file. Because answers/solutions are body blocks, you no longer put LaTeX in YAML at all.
-(`mtph verify` flags a doubled `\\command` if one slips in.)
+`.tex` file. (`mtph verify` flags a doubled `\\command` if one slips in.)
 
 **Math = LaTeX = unlimited symbols.** Any glyph a problem needs is available:
 `\frac \int \oint \nabla \partial \hbar \langle\psi| \otimes \nabla\times \vec{B}
 \hat{n} \dot{x} \ddot{x} \mathbf{T} \varepsilon_0 \mu_0 \zeta(3)` … Don't invent notation; use LaTeX.
 
 **Numbered equations.** Add `\label{eq:key}` to a display equation to number it, and cite it from
-prose with `\ref{eq:key}` (renders as a clickable `(n)`). Only labelled equations get numbers.
-Keep `\ref` in prose, not inside `$…$`. `verify` flags a `\ref` with no matching `\label`.
+prose with `\ref{eq:key}` (renders as a clickable `(n)`). Keep `\ref` in prose, not inside `$…$`;
+`verify` flags a `\ref` with no matching `\label`.
 
 ---
 
@@ -348,16 +344,14 @@ errors)**.
 
 ## 8. Verify, inspect, render, view
 
-**Verify first — it is built for you.** `mtph verify` is graduated and machine-parseable: it
-catches the silent failures `validate` cannot (doubled backslashes, undefined figure anchors,
-plot domain gaps, bare subscripts, overlapping labels). Branch on the JSON.
+**Verify first — it is built for you.** `mtph verify` is graduated and machine-parseable: it catches
+silent failures `validate` cannot (doubled backslashes, bad anchors, plot gaps, overlaps). Branch on the JSON.
 
 ```bash
 mtph verify  path/to/problem.mtph                # JSON when piped; fix every `error`, review `warning`s
 mtph inspect path/to/problem.mtph                # a figure's resolved scene as DATA — see §8.1
 mtph validate path/to/problem.mtph               # fast schema-only gate
-mtph render  path/to/problem.mtph -o out.html    # self-contained HTML
-mtph render  path/to/problem.mtph --grid -o out.html   # …with a coordinate grid over figures
+mtph render  path/to/problem.mtph -o out.html    # self-contained HTML (add --grid for a coord grid)
 mtph figure  path/to/problem.mtph --grid         # render only the figure(s) to SVG (fast loop)
 mtph view    path/to/problem.mtph                # live reader (Reveal-answer, Source)
 mtph dev     path/to/problem.mtph                # live reader + continuous verify as you edit
@@ -366,6 +360,12 @@ mtph dev     path/to/problem.mtph                # live reader + continuous veri
 Read `verify`'s output: top-level `status` is `ok | warnings | error`; each finding has a stable
 `id`, a `severity`, and a `fix` you can act on. `unknown` (e.g. `content`, `notation`) means *a
 human must check this* — never assume it is fine. **Do not finalise on an `error`.**
+
+**Write the solution as real equations — `verify` reads them.** With `symbols:` `test:` values, the
+`solution` group walks each display-math `=` chain, checks it numerically, and compares the result
+to the declared answer (`solution.step_mismatch`/`answer_mismatch`; SPEC §6.3.2) — so derive in the
+*independent* symbols (not a rounded `v=19.8`), and `mtph render --badge` stamps *“solution checked
+✓”*. An unevaluable step is `unverifiable`, never a silent pass.
 
 ### 8.1 Inspect — placing figures without eyes
 You cannot see a rendered figure, so do not guess coordinates blindly. `mtph inspect` returns, as

@@ -111,10 +111,9 @@ horizontal. Find the magnitude of its acceleration down the slope.</p></div>
 <text class="mtph-lbl" x="129.33" y="221.04" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="#ffffff" stroke="#ffffff" stroke-width="3.2" stroke-linejoin="round"><tspan dy="0.00">θ</tspan></text><text x="129.33" y="221.04" text-anchor="middle" dominant-baseline="central" font-size="18" font-style="italic" fill="currentColor"><tspan dy="0.00">θ</tspan></text>
 </svg><figcaption>Free-body diagram: weight $mg$ and normal force $N$.</figcaption></figure>
 <div class="mtph-quiz"><h3>Check your answer</h3><details class="q-reveal"><summary>Show answer &amp; solution</summary><div class="answer"><h3>Answer</h3><p>$ a = g\sin\theta $</p></div>
-<div class="solution"><h3>Solution</h3><p>Resolve forces along and perpendicular to the surface. Perpendicular to the incline the<br>
-block is in equilibrium, so $N = mg\cos\theta$. Along the incline only gravity contributes,<br>
-giving<br>
-$$mg\sin\theta = ma \implies a = g\sin\theta.$$</p></div></details></div></main>
+<div class="solution"><h3>Solution</h3><p>Perpendicular to the incline the block is in equilibrium; along the surface the only driving<br>
+force is the down-slope component of the weight, so Newton&#x27;s second law gives<br>
+$$a = \frac{m g \sin\theta}{m} = g\sin\theta.$$</p></div></details></div></main>
 <script>(function(){document.querySelectorAll('.mtph-quiz .q').forEach(function(q){var t=q.getAttribute('data-type');var fb=q.querySelector('.q-fb');if(t==='numeric'){var c=parseFloat(q.getAttribute('data-correct'));var tol=parseFloat(q.getAttribute('data-tol'))||0.01;var inp=q.querySelector('.q-in');var go=function(){var v=parseFloat((inp.value||'').replace(',','.'));if(isNaN(v)){fb.textContent='enter a number';fb.className='q-fb';return;}var ok=Math.abs(v-c)<=tol*Math.max(Math.abs(c),1e-12);fb.textContent=ok?'\u2713 correct':'\u2717 try again';fb.className='q-fb '+(ok?'ok':'no');};q.querySelector('.q-check').addEventListener('click',go);inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});}else if(t==='choice'){var ci=parseInt(q.getAttribute('data-correct'),10);q.querySelectorAll('.q-opt').forEach(function(b){b.addEventListener('click',function(){q.querySelectorAll('.q-opt').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');var ok=parseInt(b.getAttribute('data-i'),10)===ci;fb.textContent=ok?'\u2713 correct':'\u2717 not that one';fb.className='q-fb '+(ok?'ok':'no');});});}});})();</script>
 </body>
 </html>

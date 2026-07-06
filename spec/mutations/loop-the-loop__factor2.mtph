@@ -12,19 +12,19 @@ symbols:
   g: { dim: acceleration, test: 9.8 }
   k: { dim: spring_constant, test: 100 }
   mu: { dim: dimensionless, test: 0.5 }
-  L: { dim: length, test: 2 }
+  L: { dim: length, test: 6 }
   R: { dim: length, test: 1 }
 answer:
   type: expression
   value: 'd_{\min} = \sqrt{\dfrac{mg}{k}\,(2\mu L + 5R)}'
-  check: 0.828
+  check: 1.038
 solution: |
   **(a) Minimum compression.** Let the loop (radius $R$) be smooth. To *just* complete the
   loop, gravity alone supplies the centripetal force at the top:
   $$mg = \frac{m v_{\text{top}}^2}{R} \;\Rightarrow\; v_{\text{top}}^2 = gR.$$
-  Energy from release to the top (height $1R$), losing $\mu m g L$ to friction on the rough
+  Energy from release to the top (height $2R$), losing $\mu m g L$ to friction on the rough
   patch:
-  $$\tfrac{1}{2}k d_{\min}^2 = \mu m g L + \tfrac{1}{2}m v_{\text{top}}^2 + mg(2R)
+  $$k d_{\min}^2 = \mu m g L + \tfrac{1}{2}m v_{\text{top}}^2 + mg(2R)
      = \mu m g L + \tfrac{5}{2}mgR.$$
   $$\boxed{\,d_{\min} = \sqrt{\tfrac{mg}{k}\,(2\mu L + 5R)}\,}.$$
 

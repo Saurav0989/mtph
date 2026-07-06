@@ -43,7 +43,15 @@
     {
       "blocks": [
         {
-          "text": "**Necessary insight.** $S$ is a *state function*: $\\Delta S_{\\mathrm{gas}}$ depends only on the\nendpoints, so it is identical for the two routes. To compute it, integrate along *any* reversible\npath connecting them — the quasi-static isotherm — even for the free expansion.\n\n**(a)** Isothermal, so $\\mathrm{d}U=0$ and $\\mathrm{d}Q = \\mathrm{d}W = P\\,\\mathrm{d}V = nRT\\,\n\\mathrm{d}V/V$. Then $\\Delta S_{\\mathrm{gas}} = \\int \\mathrm{d}Q/T = nR\\ln 2$ — equation \\ref{eq:dS}.\n\n**(b)** The false attractor is \"$Q=0 \\Rightarrow \\Delta S=0$.\" That formula, $\\Delta S=\\int\n\\mathrm{d}Q/T$, holds only for a *reversible* path; the free expansion is irreversible. Because $S$\nis a state function and the endpoints are identical, $\\Delta S_{\\mathrm{gas}} = nR\\ln 2$ here too.\n(For an ideal gas $U=U(T)$, and $T$ is unchanged, consistent with this.)\n\n**(c)** Route 1: the surroundings lose the same entropy the gas gains, $\\Delta S_{\\mathrm{univ}}=0$\n(reversible). Route 2: nothing else changes, so $\\Delta S_{\\mathrm{univ}} = nR\\ln 2 > 0$. Same gas,\nsame $\\Delta S_{\\mathrm{gas}}$ — the routes differ only in what happens to the *rest of the world*.",
+          "text": "**Necessary insight.** $S$ is a *state function*: $\\Delta S_{\\mathrm{gas}}$ depends only on the\nendpoints, so it is identical for the two routes. To compute it, integrate along *any* reversible\npath connecting them — the quasi-static isotherm — even for the free expansion.\n\n**(a)** Isothermal, so $\\mathrm{d}U=0$ and $\\mathrm{d}Q = \\mathrm{d}W = P\\,\\mathrm{d}V = nRT\\,\n\\mathrm{d}V/V$. Integrating $\\mathrm{d}Q/T$ from $V$ to $2V$ along the isotherm (equation\n\\ref{eq:dS}),",
+          "type": "prose"
+        },
+        {
+          "latex": "\\Delta S_{\\mathrm{gas}} = nR\\ln 2.",
+          "type": "math"
+        },
+        {
+          "text": "**(b)** The false attractor is \"$Q=0 \\Rightarrow \\Delta S=0$.\" That formula, $\\Delta S=\\int\n\\mathrm{d}Q/T$, holds only for a *reversible* path; the free expansion is irreversible. Because $S$\nis a state function and the endpoints are identical, $\\Delta S_{\\mathrm{gas}} = nR\\ln 2$ here too.\n(For an ideal gas $U=U(T)$, and $T$ is unchanged, consistent with this.)\n\n**(c)** Route 1: the surroundings lose the same entropy the gas gains, $\\Delta S_{\\mathrm{univ}}=0$\n(reversible). Route 2: nothing else changes, so $\\Delta S_{\\mathrm{univ}} = nR\\ln 2 > 0$. Same gas,\nsame $\\Delta S_{\\mathrm{gas}}$ — the routes differ only in what happens to the *rest of the world*.",
           "type": "prose"
         }
       ],
@@ -73,9 +81,16 @@
     "notation": "american",
     "subject": "physics",
     "symbols": {
+      "R": {
+        "dim": "energy/temperature",
+        "test": 8.314
+      },
       "T": "temperature",
       "V": "volume",
-      "n": "dimensionless"
+      "n": {
+        "dim": "dimensionless",
+        "test": 2
+      }
     },
     "tags": [
       "entropy",

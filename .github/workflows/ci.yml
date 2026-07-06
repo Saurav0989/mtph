@@ -42,6 +42,8 @@ jobs:
           git diff --exit-code spec/mutations || (echo "mutation corpus is stale — run gen_mutations.py" && exit 1)
       - name: Mutation harness tests
         run: pytest python/tests/test_mutations.py -q
+      - name: Mutation bar (>=80% caught, <5% false-positive)
+        run: python python/tools/mutation_report.py --assert-bar
       - uses: actions/setup-node@v4
         with: { node-version: "22", cache: npm, cache-dependency-path: js/package-lock.json }
       - name: JS conformance

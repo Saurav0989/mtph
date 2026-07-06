@@ -12,12 +12,12 @@ symbols:
   g: { dim: acceleration, test: 9.8 }
   k: { dim: spring_constant, test: 100 }
   mu: { dim: dimensionless, test: 0.5 }
-  L: { dim: length, test: 2 }
+  L: { dim: length, test: 6 }
   R: { dim: length, test: 1 }
 answer:
   type: expression
   value: 'd_{\min} = \sqrt{\dfrac{mg}{k}\,(2\mu L + 5R)}'
-  check: 0.828
+  check: 1.038
 solution: |
   **(a) Minimum compression.** Let the loop (radius $R$) be smooth. To *just* complete the
   loop, gravity alone supplies the centripetal force at the top:
@@ -35,9 +35,9 @@ solution: |
 
   **(c) Leaving the track.** If the block enters the loop with a smaller speed $v_{\text{bot}}$
   (where $2gR \le v_{\text{bot}}^2 < 5gR$) it leaves the track on the way up, where $N = 0$.
-  At an angle $\theta$ from the top, $mg\sin\theta = \dfrac{mv^2}{R}$ and energy conservation
+  At an angle $\theta$ from the top, $mg\cos\theta = \dfrac{mv^2}{R}$ and energy conservation
   on the smooth loop give
-  $$\boxed{\cos\theta = \frac{v_{\text{bot}}^2 - 2gR}{3gR}},\qquad
+  $$\boxed{\sin\theta = \frac{v_{\text{bot}}^2 - 2gR}{3gR}},\qquad
     v_{\text{bot}}^2 = \frac{k d^2}{m} - 2\mu g L.$$
 ---
 
