@@ -8,6 +8,18 @@ All notable changes to mtph are documented here. Format loosely follows
 Toward v0.2 — making the format *honest* and giving it *feedback*.
 
 ### Added
+- **Optional symbolic equivalence — the `mtph[cas]` extra.** Sampling needs numbers, so a solution
+  step whose symbols carry no `test:` value stays `unverifiable`. Install `pip install "mtph[cas]"`
+  and `verify` gains a sympy-backed fallback — consulted *only* when sampling returns "can't tell" —
+  that proves identities with no test values at all (e.g. `\ln(ab) = \ln a + \ln b`,
+  `\sin^2\theta + \cos^2\theta = 1`). The builder uses mtph's own conservative tokenizer (not
+  `sympy.parsing.latex`), so it accepts exactly what the numeric evaluator does (`\log` still bails);
+  a token-count gate keeps `verify` from ever hanging. It stays conservative (P4): only a provably
+  nonzero difference is a mismatch, anything `simplify` can't settle is still `unverifiable`.
+  `EquivDetail` now records `method` (`"sampled"` / `"cas"` / `"none"`) and findings say when a
+  verdict was *shown symbolically*. **The core never imports sympy** — without the extra, behavior is
+  byte-identical to before; the published catch-rate bar is the without-extra number, so it never
+  leans on this. `mtph doctor` reports the extra. See SPEC §6.3.2.
 - **Solution step checking — `verify` reads the equation chain inside a `solution`.** No new
   syntax: write the derivation as display math as you already would, and the new `solution` check
   group splits each row into its top-level `=` chain and checks every adjacent pair numerically at

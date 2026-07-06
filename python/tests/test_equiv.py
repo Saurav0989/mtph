@@ -74,9 +74,12 @@ def test_equivalent_resamples_across_a_bad_domain():
     assert d.verdict is True
     assert d.points_used >= 2  # resampling recovered usable points from the positive half
 
-    # A range entirely in the bad domain yields no usable points → can't tell (None), not False.
+    # A range entirely in the bad domain yields no usable sample points: the *sampling* layer can't
+    # tell (None, never a false False). (With the optional CAS extra the public `equivalent`
+    # upgrades identical expressions to a provable True — not a guess; see test_cas.)
+    from mtph.mathr.equiv import _sampled_detail
     bad = {"x": {"test": {"from": -2.0, "to": -1.0}}}
-    assert equivalent(r"\sqrt{x}", r"\sqrt{x}", bad) is None
+    assert _sampled_detail(r"\sqrt{x}", r"\sqrt{x}", bad, 5).verdict is None
 
 
 def test_equivalent_detail_reports_points_and_error():

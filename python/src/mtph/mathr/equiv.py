@@ -90,6 +90,17 @@ class EquivDetail:
     verdict: Optional[bool]   # True agree / False disagree / None can't tell (P4)
     points_used: int          # how many sample points actually evaluated on both sides
     max_rel_err: float        # the largest per-point relative error seen
+    method: str = "sampled"   # how the verdict was reached: "sampled" | "cas" | "none" (plan 14)
+
+
+def _symbol_names(symbols) -> List[str]:
+    """Every declared symbol's normalized name (whether or not it carries a ``test:`` value) — the
+    alphabet the CAS fallback is allowed to reason over."""
+    if isinstance(symbols, dict):
+        return [normalize_symbol(str(n)) for n in symbols]
+    if isinstance(symbols, (list, tuple, set)):
+        return [normalize_symbol(str(n)) for n in symbols]
+    return []
 
 
 def _rel_err(a: float, b: float) -> float:
@@ -97,12 +108,9 @@ def _rel_err(a: float, b: float) -> float:
     return 0.0 if denom == 0.0 else abs(a - b) / denom
 
 
-def equivalent_detail(a: str, b: str, symbols: dict, k: int = _K_DEFAULT) -> EquivDetail:
-    """Sample the declared symbols and compare ``a`` and ``b`` numerically at each usable point.
-
-    ``True`` iff every evaluable point agrees within :data:`_REL_TOL`; ``False`` on any point that
-    disagrees (a real disagreement is reported even from a single point); ``None`` when no usable
-    point is found, or — with ranged symbols — fewer than two survive the domain guard."""
+def _sampled_detail(a: str, b: str, symbols: dict, k: int) -> EquivDetail:
+    """The numeric multi-point verdict (method ``"sampled"``), or a ``None`` verdict with method
+    ``"none"`` when sampling can't decide (no usable point, or too few ranged points survive)."""
     tests = _symbol_tests(symbols)
     has_range = any(not isinstance(t, float) for t in tests.values())
     rng = random.Random(_SEED)
@@ -112,7 +120,7 @@ def equivalent_detail(a: str, b: str, symbols: dict, k: int = _K_DEFAULT) -> Equ
         pt = _draw(tests, rng)
         va, vb = eval_latex(a, pt), eval_latex(b, pt)
         if va is None or vb is None:
-            return EquivDetail(None, 0, 0.0)
+            return EquivDetail(None, 0, 0.0, method="none")
         rel = _rel_err(va, vb)
         return EquivDetail(rel <= _REL_TOL, 1, rel)
 
@@ -134,8 +142,27 @@ def equivalent_detail(a: str, b: str, symbols: dict, k: int = _K_DEFAULT) -> Equ
     if disagreed:
         return EquivDetail(False, used, max_rel)   # a real disagreement is never masked
     if used < 2:
-        return EquivDetail(None, used, max_rel)    # not enough usable points to trust "equal"
+        return EquivDetail(None, used, max_rel, method="none")  # too few points to trust "equal"
     return EquivDetail(True, used, max_rel)
+
+
+def equivalent_detail(a: str, b: str, symbols: dict, k: int = _K_DEFAULT) -> EquivDetail:
+    """Compare ``a`` and ``b`` as functions of the declared symbols.
+
+    Sampling first (fast, deterministic): ``True`` iff every evaluable point agrees within
+    :data:`_REL_TOL`, ``False`` on any disagreement. When sampling can't decide (undeclared or
+    untested symbols), fall back — *only if* the optional `mtph[cas]` extra is installed — to
+    symbolic equivalence, which can prove identities with no test values (e.g. `\\ln(ab)`); the
+    result carries ``method`` = ``"sampled"`` / ``"cas"`` / ``"none"``. Without the extra the CAS
+    call returns ``None`` and behavior is byte-identical to plan 13 (P4 — never a guess)."""
+    detail = _sampled_detail(a, b, symbols, k)
+    if detail.verdict is not None:
+        return detail
+    from .cas import sym_equivalent  # lazy: the core never imports sympy
+    verdict = sym_equivalent(a, b, _symbol_names(symbols))
+    if verdict is None:
+        return detail  # method stays "none"
+    return EquivDetail(verdict, detail.points_used, detail.max_rel_err, method="cas")
 
 
 def equivalent(a: str, b: str, symbols: dict, k: int = _K_DEFAULT) -> Optional[bool]:

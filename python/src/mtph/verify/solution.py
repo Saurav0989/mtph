@@ -181,6 +181,13 @@ def _trim(s: str, n: int = 60) -> str:
     return s if len(s) <= n else s[: n - 1] + "…"
 
 
+def _evidence(d) -> str:
+    """Honest phrasing of *how* a verdict was reached (P1) — a CAS verdict has no sample points."""
+    if getattr(d, "method", "sampled") == "cas":
+        return "shown symbolically (mtph[cas])"
+    return f"max relative error {d.max_rel_err:.2g} over {d.points_used} sample point(s)"
+
+
 def check_solution(doc, text, answer_specs, symbols, find_line):
     """Walk the solution's equation chains and check them numerically.
 
@@ -217,8 +224,7 @@ def check_solution(doc, text, answer_specs, symbols, find_line):
                     findings.append(Finding(
                         id="solution.step_mismatch", severity="error",
                         message=(f"the step `{_trim(a)} = {_trim(b)}` doesn't hold: the two sides "
-                                 f"disagree (max relative error {d.max_rel_err:.2g} over "
-                                 f"{d.points_used} sample point(s))."),
+                                 f"disagree ({_evidence(d)})."),
                         fix="A step that fails numerically is usually an algebra slip — re-derive "
                             "it, or fix the symbols' `test:` values if the step is actually right.",
                         line=find_line(row), context="solution"))
@@ -247,8 +253,7 @@ def check_solution(doc, text, answer_specs, symbols, find_line):
             findings.append(Finding(
                 id="solution.answer_mismatch", severity="error",
                 message=(f"the solution's result `{_trim(target)}` disagrees with the declared "
-                         f"{label} `{_trim(value)}` (max relative error {d.max_rel_err:.2g} over "
-                         f"{d.points_used} sample point(s))."),
+                         f"{label} `{_trim(value)}` ({_evidence(d)})."),
                 fix="The solution and the answer must agree — re-derive one, or correct the "
                     "declared answer.",
                 line=find_line(value), context="solution"))

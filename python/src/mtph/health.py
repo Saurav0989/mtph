@@ -20,6 +20,8 @@ _EXTRAS = {
                'pip install "mtph[raster]"  (plus the native cairo lib, e.g. `brew install cairo`)'),
     "app": ("webview", "native desktop reader window (mtph view --app)",
             'pip install "mtph[app]"'),
+    "cas": ("sympy", "symbolic equivalence in verify (upgrades unverifiable solution steps)",
+            'pip install "mtph[cas]"'),
 }
 
 

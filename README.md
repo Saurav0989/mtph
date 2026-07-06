@@ -58,6 +58,7 @@ Optional extras:
 pip install "mtph[raster]"   # figure/plot PNG, browserless (cairosvg)
 pip install "mtph[export]"   # full-page PNG/SVG export   (also: playwright install chromium)
 pip install "mtph[app]"      # native desktop reader window (pywebview)
+pip install "mtph[cas]"      # symbolic equivalence in verify (sympy) — deeper solution checks
 ```
 
 > **PNG, honestly.** A figure or plot is pure SVG, so turning *it* into PNG needs only a vector

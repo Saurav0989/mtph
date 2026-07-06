@@ -21,7 +21,12 @@ jobs:
       - name: Install (editable, with dev deps)
         run: pip install -e ".[dev]"
       - name: Run tests
-        run: pytest -q
+        run: pytest -q      # core honesty: no sympy installed — CAS tests skip, guard tests run
+      - name: CAS extra — prove the symbolic fallback upgrades a step (3.12 only)
+        if: matrix.python-version == '3.12'
+        run: |
+          pip install -e ".[cas]"
+          pytest -q python/tests/test_cas.py   # now nothing skips; asserts method == "cas", steps_checked >= 1
 
   conformance:
     # Python↔JS parity: regenerate the corpus from the Python reference (fail on drift),

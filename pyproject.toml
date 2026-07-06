@@ -30,6 +30,7 @@ dependencies = [
 export = ["playwright>=1.40"]   # full-page PNG/SVG export (headless browser)
 raster = ["cairosvg>=2.5"]      # browserless figure/plot SVG→PNG
 app = ["pywebview>=4.0"]        # native desktop reader window
+cas = ["sympy>=1.12"]           # symbolic equivalence in verify (optional depth; core stays pure)
 dev = ["pytest>=7.0", "build>=1.0"]
 
 [project.urls]

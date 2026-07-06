@@ -470,6 +470,14 @@ false positives — a bar enforced in CI (`mutation_report.py --assert-bar`); th
 documented blind spots (conceptual answers with no test values; solution steps that substitute
 on-shell values into undeclared intermediates), counted honestly as missed.
 
+*Optional depth (`mtph[cas]`, v0.3).* Sampling needs numbers, so a step whose symbols have **no**
+`test:` value stays `unverifiable`. Install the optional `sympy`-backed extra and `verify` gains a
+symbolic fallback — used *only* when sampling can't decide — that proves identities like
+`\ln(ab) = \ln a + \ln b` with no test values at all. It stays conservative (P4): only a provably
+nonzero difference is a mismatch; anything `simplify` can't settle is still `unverifiable`. The
+core never requires sympy, and the published catch-rate is the **without-extra** number, so the
+bar's claim never depends on it.
+
 ### 6.4 Explorable parameters (v0.2)
 
 Declare `params:` in front-matter and reference them as `{{name}}` inside figure/plot sources. A
